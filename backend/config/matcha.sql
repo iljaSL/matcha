@@ -1,3 +1,6 @@
+CREATE DATABASE IF NOT EXISTS `matcha` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `matcha`;
+
 CREATE TABLE `users` (
   `id` int(5) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `lastname` varchar(255) NOT NULL,
@@ -27,4 +30,4 @@ CREATE TABLE `users` (
   -- `status` tinyint(1) NOT NULL DEFAULT '0',
   -- `online` tinyint(1) NOT NULL DEFAULT '0',
   -- `last_connection` datetime DEFAULT NULL
-)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

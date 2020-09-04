@@ -5,7 +5,7 @@ const mysql = require("mysql");
 const bodyParser = require("body-parser");
 const userController = require("./controllers/userController");
 const userModel = require("./models/userModel");
-const userRoute = require("./userRoute");
+const userRoute = require("./routes/userRoute");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

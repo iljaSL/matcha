@@ -9,7 +9,7 @@ module.exports = {
     data[4] = bcrypt.hashSync(data[4], salt);
     console.log(data);
     try {
-      let result = await pool.query({
+      const result = await pool.query({
         sql:
           "INSERT INTO users (lastname, firstname, username, mail, password, `key`) VALUES (?)",
         values: [data],

@@ -1,4 +1,4 @@
-var userModel = require("../models/userModel");
+const userModel = require("../models/userModel");
 
 module.exports = {
   lastname: (data) => {
@@ -45,7 +45,7 @@ module.exports = {
     if (data == null || data == "") return { error: "Input can not be empty!" };
     if (/\s/.test(data)) return { error: "mail can not contain empty spaces!" };
     //Check pattern
-    var mailPattern = /^([a-zA-Z0-9]+(?:[\.\-\_]?[a-zA-Z0-9]+)*)@([a-zA-Z0-9]+(?:[\.\-\_]?[a-zA-Z0-9]+)*)\.([a-zA-Z]{2,})+$/;
+    const mailPattern = /^([a-zA-Z0-9]+(?:[\.\-\_]?[a-zA-Z0-9]+)*)@([a-zA-Z0-9]+(?:[\.\-\_]?[a-zA-Z0-9]+)*)\.([a-zA-Z]{2,})+$/;
     if (!mailPattern.test(data)) return { error: "invalid email" };
     //Check db for already existing mail
     // var result = await userModel.findOne("mail", data);
@@ -57,12 +57,9 @@ module.exports = {
     if (data == null || data == "") return { error: "Input can not be empty!" };
     if (/\s/.test(data))
       return { error: "password can not contain empty spaces!" };
-    //Check pattern
-    var pwdPattern = /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/;
-    console.log(pwdPattern);
+    const pwdPattern = /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/;
     console.log(data);
     if (!pwdPattern.test(data)) return { error: "invalid password" };
     else return { status: "valid" };
-    console.log(data);
   },
 };
