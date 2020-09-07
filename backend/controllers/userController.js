@@ -1,8 +1,31 @@
 const userModel = require("../models/userModel");
 const UserUtil = require("../utils/userUtil");
 const input = require("../utils/inputUtil");
+const jasonWebTokenUtils = require("../utils/jasonWebTokenUtils");
 
 module.exports = {
+  // LOGIN CONTROLLER
+
+  login: async (req, res) => {
+    // Refactor to destructor
+    const user = await UserUtil.getUser({
+      username: req.body.username,
+      password: req.body.password,
+    });
+    if (user.error) return res.status(401).json({ message: user.error });
+    else {
+      const id = user.userData[0]["id"];
+      const username = user.userData[0]["username"];
+      return res.status(200).json({
+        message: "Login succesfull!",
+        username: username,
+        token: jasonWebTokenUtils.tokenGenarator([id, username]),
+      });
+    }
+  },
+
+  // REGISTER CONTROLLER
+
   createUser: async (req, res) => {
     const { lastname, firstname, username, mail, password } = req.body;
     let err;

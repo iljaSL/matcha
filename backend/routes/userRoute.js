@@ -6,5 +6,7 @@ exports.router = (() => {
 
   userRouter.route("/register").post(userController.createUser);
 
+  userRouter.route("/login").post(userController.login);
+
   return userRouter;
 })();
