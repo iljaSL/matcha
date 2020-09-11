@@ -8,5 +8,9 @@ exports.router = (() => {
 
   userRouter.route("/login").post(userController.login);
 
+  userRouter
+    .route("/update/:id/password")
+    .post(userController.updatePasswordWithUserId);
+
   return userRouter;
 })();

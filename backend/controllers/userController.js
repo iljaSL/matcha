@@ -4,6 +4,22 @@ const input = require("../utils/inputUtil");
 const jasonWebTokenUtils = require("../utils/jasonWebTokenUtils");
 
 module.exports = {
+  // UPDATE PASSWORD
+
+  updatePasswordWithUserId: async (req, res, next) => {
+    let err;
+    if ((err = input.password(req.body.password).error))
+      return res.status(400).json({ message: "password " + err });
+    const result = await UserUtil.verifyPasswordWithUserId(
+      req.body.password,
+      req.params.id
+    );
+
+    if (result.status !== "Password is valid")
+      return res.status(401).json({ message: "Password is incorrect" });
+    else return res.status(200).json({ message: "Password is correct" });
+  },
+
   // LOGIN CONTROLLER
 
   login: async (req, res) => {

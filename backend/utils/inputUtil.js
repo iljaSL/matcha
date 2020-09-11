@@ -35,8 +35,8 @@ module.exports = {
     if (data.length < 2 || data.length > 30)
       return { error: "username needs to be between 2 and 29 chars long" };
 
-    //Check db for already existing username
-    // var result = await userModel.findOne("username", data);
+    // Check db for already existing username
+    // const result = await userModel.findUser("username", data);
     // if (result != "") return { error: "already exists" };
     // else return { status: "valid" };
   },
