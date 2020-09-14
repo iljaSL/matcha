@@ -8,8 +8,8 @@ module.exports = {
     const result = await userModel.findUser("id", id);
     if (result) {
       const hashed = result[0]["password"];
-      if (bcrypt.compare(password, hashed))
-        return { status: "Password is correct" };
+      match = await bcrypt.compare(password, hashed);
+      if (match) return { status: "Password is correct" };
       else return { status: "Password is incorrect" };
     }
   },
@@ -20,7 +20,6 @@ module.exports = {
 
     if (user.match(/@/)) {
       const result = await userModel.findUser("mail", user);
-      console.log(result);
       if (result != "") {
         const hashed = result[0]["password"];
         if (result[0]["status"] == 0)

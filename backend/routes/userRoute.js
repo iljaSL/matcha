@@ -10,7 +10,7 @@ exports.router = (() => {
 
   userRouter
     .route("/update/:id/password")
-    .post(userController.updatePasswordWithUserId);
+    .post(userController.verifyPasswordWithUserId);
 
   return userRouter;
 })();
