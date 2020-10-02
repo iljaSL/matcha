@@ -4,19 +4,36 @@ const input = require('../utils/inputUtil');
 const jasonWebTokenUtils = require('../utils/jasonWebTokenUtils');
 
 module.exports = {
+	updatePasswordWithUserId: async (request, response, err) => {
+		if ((err = input.password(request.body.password).error))
+			return response.status(400).json({ message: err });
+
+		const result = await UserUtil.updatePasswordWithUserId(
+			request.body.password,
+			request.params.id
+		);
+
+		if (result.status !== 'Password has been updated!')
+			return response
+				.status(401)
+				.json({ message: 'Password could not be updated' });
+		else {
+			return response.status(200).json({ message: 'Password updated!' });
+		}
+	},
+
 	// UPDATE PASSWORD
 
-	verifyPasswordWithUserId: async (req, res) => {
-		let err;
-		if ((err = input.password(req.body.password).error))
-			return res.status(400).json({ message: 'password ' + err });
+	verifyPasswordWithUserId: async (request, response, err) => {
+		if ((err = input.password(request.body.password).error))
+			return response.status(400).json({ message: err });
 		const result = await UserUtil.verifyPasswordWithUserId(
-			req.body.password,
-			req.params.id
+			request.body.password,
+			request.params.id
 		);
 		if (result.status !== 'Password is correct')
-			return res.status(401).json({ message: 'Password is incorrect' });
-		else return res.status(200).json({ message: 'Password is correct' });
+			return response.status(401).json({ message: 'Password is incorrect' });
+		else return response.status(200).json({ message: 'Password is correct' });
 	},
 
 	// LOGIN CONTROLLER

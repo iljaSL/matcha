@@ -1,16 +1,20 @@
-const express = require("express");
-const userController = require("../controllers/userController");
+const express = require('express');
+const userController = require('../controllers/userController');
 
 exports.router = (() => {
-  let userRouter = express.Router();
+	let userRouter = express.Router();
 
-  userRouter.route("/register").post(userController.createUser);
+	userRouter.route('/register').post(userController.createUser);
 
-  userRouter.route("/login").post(userController.login);
+	userRouter.route('/login').post(userController.login);
 
-  userRouter
-    .route("/update/:id/password")
-    .post(userController.verifyPasswordWithUserId);
+	userRouter
+		.route('/verify/password/:id')
+		.post(userController.verifyPasswordWithUserId);
 
-  return userRouter;
+	userRouter
+		.route('/update/password/:id')
+		.post(userController.updatePasswordWithUserId);
+
+	return userRouter;
 })();

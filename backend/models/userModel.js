@@ -2,6 +2,22 @@ const pool = require('../config/database');
 const bcrypt = require('bcrypt');
 
 module.exports = {
+	updatePasswordWithUserId: async (password, id) => {
+		console.log('UPDATED PASSWORD', password);
+		const saltRounds = 10;
+		const salt = bcrypt.genSaltSync(saltRounds);
+		password = bcrypt.hashSync(password, salt);
+		try {
+			const result = await pool.query({
+				sql: 'UPDATE users SET `password` = ? WHERE `id` = ?',
+				values: [password, id],
+			});
+			return result.affectedRows;
+		} catch (err) {
+			console.log(err);
+		}
+	},
+
 	findUser: async (field, data) => {
 		try {
 			const result = await pool.query({
