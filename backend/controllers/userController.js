@@ -1,71 +1,70 @@
-const userModel = require("../models/userModel");
-const UserUtil = require("../utils/userUtil");
-const input = require("../utils/inputUtil");
-const jasonWebTokenUtils = require("../utils/jasonWebTokenUtils");
+const userModel = require('../models/userModel');
+const UserUtil = require('../utils/userUtil');
+const input = require('../utils/inputUtil');
+const jasonWebTokenUtils = require('../utils/jasonWebTokenUtils');
 
 module.exports = {
-  // UPDATE PASSWORD
+	// UPDATE PASSWORD
 
-  verifyPasswordWithUserId: async (req, res) => {
-    let err;
-    if ((err = input.password(req.body.password).error))
-      return res.status(400).json({ message: "password " + err });
-    const result = await UserUtil.verifyPasswordWithUserId(
-      req.body.password,
-      req.params.id
-    );
-    if (result.status !== "Password is correct")
-      return res.status(401).json({ message: "Password is incorrect" });
-    else return res.status(200).json({ message: "Password is correct" });
-  },
+	verifyPasswordWithUserId: async (req, res) => {
+		let err;
+		if ((err = input.password(req.body.password).error))
+			return res.status(400).json({ message: 'password ' + err });
+		const result = await UserUtil.verifyPasswordWithUserId(
+			req.body.password,
+			req.params.id
+		);
+		if (result.status !== 'Password is correct')
+			return res.status(401).json({ message: 'Password is incorrect' });
+		else return res.status(200).json({ message: 'Password is correct' });
+	},
 
-  // LOGIN CONTROLLER
+	// LOGIN CONTROLLER
 
-  login: async (req, res) => {
-    // Refactor to destructor
-    const user = await UserUtil.getUser({
-      username: req.body.username,
-      password: req.body.password,
-    });
-    if (user.error) return res.status(401).json({ message: user.error });
-    else {
-      const id = user.userData[0]["id"];
-      const username = user.userData[0]["username"];
-      return res.status(200).json({
-        message: "Login succesfull!",
-        username: username,
-        token: jasonWebTokenUtils.tokenGenarator([id, username]),
-      });
-    }
-  },
+	login: async (request, response) => {
+		const user = await UserUtil.getUser({
+			username: request.body.username,
+			password: request.body.password,
+		});
+		if (user.error) return response.status(401).json({ message: user.error });
+		else {
+			const id = user.userData[0]['id'];
+			const username = user.userData[0]['username'];
+			return response.status(200).json({
+				message: 'Login succesfull!',
+				username: username,
+				token: jasonWebTokenUtils.tokenGenarator([id, username]),
+			});
+		}
+	},
 
-  // REGISTER CONTROLLER
+	// REGISTER CONTROLLER
 
-  createUser: async (req, res) => {
-    const { lastname, firstname, username, mail, password } = req.body;
-    let err;
+	createUser: async (request, response, err) => {
+		const { lastname, firstname, username, mail, password } = request.body;
 
-    if ((err = input.lastname(lastname).error))
-      return res.status(400).json({ error: "lastname " + err });
-    if ((err = input.firstname(firstname).error))
-      return res.status(400).json({ error: "firstname " + err });
-    if ((err = input.password(password).error))
-      return res.status(400).json({ error: "password " + err });
+		if ((err = input.lastname(lastname).error))
+			return response.status(400).json({ error: err });
+		if ((err = input.firstname(firstname).error))
+			return response.status(400).json({ error: err });
+		if ((err = input.password(password).error))
+			return response.status(400).json({ error: err });
 
-    err = await input.username(username);
-    if (err) return res.status(400).json({ error: "username " + err.error });
-    err = await input.mail(mail);
-    if (err) return res.status(400).json({ error: "mail " + err.error });
+		err = await input.username(username);
+		if (err) return response.status(400).json({ error: err.error });
+		err = await input.mail(mail);
+		if (err) return response.status(400).json({ error: err.error });
 
-    const ret = await UserUtil.createUser([
-      lastname,
-      firstname,
-      username,
-      mail,
-      password,
-    ]);
+		const result = await UserUtil.createUser([
+			lastname,
+			firstname,
+			username,
+			mail,
+			password,
+		]);
 
-    if (ret.status === "user created!") return res.status(201).send(ret.status);
-    else return res.status(400).send(ret.status);
-  },
+		if (result.status === 'User created with success')
+			return response.status(201).send(result.status);
+		else return response.status(400).send(result.status);
+	},
 };

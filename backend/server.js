@@ -1,23 +1,23 @@
-const app = require("express")();
-const cors = require("cors");
-var http = require("http").Server(app);
-const mysql = require("mysql");
-const bodyParser = require("body-parser");
-const userController = require("./controllers/userController");
-const userModel = require("./models/userModel");
-const userRoute = require("./routes/userRoute");
+const app = require('express')();
+const cors = require('cors');
+var http = require('http').Server(app);
+const mysql = require('mysql');
+const bodyParser = require('body-parser');
+const userController = require('./controllers/userController');
+const userModel = require('./models/userModel');
+const userRoute = require('./routes/userRoute');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 
-const PORT = 3000;
+const PORT = 3001;
 
 http.listen(PORT, () => {
-  console.log("Listening on port: ", PORT);
+	console.log('Listening on port: ', PORT);
 });
 
-app.use("/users/", userRoute.router);
+app.use('/api/users/', userRoute.router);
 
 // const pool = mysql.createPool({
 //   host: "localhost",
