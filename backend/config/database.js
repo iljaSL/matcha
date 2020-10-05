@@ -1,12 +1,14 @@
 import mysql from "mysql";
 import util from "util";
 
-const pool = mysql.createPool({
+const database = process.env.NODE_ENV === 'test' ? 'matcha_test' : 'matcha'
+
+    const pool = mysql.createPool({
   connectionLimit: 10,
   host: "localhost",
   user: "root",
   password: "rootpasswd",
-  database: "matcha"
+  database: database
 });
 
 pool.getConnection((err, connection) => {
