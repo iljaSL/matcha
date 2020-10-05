@@ -3,7 +3,7 @@ import userModel from "../models/userModel.js";
 export default {
   lastname: (data) => {
     const regex = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
-    console.log(data);
+    //console.log(data);
     if (data == null || data == "") return { error: "Input can not be empty!" };
     if (/\s/.test(data))
       return { error: "lastname can not contain empty spaces!" };
@@ -58,7 +58,7 @@ export default {
     if (/\s/.test(data))
       return { error: "password can not contain empty spaces!" };
     const pwdPattern = /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/;
-    console.log(data);
+    //console.log(data);
     if (!pwdPattern.test(data)) return { error: "invalid password" };
     else return { status: "valid" };
   },
