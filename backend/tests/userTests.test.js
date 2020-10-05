@@ -26,6 +26,15 @@ describe('user creation and modification', () => {
             })
             .expect(200)).body.token
     })
+    test('invalid login', async () => {
+      await request
+            .post('/api/login')
+            .send({
+                "username": userTestUtils.newValidUser.username,
+                "password": "kalle-Petteri"
+            })
+            .expect(401)
+    })
 })
 
 afterAll(async () => {
