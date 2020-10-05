@@ -1,6 +1,6 @@
-const userModel = require("../models/userModel");
+import userModel from "../models/userModel.js";
 
-module.exports = {
+export default {
   lastname: (data) => {
     const regex = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
     console.log(data);

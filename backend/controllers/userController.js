@@ -1,9 +1,9 @@
-const userModel = require('../models/userModel');
-const UserUtil = require('../utils/userUtil');
-const input = require('../utils/inputUtil');
-const jasonWebTokenUtils = require('../utils/jasonWebTokenUtils');
+import userModel from '../models/userModel.js';
+import UserUtil from '../utils/userUtil.js';
+import input from '../utils/inputUtil.js';
+import jasonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
 
-module.exports = {
+export default {
 	updatePasswordWithUserId: async (request, response, err) => {
 		if ((err = input.password(request.body.password).error))
 			return response.status(400).json({ message: err });

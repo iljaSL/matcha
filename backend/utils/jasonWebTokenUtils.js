@@ -1,8 +1,13 @@
-const jsonWebTokenUtil = require("jsonwebtoken");
-const fs = require("fs");
+import jsonWebTokenUtil from "jsonwebtoken";
+import fs from "fs";
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const PRIVATE_KEY = fs.readFileSync(__dirname + "/keys/private.key");
-module.exports = {
+
+export default {
   tokenGenarator: (userData) => {
     console.log(userData);
     const jwt_token = jsonWebTokenUtil.sign(

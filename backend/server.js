@@ -1,11 +1,15 @@
-const app = require('express')();
-const cors = require('cors');
-var http = require('http').Server(app);
-const mysql = require('mysql');
-const bodyParser = require('body-parser');
-const userController = require('./controllers/userController');
-const userModel = require('./models/userModel');
-const userRoute = require('./routes/userRoute');
+import express from 'express';
+import cors from 'cors';
+import http from 'http';
+import mysql from 'mysql';
+import bodyParser from 'body-parser';
+
+import userController from './controllers/userController.js';
+import userModel from './models/userModel.js';
+import userRoute from './routes/userRoute.js';
+
+const app = express()
+const server = http.createServer(app);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -13,53 +17,8 @@ app.use(cors());
 
 const PORT = 3001;
 
-http.listen(PORT, () => {
+server.listen(PORT, () => {
 	console.log('Listening on port: ', PORT);
 });
 
-app.use('/api/users/', userRoute.router);
-
-// const pool = mysql.createPool({
-//   host: "localhost",
-//   user: "root",
-//   password: "rootpasswd",
-//   database: "matcha",
-//   connectionLimit: 5,
-//   multipleStatements: true,
-// });
-
-// app.get("/", (req, res) => {
-//   console.log("It works!");
-// });
-
-// app.post("/register", (req, res) => {
-//   const users = {
-//     lastname: req.body.lastname,
-//     firstname: req.body.firstname,
-//     username: req.body.username,
-//     mail: req.body.mail,
-//     password: req.body.password,
-//   };
-
-//   pool.query(
-//     "INSERT INTO users(lastname, firstname, username, mail, password) VALUES (?, ?, ?, ?, ?)",
-//     [
-//       users.lastname,
-//       users.firstname,
-//       users.username,
-//       users.mail,
-//       users.password,
-//     ],
-//     function (err, res) {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         console.log("query worked");
-//       }
-//     }
-//   );
-// });
-
-// app.listen(3000, () => {
-//   console.log("App is running!");
-// });
+app.use('/api/users/', userRoute);

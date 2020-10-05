@@ -1,8 +1,8 @@
-const express = require('express');
-const userController = require('../controllers/userController');
+import express from 'express';
+import userController from '../controllers/userController.js';
 
-exports.router = (() => {
-	let userRouter = express.Router();
+
+const userRouter = express.Router();
 
 	userRouter.route('/register').post(userController.createUser);
 
@@ -16,5 +16,4 @@ exports.router = (() => {
 		.route('/update/password/:id')
 		.post(userController.updatePasswordWithUserId);
 
-	return userRouter;
-})();
+export default userRouter

@@ -1,9 +1,12 @@
-const userModel = require('../models/userModel');
-const bcrypt = require('bcrypt');
-const sendmail = require('../utils/emailUtil');
-const { password } = require('./inputUtil');
+import userModel from '../models/userModel.js';
+import bcrypt from 'bcrypt';
+import sendmail from '../utils/emailUtil.js';
+import inputUtil from './inputUtil.js';
 
-module.exports = {
+const username = inputUtil.username()
+const password = inputUtil.password()
+
+export default {
 	updatePasswordWithUserId: async (password, id) => {
 		const updatedPassword = await userModel.updatePasswordWithUserId(
 			password,

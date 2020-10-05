@@ -1,7 +1,7 @@
-const pool = require('../config/database');
-const bcrypt = require('bcrypt');
+import pool from '../config/database.js';
+import bcrypt from 'bcrypt';
 
-module.exports = {
+export default  {
 	updatePasswordWithUserId: async (password, id) => {
 		console.log('UPDATED PASSWORD', password);
 		const saltRounds = 10;

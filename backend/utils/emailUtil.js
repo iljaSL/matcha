@@ -1,7 +1,9 @@
-const nodemailer = require("nodemailer");
-const { username } = require("./inputUtil");
+import nodemailer from "nodemailer";
+import inputUtil from "./inputUtil.js";
 
-module.exports = {
+const username = inputUtil.username()
+
+export default {
   confirmRegistrationWithEmail: (mail, username, link) => {
     let message =
       `
