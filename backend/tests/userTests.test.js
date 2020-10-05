@@ -4,7 +4,7 @@ import userTestUtils from './userTestUtils.js'
 
 const request = supertest(app)
 
-describe('user creation and modification',  () => {
+describe('user creation and modification', () => {
     test('normal user creation', async () => {
         await request
             .post('/api/users/')
@@ -16,6 +16,15 @@ describe('user creation and modification',  () => {
             .post('/api/users/')
             .send(userTestUtils.newUserMissingValues)
             .expect(400)
+    })
+    test('login with valid username & pw', async () => {
+        let token = (await request
+            .post('/api/login')
+            .send({
+                "username": userTestUtils.newValidUser.username,
+                "password": userTestUtils.newValidUser.password
+            })
+            .expect(200)).body.token
     })
 })
 
