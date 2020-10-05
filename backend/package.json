@@ -1,32 +1,36 @@
 {
-	"name": "backend",
-	"version": "1.0.0",
-	"description": "",
-	"main": "server.js",
-	"scripts": {
-		"test": "NODE_ENV=test jest --verbose --runInBand",
-		"start": "node server.js",
-		"dev": "NODE_ENV=development nodemon index.js "
-	},
-	"keywords": [],
-	"author": "",
-	"type": "module",
-	"license": "ISC",
-	"dependencies": {
-		"bcrypt": "^5.0.0",
-		"body-parser": "^1.19.0",
-		"cors": "^2.8.5",
-		"express": "^4.17.1",
-		"fs": "0.0.1-security",
-		"http": "0.0.1-security",
-		"jsonwebtoken": "^8.5.1",
-		"mysql": "^2.18.1",
-		"nodemailer": "^6.4.11",
-		"util": "^0.12.3"
-	},
-	"devDependencies": {
-		"jest": "^26.5.0",
-		"nodemon": "^2.0.4",
-		"supertest": "^5.0.0"
-	}
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "NODE_ENV=test NODE_OPTIONS='--experimental-vm-modules' jest -f --verbose --runInBand --detectOpenHandles",
+    "start": "node server.js",
+    "dev": "NODE_ENV=development nodemon index.js "
+  },
+  "keywords": [],
+  "author": "ismelich & ehalmkro",
+  "type": "module",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "http": "0.0.1-security",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
+    "nodemailer": "^6.4.11",
+    "util": "^0.12.3"
+  },
+  "devDependencies": {
+    "jest": "^26.5.0",
+    "nodemon": "^2.0.4",
+    "supertest": "^5.0.0"
+  },
+  "jest": {
+    "testEnvironment": "jest-environment-node",
+    "transform": {}
+  }
 }
