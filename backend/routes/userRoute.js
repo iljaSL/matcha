@@ -8,8 +8,6 @@ userRouter.post('/', async (req, res, err) => {
     await userController.createUser(req, res, err)
 })
 
-userRouter.route('/login').post(userController.login);
-
 userRouter
     .route('/verify/password/:id')
     .post(userController.verifyPasswordWithUserId);
