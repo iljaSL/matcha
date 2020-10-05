@@ -19,9 +19,9 @@ module.exports = {
 
 	verifyPasswordWithUserId: async (password, id) => {
 		const result = await userModel.findUser('id', id);
-		if (result) {
+		if (result.length > 0) {
 			const hashed = result[0]['password'];
-			match = await bcrypt.compare(password, hashed);
+			const match = await bcrypt.compare(password, hashed);
 			if (match) return { status: 'Password is correct' };
 			else return { status: 'Password is incorrect' };
 		}

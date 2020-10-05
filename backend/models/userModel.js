@@ -14,7 +14,7 @@ module.exports = {
 			});
 			return result.affectedRows;
 		} catch (err) {
-			console.log(err);
+            console.log('Error: ', err.message);
 		}
 	},
 
@@ -26,8 +26,7 @@ module.exports = {
 			});
 			if (result) return result;
 		} catch (err) {
-			console.log(err);
-			throw new Error(err);
+            console.log('Error: ', err.message);
 		}
 	},
 
@@ -45,7 +44,7 @@ module.exports = {
 			});
 			return result.affectedRows;
 		} catch (err) {
-			throw new Error('query failed');
+			console.log('Error: ', err.message);
 		}
 	},
 };

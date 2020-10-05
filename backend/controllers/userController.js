@@ -31,6 +31,8 @@ module.exports = {
 			request.body.password,
 			request.params.id
 		);
+		if (!result)
+		    return response.status(404).json({ message: "no such user"})
 		if (result.status !== 'Password is correct')
 			return response.status(401).json({ message: 'Password is incorrect' });
 		else return response.status(200).json({ message: 'Password is correct' });
