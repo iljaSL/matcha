@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS `matcha` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `matcha`;
+CREATE DATABASE IF NOT EXISTS `matcha_test` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `matcha_test`;
 
 CREATE TABLE `users` (
   `id` int(5) NOT NULL PRIMARY KEY AUTO_INCREMENT,
