@@ -7,7 +7,6 @@ export default {
 	updatePasswordWithUserId: async (request, response, err) => {
 		if ((err = input.password(request.body.password).error))
 			return response.status(400).json({ message: err });
-
 		const result = await UserUtil.updatePasswordWithUserId(
 			request.body.password,
 			request.params.id

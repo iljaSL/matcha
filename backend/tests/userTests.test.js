@@ -4,10 +4,11 @@ import userTestUtils from './userTestUtils.js'
 
 const request = supertest(app)
 
-beforeAll(() => {
-    // TODO: should drop the database here?
-})
+// TODO: should drop the test database here to start w/ a blank slate?
 
+beforeAll(() => {
+    // drop table users
+})
 
 describe('user creation and modification', () => {
     test('normal user creation returns 201', async () => {

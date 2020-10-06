@@ -12,7 +12,7 @@ const database = process.env.NODE_ENV === 'test' ? 'matcha_test' : 'matcha'
 });
 
 pool.getConnection((err, connection) => {
-/*  if (err) {
+  if (err) {
     if (err.code === "PROTOCOL_CONNECTION_LOST") {
       console.error("DB connection was closed.");
     }
@@ -24,7 +24,7 @@ pool.getConnection((err, connection) => {
     }
   } else {
     console.log("DB is connected!");
-  }*/
+  }
   if (connection) connection.release();
   return;
 });
