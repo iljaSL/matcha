@@ -61,6 +61,7 @@ export default {
 
 	createUser: async (request, response, err) => {
 		const { lastname, firstname, username, mail, password } = request.body;
+		// TODO: check if there is other way to check the inputs, split into own function at least?
 
 		if ((err = input.lastname(lastname).error))
 			return response.status(400).json({ error: err });
@@ -73,6 +74,8 @@ export default {
 		if (err) return response.status(400).json({ error: err.error });
 		err = await input.mail(mail);
 		if (err) return response.status(400).json({ error: err.error });
+		if (await UserUtil.isDuplicateUser(username) === true)
+            return response.status(409).json({ error: 'duplicate user exists!' });
 
 		const result = await UserUtil.createUser([
 			lastname,

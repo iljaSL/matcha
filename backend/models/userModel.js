@@ -32,7 +32,7 @@ export default  {
 
 	registerUser: async (data) => {
 		const saltRounds = 10;
-		//console.log(data[4]);
+		//console.log(data);
 		const salt = bcrypt.genSaltSync(saltRounds);
 		data[4] = bcrypt.hashSync(data[4], salt);
 		//console.log(data);

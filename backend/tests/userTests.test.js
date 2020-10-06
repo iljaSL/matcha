@@ -4,20 +4,32 @@ import userTestUtils from './userTestUtils.js'
 
 const request = supertest(app)
 
+beforeAll(() => {
+    // TODO: should drop the database here?
+})
+
+
 describe('user creation and modification', () => {
-    test('normal user creation', async () => {
-        await request
+    test('normal user creation returns 201', async () => {
+       const response = await request
             .post('/api/users/')
             .send(userTestUtils.newValidUser)
             .expect(201)
     })
-    test('invalid user creation', async () => {
+    test('user creation with missing values returns 400', async () => {
         await request
             .post('/api/users/')
             .send(userTestUtils.newUserMissingValues)
             .expect(400)
     })
-    test('login with valid username & pw', async () => {
+    test('dupliate username on creation returns 409', async () => {
+        const response = await request
+            .post('/api/users/')
+            .send(userTestUtils.newValidUser)
+            .expect(409)
+    })
+
+    test('login with valid username & pw returns 200', async () => {
         let token = (await request
             .post('/api/login')
             .send({
@@ -26,7 +38,7 @@ describe('user creation and modification', () => {
             })
             .expect(200)).body.token
     })
-    test('invalid login', async () => {
+    test('invalid login returns 401', async () => {
       await request
             .post('/api/login')
             .send({

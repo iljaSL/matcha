@@ -59,6 +59,13 @@ export default {
 		}
 	},
 
+    isDuplicateUser: async (username) => {
+	    const result = await userModel.findUser('username', username)
+        if (result.length === 0)
+            return false
+        return true
+    },
+
 	createUser: async (data) => {
 		const uniqid = (
 			new Date().getTime() + Math.floor(Math.random() * 10000 + 1)
@@ -73,3 +80,4 @@ export default {
 		return { status: 'An error has occurred' };
 	},
 };
+
