@@ -49,7 +49,7 @@ export default {
     return response.status(200).json({
       message: 'Login succesfull!',
       username,
-      token: jasonWebTokenUtils.tokenGenarator([id, username]),
+      token: jasonWebTokenUtils.tokenGenerator([id, username]),
     });
   },
 
