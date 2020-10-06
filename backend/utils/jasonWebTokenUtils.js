@@ -1,26 +1,26 @@
-import jsonWebTokenUtil from "jsonwebtoken";
-import fs from "fs";
+import jsonWebTokenUtil from 'jsonwebtoken';
+import fs from 'fs';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const rootDir = dirname(fileURLToPath(import.meta.url));
 
-const PRIVATE_KEY = fs.readFileSync(__dirname + "/keys/private.key");
+const PRIVATE_KEY = fs.readFileSync(`${rootDir}/keys/private.key`);
 
 export default {
-  tokenGenarator: (userData) => {
+  tokenGenerator: (userData) => {
     console.log(userData);
-    const jwt_token = jsonWebTokenUtil.sign(
+    const jwtToken = jsonWebTokenUtil.sign(
       {
         id: userData[0],
         username: userData[1],
       },
       PRIVATE_KEY,
       {
-        expiresIn: "24h",
-      }
+        expiresIn: '24h',
+      },
     );
-    console.log(jwt_token);
-    return jwt_token;
+    console.log(jwtToken);
+    return jwtToken;
   },
 };

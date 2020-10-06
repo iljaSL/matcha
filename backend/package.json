@@ -4,9 +4,10 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "NODE_ENV=test NODE_OPTIONS='--experimental-vm-modules' jest -f --verbose --runInBand --detectOpenHandles",
+    "test": "NODE_ENV=test NODE_OPTIONS='--experimental-vm-modules' jest -f --verbose --runInBand --detectOpenHandles && exit 0",
     "start": "node server.js",
-    "dev": "NODE_ENV=development nodemon index.js "
+    "dev": "NODE_ENV=development nodemon index.js ",
+    "lint": "eslint . ; exit 0"
   },
   "keywords": [],
   "author": "ismelich & ehalmkro",
@@ -25,6 +26,13 @@
     "util": "^0.12.3"
   },
   "devDependencies": {
+    "eslint": "^7.10.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-react": "^7.21.3",
+    "eslint-plugin-react-hooks": "^4.0.0",
     "jest": "^26.5.0",
     "nodemon": "^2.0.4",
     "supertest": "^5.0.0"
