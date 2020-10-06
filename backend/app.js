@@ -1,9 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import bodyParser from 'body-parser';
 
-import userController from './controllers/userController.js';
-import userModel from './models/userModel.js';
 import userRoute from './routes/userRoute.js';
 import loginRoute from "./routes/loginRoute.js";
 
