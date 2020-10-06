@@ -42,7 +42,7 @@ export default  {
 					'INSERT INTO users (lastname, firstname, username, mail, password, `key`) VALUES (?)',
 				values: [data],
 			});
-			return result.affectedRows;
+			return result.insertId;
 		} catch (err) {
 			console.log('Error: ', err.message);
 		}
