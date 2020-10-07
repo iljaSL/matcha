@@ -1,4 +1,3 @@
-import bcrypt from 'bcrypt';
 import userModel from '../models/userModel.js';
 import inputChecker from './inputUtil.js';
 
@@ -20,29 +19,4 @@ async function isDuplicateUser(username) {
 export default {
   checkUserValidity,
   isDuplicateUser,
-
-  getUser: async (data) => {
-    const user = data.username;
-    const { password } = data;
-
-    if (user.match(/@/)) {
-      const result = await userModel.findUser('mail', user);
-      if (result !== '') {
-        const hashed = result[0].password;
-        if (result[0].status === 0) return { error: 'Account has not been activated yet!' };
-        const match = await bcrypt.compare(password, hashed);
-        if (match) return { message: 'Succesfully User Retrieved', userData: result };
-        return { error: 'Incorrect username or password.' };
-      } return { error: 'Incorrect username or password' };
-    }
-    const result = await userModel.findUser('username', user);
-    if (result !== '') {
-      const hashed = result[0].password;
-      if (result[0].status === 0) return { error: 'Account has not been activated yet!' };
-      const match = await bcrypt.compare(password, hashed);
-      if (match) return { message: 'You are now logged in!', userData: result };
-      return { error: 'Incorrect username or password.' };
-    } return { error: 'Incorrect username or password.' };
-  },
-
 };
