@@ -13,8 +13,14 @@ function checkUserValidity(body) {
     .every((value) => value === true);
 }
 
+async function isDuplicateUser(username) {
+  const result = await userModel.findUser('username', username);
+  return result.length !== 0;
+}
+
 export default {
   checkUserValidity,
+  isDuplicateUser,
 
   verifyPasswordWithUserId: async (password, id) => {
     const result = await userModel.findUser('id', id);
@@ -50,9 +56,4 @@ export default {
     } return { error: 'Incorrect username or password.' };
   },
 
-  isDuplicateUser: async (username) => {
-    const result = await userModel.findUser('username', username);
-    if (result.length === 0) return false;
-    return true;
-  },
 };
