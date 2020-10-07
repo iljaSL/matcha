@@ -6,7 +6,7 @@ CREATE TABLE `users` (
   `lastname` varchar(255) NOT NULL,
   `firstname` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
-  -- `gender` enum('man','woman') DEFAULT NULL,
+  -- `gender` enum('man','woman', 'nonbinary') DEFAULT NULL,
   -- `sexual_orientation` enum('bisexual','homosexual','heterosexual') NOT NULL DEFAULT 'bisexual',
   `mail` varchar(255) NOT NULL,
   -- `bio` varchar(255) DEFAULT NULL,
