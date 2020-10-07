@@ -1,6 +1,18 @@
 import bcrypt from 'bcrypt';
 import pool from '../config/database.js';
 
+const updatePasswordWithUserId = async (password, id) => {
+  const saltRounds = 10;
+  const salt = bcrypt.genSaltSync(saltRounds);
+  const pwHash = bcrypt.hashSync(password, salt);
+  const result = await pool.query({
+    sql: 'UPDATE users SET `password` = ? WHERE `id` = ?',
+    values: [pwHash, id],
+  });
+  if (result.err) console.log('Error: ', result.err.message);
+  return result.affectedRows;
+};
+
 export default {
   updatePasswordWithUserId: async (password, id) => {
     const saltRounds = 10;
