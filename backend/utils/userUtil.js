@@ -1,12 +1,21 @@
 import bcrypt from 'bcrypt';
 import userModel from '../models/userModel.js';
 import sendmail from './emailUtil.js';
-import inputUtil from './inputUtil.js';
+import inputChecker from './inputUtil.js';
 
-const username = inputUtil.username();
-const password = inputUtil.password();
+function checkUserValidity(body) {
+  if (Object.keys(body).length !== 5) return false;
+  const {
+    lastname, firstname, username, mail, password,
+  } = body;
+  return [inputChecker.realName(lastname), inputChecker.realName(firstname),
+    inputChecker.username(username), inputChecker.mail(mail), inputChecker.password(password)]
+    .every((value) => value === true);
+}
 
 export default {
+  checkUserValidity,
+
   updatePasswordWithUserId: async (password, id) => {
     const updatedPassword = await userModel.updatePasswordWithUserId(
       password,

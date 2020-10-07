@@ -2,6 +2,7 @@ import userModel from '../models/userModel.js';
 import UserUtil from '../utils/userUtil.js';
 import input from '../utils/inputUtil.js';
 import jasonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
+import sendmail from '../utils/emailUtil.js';
 
 export default {
   updatePasswordWithUserId: async (request, response, err) => {
@@ -55,31 +56,17 @@ export default {
 
   // REGISTER CONTROLLER
 
-  createUser: async (request, response, err) => {
-    const {
-      lastname, firstname, username, mail, password,
-    } = request.body;
-    // TODO: check if there is other way to check the inputs, split into own function at least?
-
-    if ((err = input.lastname(lastname).error)) return response.status(400).json({ error: err });
-    if ((err = input.firstname(firstname).error)) return response.status(400).json({ error: err });
-    if ((err = input.password(password).error)) return response.status(400).json({ error: err });
-
-    err = await input.username(username);
-    if (err) return response.status(400).json({ error: err.error });
-    err = await input.mail(mail);
-    if (err) return response.status(400).json({ error: err.error });
-    if (await UserUtil.isDuplicateUser(username) === true) return response.status(409).json({ error: 'duplicate user exists!' });
-
-    const result = await UserUtil.createUser([
-      lastname,
-      firstname,
-      username,
-      mail,
-      password,
-    ]);
-
-    if (result.status === 'User created with success') return response.status(201).send(result.status);
-    return response.status(400).send(result.status);
+  createUser: async (request, response) => {
+    const { body } = request;
+    if (await UserUtil.isDuplicateUser(body.username) === true) return response.status(409).json({ error: 'duplicate user exists!' });
+    if (!UserUtil.checkUserValidity(body)) return response.status(400).json({ error: 'invalid user' });
+    body.uuid = (new Date().getTime() + Math.floor(Math.random() * 10000 + 1)).toString(16);
+    const created = await userModel.registerUser(body);
+    if (created) {
+      const link = `https://localhost:3000/users/register/${body.uuid}`;
+      await sendmail.confirmRegistrationWithEmail(body.mail, body.username, link);
+      return response.status(201).json({ status: 'User created with success' });
+    }
+    return response.status(500).json({ status: 'An error has occurred' });
   },
 };
