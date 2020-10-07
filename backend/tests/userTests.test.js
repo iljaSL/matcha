@@ -2,6 +2,8 @@ import supertest from 'supertest';
 import app from '../app.js';
 import userTestUtils from './userTestUtils.js';
 
+/* eslint-disable */
+
 const request = supertest(app);
 let token;
 
@@ -21,7 +23,7 @@ describe('user creation and modification', () => {
   test('user creation with missing values returns 400', async () => {
     await request
       .post('/api/users/')
-      .send(userTestUtils.newUserMissingValues)
+      .send(userTestUtils.newUserMissingUsername)
       .expect(400);
   });
   test('duplicate username on creation returns 409', async () => {
@@ -49,6 +51,16 @@ describe('user creation and modification', () => {
       })
       .expect(401);
   });
+  test('invalid users should return 400', () => {
+      userTestUtils.invalidUsers.forEach(async invalidUser => {
+          await request
+              .post('/api/users/')
+              .send(invalidUser)
+              .expect(400)
+      })
+  })
+
+
 });
 
 afterAll(async () => {
