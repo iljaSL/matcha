@@ -59,8 +59,6 @@ describe('user creation and modification', () => {
               .expect(400)
       })
   })
-
-
 });
 
 afterAll(async () => {

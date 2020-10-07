@@ -61,6 +61,13 @@ const invalidUsers = [
     mail: 'notanemail',
     password: 'pw2345661a',
   },
+  {
+    lastname: 'Bergström',
+    firstname: 'Hermann',
+    username: 'hbergstroem',
+    mail: 'notanemail',
+    password: 'e',
+  },
 ];
 
 export default { newValidUser, newUserMissingUsername, invalidUsers };
