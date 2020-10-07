@@ -1,12 +1,21 @@
 import bcrypt from 'bcrypt';
 import userModel from '../models/userModel.js';
 import sendmail from './emailUtil.js';
-import inputUtil from './inputUtil.js';
+import inputChecker from './inputUtil.js';
 
-const username = inputUtil.username();
-const password = inputUtil.password();
+function checkUserValidity(body) {
+  if (Object.keys(body).length !== 5) return false;
+  const {
+    lastname, firstname, username, mail, password,
+  } = body;
+  return [inputChecker.realName(lastname), inputChecker.realName(firstname),
+    inputChecker.username(username), inputChecker.mail(mail), inputChecker.password(password)]
+    .every((value) => value === true);
+}
 
 export default {
+  checkUserValidity,
+
   updatePasswordWithUserId: async (password, id) => {
     const updatedPassword = await userModel.updatePasswordWithUserId(
       password,
@@ -57,19 +66,5 @@ export default {
     const result = await userModel.findUser('username', username);
     if (result.length === 0) return false;
     return true;
-  },
-
-  createUser: async (data) => {
-    const uniqId = (
-      new Date().getTime() + Math.floor(Math.random() * 10000 + 1)
-    ).toString(16);
-    data.push(uniqId);
-    const created = await userModel.registerUser(data);
-    if (created) {
-      const link = `https://localhost:3000/users/register/${uniqId}`;
-      await sendmail.confirmRegistrationWithEmail(data[3], data[2], link);
-      return { status: 'User created with success' };
-    }
-    return { status: 'An error has occurred' };
   },
 };

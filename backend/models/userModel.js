@@ -30,17 +30,15 @@ export default {
     }
   },
 
-  registerUser: async (data) => {
+  registerUser: async (user) => {
     const saltRounds = 10;
-    // console.log(data);
     const salt = bcrypt.genSaltSync(saltRounds);
-    data[4] = bcrypt.hashSync(data[4], salt);
-    // console.log(data);
+    const passwordHash = bcrypt.hashSync(user.password, salt);
     try {
       const result = await pool.query({
         sql:
-					'INSERT INTO users (lastname, firstname, username, mail, password, `key`) VALUES (?)',
-        values: [data],
+            'INSERT INTO users (lastname, firstname, username, mail, password, `key`) VALUES (?)',
+        values: [[user.lastname, user.firstname, user.username, user.mail, passwordHash, user.uuid]],
       });
       return result.insertId;
     } catch (err) {
