@@ -6,20 +6,16 @@ import sendmail from '../utils/emailUtil.js';
 
 export default {
   updatePasswordWithUserId: async (request, response, err) => {
-    if ((err = input.password(request.body.password).error)) {
+    const { body } = request;
+    if (!input.password(body.password)) {
       return response.status(400).json({ message: err });
     }
-    const result = await UserUtil.updatePasswordWithUserId(
-      request.body.password,
+    const result = await userModel.updatePasswordWithUserId(
+      body.password,
       request.params.id,
     );
 
-    if (result.status !== 'Password has been updated!') {
-      return response
-        .status(401)
-        .json({ message: 'Password could not be updated' });
-    }
-
+    if (result.err) return response.status(401).json({ message: 'Password could not be updated' });
     return response.status(200).json({ message: 'Password updated!' });
   },
 

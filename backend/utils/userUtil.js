@@ -16,18 +16,6 @@ function checkUserValidity(body) {
 export default {
   checkUserValidity,
 
-  updatePasswordWithUserId: async (password, id) => {
-    const updatedPassword = await userModel.updatePasswordWithUserId(
-      password,
-      id,
-    );
-
-    if (updatedPassword !== '') {
-      return { status: 'Password has been updated!' };
-    }
-    return { status: 'Ops, something went wrong!' };
-  },
-
   verifyPasswordWithUserId: async (password, id) => {
     const result = await userModel.findUser('id', id);
     if (result.length > 0) {
