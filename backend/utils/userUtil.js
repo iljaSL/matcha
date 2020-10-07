@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt';
 import userModel from '../models/userModel.js';
-import sendmail from './emailUtil.js';
 import inputChecker from './inputUtil.js';
 
 function checkUserValidity(body) {
@@ -21,16 +20,6 @@ async function isDuplicateUser(username) {
 export default {
   checkUserValidity,
   isDuplicateUser,
-
-  verifyPasswordWithUserId: async (password, id) => {
-    const result = await userModel.findUser('id', id);
-    if (result.length > 0) {
-      const hashed = result[0].password;
-      const match = await bcrypt.compare(password, hashed);
-      if (match) return { status: 'Password is correct' };
-      return { status: 'Password is incorrect' };
-    }
-  },
 
   getUser: async (data) => {
     const user = data.username;

@@ -9,7 +9,7 @@ userRouter.post('/', async (req, res, err) => {
 
 userRouter
   .route('/verify/password/:id')
-  .post(userController.verifyPasswordWithUserId);
+  .post(userController.auth);
 
 userRouter
   .route('/update/password/:id')

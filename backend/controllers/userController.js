@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import userModel from '../models/userModel.js';
 import UserUtil from '../utils/userUtil.js';
 import input from '../utils/inputUtil.js';
@@ -7,28 +8,20 @@ import sendmail from '../utils/emailUtil.js';
 export default {
   updatePasswordWithUserId: async (request, response, err) => {
     const { body } = request;
-    if (!input.password(body.password)) {
-      return response.status(400).json({ message: err });
-    }
-    const result = await userModel.updatePasswordWithUserId(
-      body.password,
-      request.params.id,
-    );
-
+    if (!input.password(body.password)) return response.status(400).json({ message: err });
+    const result = await userModel.updatePasswordWithUserId(body.password, request.params.id);
     if (result.err) return response.status(401).json({ message: 'Password could not be updated' });
     return response.status(200).json({ message: 'Password updated!' });
   },
 
   // UPDATE PASSWORD
 
-  verifyPasswordWithUserId: async (request, response, err) => {
-    if ((err = input.password(request.body.password).error)) return response.status(400).json({ message: err });
-    const result = await UserUtil.verifyPasswordWithUserId(
-      request.body.password,
-      request.params.id,
-    );
-    if (!result) return response.status(404).json({ message: 'no such user' });
-    if (result.status !== 'Password is correct') return response.status(401).json({ message: 'Password is incorrect' });
+  auth: async (request, response, err) => {
+    const { body } = request;
+    if (!input.password(body.password)) return response.status(400).json({ message: err });
+    const result = await userModel.findUser('id', request.params.id);
+    if (!result) response.status(404).json({ message: 'no such user' });
+    if (!await bcrypt.compare(body.password, result[0].password)) return response.status(401).json({ message: 'Password is incorrect' });
     return response.status(200).json({ message: 'Password is correct' });
   },
 
