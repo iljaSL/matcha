@@ -67,18 +67,4 @@ export default {
     if (result.length === 0) return false;
     return true;
   },
-
-  createUser: async (data) => {
-    const uniqId = (
-      new Date().getTime() + Math.floor(Math.random() * 10000 + 1)
-    ).toString(16);
-    data.push(uniqId);
-    const created = await userModel.registerUser(data);
-    if (created) {
-      const link = `https://localhost:3000/users/register/${uniqId}`;
-      await sendmail.confirmRegistrationWithEmail(data[3], data[2], link);
-      return { status: 'User created with success' };
-    }
-    return { status: 'An error has occurred' };
-  },
 };
