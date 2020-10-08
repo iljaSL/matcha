@@ -1,0 +1,14 @@
+import express from 'express';
+import tagController from '../controllers/tagController.js';
+
+const tagRouter = express.Router();
+
+tagRouter.get('/', async (request, response, err) => {
+  await tagController.getTags(request, response, err);
+});
+
+tagRouter.post('/', async (request, response, err) => {
+  await tagController.addTag(request, response, err);
+});
+
+export default tagRouter;
