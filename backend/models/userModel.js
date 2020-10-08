@@ -1,6 +1,14 @@
 import bcrypt from 'bcrypt';
 import pool from '../config/database.js';
 
+const deleteUser = async (userId) => {
+  const result = await pool.query({
+    sql: 'DELETE FROM users WHERE `id` = ?',
+    values: userId,
+  });
+  return result.affectedRows;
+};
+
 const updatePasswordWithUserId = async (password, id) => {
   const saltRounds = 10;
   const salt = bcrypt.genSaltSync(saltRounds);
@@ -48,4 +56,5 @@ export default {
   registerUser,
   findUser,
   updatePasswordWithUserId,
+  deleteUser,
 };
