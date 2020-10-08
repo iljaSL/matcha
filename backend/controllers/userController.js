@@ -4,6 +4,11 @@ import input from '../utils/inputUtil.js';
 import jasonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
 import sendmail from '../utils/emailUtil.js';
 
+// const deleteUser = async (request, response, err) => {
+//   const { auth } = request.body.headers;
+//   const userId = jasonWebTokenUtils.get;
+// };
+
 const updatePasswordWithUserId = async (request, response, err) => {
   if ((input.password(request.body.password).error)) {
     return response.status(400).json({ message: err });

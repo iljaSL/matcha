@@ -1,13 +1,16 @@
 import mysql from 'mysql';
 import util from 'util';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const database = process.env.NODE_ENV === 'test' ? 'matcha_test' : 'matcha';
 
 const pool = mysql.createPool({
   connectionLimit: 10,
   host: 'localhost',
-  user: 'root',
-  password: 'rootpasswd',
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
   database,
 });
 

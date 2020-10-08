@@ -1,10 +1,13 @@
 import express from 'express';
 import cors from 'cors';
+import dotenv from 'dotenv';
 
 import userRoute from './routes/userRoute.js';
 import loginRoute from './routes/loginRoute.js';
 
 import middleware from './utils/middleware.js';
+
+dotenv.config();
 
 const app = express();
 app.use(cors());
