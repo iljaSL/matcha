@@ -7,6 +7,8 @@ import sendmail from '../utils/emailUtil.js';
 // const deleteUser = async (request, response, err) => {
 //   const { auth } = request.body.headers;
 //   const userId = jasonWebTokenUtils.get;
+//
+//   if (userId !== -1 && request.params.user_id === userId)
 // };
 
 const updatePasswordWithUserId = async (request, response, err) => {
@@ -45,14 +47,16 @@ const verifyPasswordWithUserId = async (request, response, err) => {
 // LOGIN CONTROLLER
 
 const login = async (request, response) => {
+  const body = request.body
   const user = await UserUtil.getUser({
-    username: request.body.username,
-    password: request.body.password,
+    username: body.username
   });
-  if (user.error) return response.status(401).json({ message: user.error });
 
-  const { id } = user.userData[0];
-  const { username } = user.userData[0];
+  if (!(user && pas) return response.status(401).json({ message: user.error });
+
+  const userForToken = {
+    username; requ
+  }
   return response.status(200).json({
     message: 'Login successful!',
     username,
