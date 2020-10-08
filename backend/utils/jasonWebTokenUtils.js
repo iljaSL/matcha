@@ -1,10 +1,9 @@
 import jsonWebTokenUtil from 'jsonwebtoken';
-import fs from 'fs';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
 
-const rootDir = dirname(fileURLToPath(import.meta.url));
-const PRIVATE_KEY = fs.readFileSync(`${rootDir}/keys/private.key`);
+dotenv.config();
+
+const PRIVATE_KEY = process.env.SECRET_KEY;
 
 const tokenGenerator = (userData) => {
   console.log(userData);
