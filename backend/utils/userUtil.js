@@ -1,4 +1,3 @@
-import userModel from '../models/userModel.js';
 import inputChecker from './inputUtil.js';
 
 const checkUserValidity = (body) => {
@@ -11,12 +10,6 @@ const checkUserValidity = (body) => {
     .every((value) => value === true);
 };
 
-const isDuplicateUser = async (username) => {
-  const result = await userModel.findUser('username', username);
-  return result.length !== 0;
-};
-
 export default {
   checkUserValidity,
-  isDuplicateUser,
 };
