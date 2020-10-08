@@ -65,4 +65,5 @@ const createUser = async (request, response) => {
 
 export default {
   createUser, auth, login, updatePasswordWithUserId,
+
 };
