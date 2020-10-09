@@ -19,5 +19,8 @@ userRouter
   .route('/update/password/:id')
   .post(userController.updatePasswordWithUserId);
 
+userRouter.get('/tags/:id', async (request, response, err) => {
+  await userController.getTagsById(request, response, err);
+});
 
 export default userRouter;

@@ -51,10 +51,16 @@ const registerUser = async (user) => {
   return result.insertId;
 };
 
+const getTagsById = async (id) => pool.query({
+  sql: 'SELECT * FROM `usertags`  WHERE uid = (?)',
+  values: [id],
+});
+
 export default {
   isDuplicateUser,
   registerUser,
   findUser,
   updatePasswordWithUserId,
   deleteUser,
+  getTagsById,
 };

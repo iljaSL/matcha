@@ -4,6 +4,7 @@ import UserUtil from '../utils/userUtil.js';
 import input from '../utils/inputUtil.js';
 import jasonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
 import sendmail from '../utils/emailUtil.js';
+import tagModel from '../models/tagModel.js';
 
 const deleteUser = async (request, response) => {
   const { authorization } = request.headers;
@@ -75,7 +76,10 @@ const createUser = async (request, response) => {
   return response.status(500).json({ status: 'An error has occurred' });
 };
 
-export default {
-  createUser, auth, login, updatePasswordWithUserId, deleteUser,
+const getTagsById = async (request, response) => {
+  const tagList = await userModel.getTagsById(request.params.id);
+};
 
+export default {
+  createUser, auth, login, updatePasswordWithUserId, deleteUser, getTagsById,
 };
