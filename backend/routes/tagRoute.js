@@ -7,6 +7,10 @@ tagRouter.get('/', async (request, response, err) => {
   await tagController.getTags(request, response, err);
 });
 
+tagRouter.get('/:id', async (request, response, err) => {
+  await tagController.getTagById(request, response, err);
+});
+
 tagRouter.post('/', async (request, response, err) => {
   await tagController.addTag(request, response, err);
 });

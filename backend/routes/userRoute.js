@@ -19,4 +19,5 @@ userRouter
   .route('/update/password/:id')
   .post(userController.updatePasswordWithUserId);
 
+
 export default userRouter;
