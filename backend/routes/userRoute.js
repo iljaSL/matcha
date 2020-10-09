@@ -3,7 +3,7 @@ import userController from '../controllers/userController.js';
 
 const userRouter = express.Router();
 
-userRouter.delete('/delete/:id', async (request, response, err) => {
+userRouter.delete('/:id', async (request, response, err) => {
   await userController.deleteUser(request, response, err);
 });
 

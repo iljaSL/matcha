@@ -5,6 +5,18 @@ import input from '../utils/inputUtil.js';
 import jasonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
 import sendmail from '../utils/emailUtil.js';
 
+const deleteUser = async (request, response) => {
+  const { authorization } = request.headers;
+  const userId = jasonWebTokenUtils.getUserId(authorization);
+  console.log('THIS IS userID', userId);
+  console.log('AND', request.params.id);
+  if (Number(request.params.id) === userId) {
+    await userModel.deleteUser(userId);
+    return response.status(200).json({ message: 'User has been deleted' });
+  }
+  return response.status(401).json({ error: 'token missing or invalid' });
+};
+
 const updatePasswordWithUserId = async (request, response, err) => {
   if ((input.password(request.body.password).error)) {
     return response.status(400).json({ message: err });
@@ -64,6 +76,6 @@ const createUser = async (request, response) => {
 };
 
 export default {
-  createUser, auth, login, updatePasswordWithUserId,
+  createUser, auth, login, updatePasswordWithUserId, deleteUser,
 
 };
