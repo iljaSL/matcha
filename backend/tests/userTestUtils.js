@@ -1,3 +1,5 @@
+const wrongToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQsInVzZXJuYW1lIjoicGx1c3RpZyIsImlhdCI6MTYwMjI1NTU0MywiZXhwIjoxNjAyMzQxOTQzfQ.zywxu6To--e2yLG3BkjIFJPhaRwrvYPXLp_Hte2u7Qo';
+
 const newValidUser = {
   lastname: 'Lustig',
   firstname: 'Peter',
@@ -70,4 +72,6 @@ const invalidUsers = [
   },
 ];
 
-export default { newValidUser, newUserMissingUsername, invalidUsers };
+export default {
+  newValidUser, newUserMissingUsername, invalidUsers, wrongToken,
+};

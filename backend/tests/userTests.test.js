@@ -68,6 +68,16 @@ describe('user creation and modification', () => {
 
       await request.delete(`/api/users/${userId}`).expect(401)
   });
+  test ('delete user should return 401, with a wrong token', async () => {
+      let login = await request.post('/api/login').send({
+          username: userTestUtils.newValidUser.username,
+          password: userTestUtils.newValidUser.password,
+      });
+      let wrongToken = userTestUtils.wrongToken;
+      let userId = login.body.id;
+
+      await request.delete(`/api/users/${userId}`).set('Authorization', `${wrongToken}`).expect(401)
+  })
   test ('delete user should return 200',async () => {
       let login = await request.post('/api/login').send({
           username: userTestUtils.newValidUser.username,
