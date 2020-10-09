@@ -71,7 +71,7 @@ const createUser = async (request, response) => {
   if (created) {
     const link = `https://localhost:3000/users/register/${body.uuid}`;
     await sendmail.confirmRegistrationWithEmail(body.mail, body.username, link);
-    return response.status(201).json({ status: 'User created with success' });
+    return response.status(201).json({ status: 'User created with success', id: created });
   }
   return response.status(500).json({ status: 'An error has occurred' });
 };
@@ -88,7 +88,7 @@ const addTagById = async (request, response) => {
   if (tokenUserId) {
     const result = await userModel.addUserTag(tokenUserId, tagId);
     if (!result) return response.status(409).json({ status: 'duplicate' });
-    return response.status(200).json({ status: 'success' });
+    return response.status(201).json({ status: 'success' });
   }
   return response.status(401).json({ error: 'token missing or invalid' });
 };

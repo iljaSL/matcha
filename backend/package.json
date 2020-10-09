@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "NODE_ENV=test NODE_OPTIONS='--experimental-vm-modules' jest -f --verbose --runInBand --detectOpenHandles && exit 0",
+    "test": "NODE_ENV=test NODE_OPTIONS='--experimental-vm-modules' jest -f --verbose --runInBand --detectOpenHandles",
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development nodemon index.js ",
     "lint": "eslint . ; exit 0"
