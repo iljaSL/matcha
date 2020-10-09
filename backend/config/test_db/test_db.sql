@@ -39,7 +39,9 @@ CREATE TABLE IF NOT EXISTS `tags` (
 
 CREATE TABLE IF NOT EXISTS `usertags` (
                                           `id` int PRIMARY KEY AUTO_INCREMENT NOT NULL,
-                                          FOREIGN KEY (id) REFERENCES users(id),
-                                          FOREIGN KEY (id) REFERENCES tags(id)
+                                          `uid` int,
+                                          `tagId` int,
+                                          FOREIGN KEY (uid) REFERENCES users (id),
+                                          FOREIGN KEY (tagId) REFERENCES tags (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
