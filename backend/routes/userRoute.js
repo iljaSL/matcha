@@ -23,4 +23,12 @@ userRouter.get('/tags/:id', async (request, response, err) => {
   await userController.getTagsById(request, response, err);
 });
 
+userRouter.post('/tags/:id', async (request, response, err) => {
+  await userController.addTagById(request, response, err);
+});
+
+userRouter.delete('/tags/:id', async (request, response, err) => {
+  await userController.removeTagById(request, response, err);
+});
+
 export default userRouter;
