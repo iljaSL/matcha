@@ -22,10 +22,6 @@ const addTag = async (tag) => {
   return result;
 };
 
-const getUserTagsById = async (id) => {
-  const result = await pool.query({ sql: 'SELECT * FROM `usertags` WHERE ' });
-};
-
 export default {
   getTags, getTagById, isDuplicate, addTag,
 };
