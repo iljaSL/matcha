@@ -45,3 +45,4 @@ CREATE TABLE IF NOT EXISTS `usertags` (
                                           FOREIGN KEY (tagId) REFERENCES tags (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+ALTER TABLE `usertags` ADD UNIQUE (`uid` , `tagId`)
