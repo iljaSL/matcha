@@ -15,4 +15,8 @@ tagRouter.post('/', async (request, response, err) => {
   await tagController.addTag(request, response, err);
 });
 
+tagRouter.get('/users/:id', async (request, response, err) => {
+  await tagController.getTagUsers(request, response, err);
+});
+
 export default tagRouter;

@@ -52,7 +52,7 @@ const registerUser = async (user) => {
 };
 
 const getTagsById = async (id) => pool.query({
-  sql: 'SELECT tags.tag FROM `tags`, `usertags`, `users` WHERE usertags.tagid = tags.id AND uid = (?)',
+  sql: 'SELECT tags.id as tagId, tags.tag, users.username FROM `tags`, `usertags`, `users` WHERE usertags.tagid = tags.id AND uid = (?)',
   values: [id],
 });
 

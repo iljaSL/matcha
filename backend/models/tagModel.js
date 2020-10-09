@@ -22,6 +22,11 @@ const addTag = async (tag) => {
   return result;
 };
 
+const getTagUsers = async (tagId) => pool.query({
+  sql: 'SELECT DISTINCT usertags.uid AS uid, users.username, tags.id as tagID, tags.tag FROM `tags`, `usertags`, `users` WHERE usertags.tagid = tags.id AND usertags.uid = users.id AND tagid = (?)',
+  values: [tagId],
+});
+
 export default {
-  getTags, getTagById, isDuplicate, addTag,
+  getTags, getTagById, isDuplicate, addTag, getTagUsers,
 };

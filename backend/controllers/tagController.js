@@ -18,6 +18,11 @@ const addTag = async (request, response, err) => {
   if (result) return response.status(201).json({ message: 'Tag added' });
 };
 
+const getTagUsers = async (request, response, err) => {
+  const tags = await tagModel.getTagUsers(request.params.id);
+  return response.status(200).json(tags);
+};
+
 export default {
-  getTags, addTag, getTagById,
+  getTags, addTag, getTagById, getTagUsers,
 };
