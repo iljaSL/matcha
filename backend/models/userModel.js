@@ -56,6 +56,28 @@ const getTagsById = async (id) => pool.query({
   values: [id],
 });
 
+const addUserTag = async (uid, tagId) => {
+  let result;
+  try {
+    result = await pool.query({
+      sql: 'INSERT INTO `usertags` (`uid`, `tagId`) VALUES (?, ?)',
+      values: [uid, tagId],
+    });
+  } catch (err) { result = null; } // TODO: proper error handling
+  return result;
+};
+
+const removeUserTag = async (userTagId) => {
+  let result;
+  try {
+    result = await pool.query({
+      sql: 'DELETE FROM `usertags` WHERE id = (?)',
+      values: [userTagId],
+    });
+  } catch (err) { result = null; } // TODO: proper error handling
+  return result;
+};
+
 export default {
   isDuplicateUser,
   registerUser,
@@ -63,4 +85,6 @@ export default {
   updatePasswordWithUserId,
   deleteUser,
   getTagsById,
+  addUserTag,
+  removeUserTag,
 };

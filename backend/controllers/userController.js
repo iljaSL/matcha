@@ -81,6 +81,36 @@ const getTagsById = async (request, response) => {
   response.status(200).json(tagList);
 };
 
+const addTagById = async (request, response) => {
+  const tagId = request.params.id;
+  const { authorization } = request.headers;
+  const tokenUserId = jasonWebTokenUtils.getUserId(authorization);
+  if (tokenUserId) {
+    const result = await userModel.addUserTag(tokenUserId, tagId);
+    if (!result) return response.status(409).json({ status: 'duplicate' });
+    return response.status(200).json({ status: 'success' });
+  }
+  return response.status(401).json({ error: 'token missing or invalid' });
+};
+
+const removeTagById = async (request, response) => {
+  const userTagId = request.params.id;
+  const { authorization } = request.headers;
+  const tokenUserId = jasonWebTokenUtils.getUserId(authorization);
+  if (tokenUserId) {
+    const result = await userModel.removeUserTag(userTagId);
+    return response.status(200).json({ status: 'success' });
+  }
+  return response.status(401).json({ error: 'token missing or invalid' });
+};
+
 export default {
-  createUser, auth, login, updatePasswordWithUserId, deleteUser, getTagsById,
+  createUser,
+  auth,
+  login,
+  updatePasswordWithUserId,
+  deleteUser,
+  getTagsById,
+  addTagById,
+  removeTagById,
 };
