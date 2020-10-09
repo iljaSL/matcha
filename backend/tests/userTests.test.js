@@ -9,7 +9,7 @@ let token;
 
 // TODO: should drop the test database here to start w/ a blank slate?
 
-beforeAll(() => {
+beforeAll(async () => {
   // drop table users
 });
 
@@ -58,9 +58,30 @@ describe('user creation and modification', () => {
               .send(invalidUser)
               .expect(400)
       })
+  });
+  test ('delete user should return 401, no token used',async () => {
+      let login = await request.post('/api/login').send({
+          username: userTestUtils.newValidUser.username,
+          password: userTestUtils.newValidUser.password,
+      });
+      let userId = login.body.id;
+
+      await request.delete(`/api/users/${userId}`).expect(401)
+  });
+  test ('delete user should return 200',async () => {
+      let login = await request.post('/api/login').send({
+          username: userTestUtils.newValidUser.username,
+          password: userTestUtils.newValidUser.password,
+      });
+
+      let token = login.body.token;
+      let userId = login.body.id;
+      console.log('Im HERE!', login.body);
+
+      await request.delete(`/api/users/${userId}`).set('Authorization', `${token}`).expect(200)
   })
 });
 
 afterAll(async () => {
-  await new Promise((resolve) => setTimeout(resolve, 500));
+  await new Promise((resolve) => setTimeout(resolve, 5000));
 });

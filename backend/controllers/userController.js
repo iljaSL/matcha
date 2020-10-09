@@ -9,8 +9,7 @@ import tagModel from '../models/tagModel.js';
 const deleteUser = async (request, response) => {
   const { authorization } = request.headers;
   const userId = jasonWebTokenUtils.getUserId(authorization);
-  console.log('THIS IS userID', userId);
-  console.log('AND', request.params.id);
+
   if (Number(request.params.id) === userId) {
     await userModel.deleteUser(userId);
     return response.status(200).json({ message: 'User has been deleted' });
@@ -54,6 +53,7 @@ const login = async (request, response) => {
   const match = await bcrypt.compare(password, user.password);
   if (!match) return response.status(401).json({ message: 'invalid username/password' });
   return response.status(200).json({
+    id: user.id,
     message: 'Login successful!',
     body: username,
     token: jasonWebTokenUtils.tokenGenerator([user.id, user.username]),
