@@ -1,9 +1,13 @@
 import pool from '../config/database.js';
 
-const getTags = async () => {
-  const tags = await pool.query({ sql: 'SELECT * FROM `tags`' });
-  return tags;
-};
+const getTags = async () => pool.query({ sql: 'SELECT * FROM `tags`' });
+
+const getTagById = async (id) => pool.query(
+  {
+    sql: 'SELECT * FROM `tags` WHERE id = (?)',
+    values: [id],
+  },
+);
 
 const isDuplicate = async (tag) => {
   const match = await pool.query({
@@ -18,4 +22,10 @@ const addTag = async (tag) => {
   return result;
 };
 
-export default { getTags, isDuplicate, addTag };
+const getUserTagsById = async (id) => {
+  const result = await pool.query({ sql: 'SELECT * FROM `usertags` WHERE ' });
+};
+
+export default {
+  getTags, getTagById, isDuplicate, addTag,
+};
