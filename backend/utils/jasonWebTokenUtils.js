@@ -4,27 +4,21 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const PRIVATE_KEY = process.env.SECRET_KEY;
-
-const tokenGenerator = (userData) => {
-  console.log(userData);
-  const jwtToken = jsonWebTokenUtil.sign(
-    {
-      id: userData[0],
-      username: userData[1],
-    },
-    PRIVATE_KEY,
-    {
-      expiresIn: '24h',
-    },
-  );
-  console.log(jwtToken);
-  return jwtToken;
-};
-
 const parseAuthorization = (authorization) => (authorization != null ? authorization.replace('Bearer ', '') : null);
 
+const tokenGenerator = (userData) => jsonWebTokenUtil.sign(
+  {
+    id: userData[0],
+    username: userData[1],
+  },
+  PRIVATE_KEY,
+  {
+    expiresIn: '24h',
+  },
+);
+
 const getUserId = (authorization) => {
-  let userId = -1;
+  let userId = 0;
   const token = parseAuthorization(authorization);
   if (token != null) {
     try {
