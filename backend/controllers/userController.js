@@ -78,6 +78,7 @@ const createUser = async (request, response) => {
 
 const getTagsById = async (request, response) => {
   const tagList = await userModel.getTagsById(request.params.id);
+  response.status(200).json(tagList);
 };
 
 export default {
