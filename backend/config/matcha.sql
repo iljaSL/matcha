@@ -45,4 +45,14 @@ FOREIGN KEY (uid) REFERENCES users (id),
 FOREIGN KEY (tagId) REFERENCES tags (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-ALTER TABLE `usertags` ADD UNIQUE (`uid` , `tagId`)
+CREATE TABLE IF NOT EXISTS `user_photo` (
+`id` int PRIMARY KEY AUTO_INCREMENT NOT NULL,
+`uid` int,
+`link` text,
+`details` text,
+`time_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY (uid) REFERENCES users (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+ALTER TABLE `usertags` ADD UNIQUE (`uid` , `tagId`) -- TO ENSURE UNIQUENESS OF ALL TAGS PER USER, NO DUPLICATES

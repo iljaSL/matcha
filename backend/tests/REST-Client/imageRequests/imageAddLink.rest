@@ -1,0 +1,7 @@
+POST http://localhost:3001/api/images/4 HTTP/1.1
+content-Type: application/json
+
+{
+  "link": "https://en.wikipedia.org/wiki/Barack_Obama#/media/File:President_Barack_Obama.jpg"
+}
+
