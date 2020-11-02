@@ -24,7 +24,6 @@ or use image-type package
 };
 
 const addImageLink = async (uid, imageLink) => {
-  console.log('Add image link', uid, imageLink);
   const result = await pool.query({
     sql: 'INSERT INTO user_photo (uid, link) VALUES (?, ?)',
     values: [uid, imageLink],
