@@ -78,6 +78,25 @@ describe('user creation and modification', () => {
 
       await request.delete(`/api/users/${userId}`).set('Authorization', `${wrongToken}`).expect(401)
   })
+
+    test('forgot-password route should find user and return 200', async () => {
+        await request
+            .post('/api/users/forgot-password')
+            .send({
+                login: userTestUtils.newValidUser.username,
+            })
+            .expect(200);
+    });
+
+  test('forgot-password route should return 404 with wrong login', async () => {
+        await request
+            .post('/api/users/forgot-password')
+            .send({
+                login: 'plust',
+            })
+            .expect(404);
+    });
+
   test ('delete user should return 200',async () => {
       let login = await request.post('/api/login').send({
           username: userTestUtils.newValidUser.username,

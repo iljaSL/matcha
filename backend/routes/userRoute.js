@@ -7,6 +7,10 @@ userRouter.post('/forgot-password', async (request, response, err) => {
   await userController.forgotPassword(request, response, err);
 });
 
+userRouter.get('/reset-password/:key', async (request, response, err) => {
+  await userController.checkPasswordResetKey(request, response, err);
+});
+
 userRouter.delete('/:id', async (request, response, err) => {
   await userController.deleteUser(request, response, err);
 });
