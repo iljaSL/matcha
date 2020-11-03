@@ -3,6 +3,10 @@ import userController from '../controllers/userController.js';
 
 const userRouter = express.Router();
 
+userRouter.post('/forgot-password', async (request, response, err) => {
+  await userController.forgotPassword(request, response, err);
+});
+
 userRouter.delete('/:id', async (request, response, err) => {
   await userController.deleteUser(request, response, err);
 });
