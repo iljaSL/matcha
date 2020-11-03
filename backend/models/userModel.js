@@ -1,6 +1,18 @@
 import bcrypt from 'bcrypt';
 import pool from '../config/database.js';
 
+const setResetKeyForPassword = async (id, key) => {
+  try {
+    const result = await pool.query({
+      sql: 'UPDATE users SET `reset_password_key` = ? WHERE `id` = ?',
+      values: [key, id],
+    });
+    return result.affectedRows;
+  } catch (error) {
+    return console.log('error');
+  }
+};
+
 const deleteUser = async (userId) => {
   const result = await pool.query({
     sql: 'DELETE FROM users WHERE `id` = ?',
@@ -87,4 +99,5 @@ export default {
   getTagsById,
   addUserTag,
   removeUserTag,
+  setResetKeyForPassword,
 };

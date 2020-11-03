@@ -6,6 +6,15 @@ import jasonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
 import sendmail from '../utils/emailUtil.js';
 import tagModel from '../models/tagModel.js';
 
+const forgotPassword = async (request, response) => {
+  const user = await UserUtil.checkIfUsernameExist({
+    login: request.body.login,
+  });
+  if (user.error) return response.status(404).json({ error: 'user does not exist' });
+  await UserUtil.resetUserPassword(user.userData);
+  return response.status(200).json({ status: 'success' });
+};
+
 const deleteUser = async (request, response) => {
   const { authorization } = request.headers;
   const userId = jasonWebTokenUtils.getUserId(authorization);
@@ -113,4 +122,5 @@ export default {
   getTagsById,
   addTagById,
   removeTagById,
+  forgotPassword,
 };

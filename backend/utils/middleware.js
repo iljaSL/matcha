@@ -1,6 +1,5 @@
 // eslint-disable-next-line consistent-return
 const errorHandler = (error, request, response, next) => {
-  console.log(response, error);
   if (!request.token) return response.status(401).json({ error: 'token missing or invalid' });
 
   if (error.name === 'CastError' && error.kind === 'ObjectId') {
