@@ -2,6 +2,14 @@ import inputChecker from './inputUtil.js';
 import userModel from '../models/userModel.js';
 import sendmail from './emailUtil.js';
 
+const updatePasswordWithResetKey = async (newPassword, key) => {
+  const updatedPassword = await userModel.updatePasswordWithResetKey(newPassword, key);
+  if (updatedPassword) {
+    return { status: 'success' };
+  }
+  return { status: 'error' };
+};
+
 const resetUserPassword = async (data) => {
   const resetId = (
     new Date().getTime() + Math.floor(Math.random() * 1000 + 1)
@@ -43,4 +51,5 @@ export default {
   checkUserValidity,
   checkIfUsernameExist,
   resetUserPassword,
+  updatePasswordWithResetKey,
 };
