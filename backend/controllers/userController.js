@@ -6,6 +6,28 @@ import jasonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
 import sendmail from '../utils/emailUtil.js';
 import tagModel from '../models/tagModel.js';
 
+const updatePasswordWithResetKey = async (request, response) => {
+  const newPassword = request.body.new_password;
+  const repeatPassword = request.body.repeat_password;
+  const { key } = request.params;
+  console.log('CHECK OUT THIS', request.body);
+  if (input.password(newPassword).error) return response.status(400).json({ error: 'new password does not work' });
+  if (input.password(repeatPassword).error) return response.status(400).json({ error: 'password 2 does not work' });
+  if (newPassword !== repeatPassword) return response.status(400).json({ error: 'passwords do not match!' });
+
+  const result = await UserUtil.updatePasswordWithResetKey(newPassword, key);
+  if (result.status === 'success') return response.status(201).json({ status: 'password has been updated' });
+  return response.status(400).json({ error: 'something went wrong' });
+};
+
+const checkPasswordResetKey = async (request, response, next) => {
+  const result = await userModel.findUser('reset_password_key', request.params.key);
+  if (result.length !== 0) {
+    return response.status(200).json({ message: 'success' });
+  }
+  return response.status(404).json({ message: 'key is not valid' });
+};
+
 const forgotPassword = async (request, response) => {
   const user = await UserUtil.checkIfUsernameExist({
     login: request.body.login,
@@ -123,4 +145,6 @@ export default {
   addTagById,
   removeTagById,
   forgotPassword,
+  checkPasswordResetKey,
+  updatePasswordWithResetKey,
 };

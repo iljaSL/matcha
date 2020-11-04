@@ -11,6 +11,10 @@ userRouter.get('/reset-password/:key', async (request, response, err) => {
   await userController.checkPasswordResetKey(request, response, err);
 });
 
+userRouter.post('/reset-password/:key', async (request, response, err) => {
+  await userController.updatePasswordWithResetKey(request, response, err);
+});
+
 userRouter.delete('/:id', async (request, response, err) => {
   await userController.deleteUser(request, response, err);
 });
