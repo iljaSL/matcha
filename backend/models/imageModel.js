@@ -9,14 +9,19 @@ const directoryExists = (filePath) => {
 };
 
 const saveImageBlob = async (uid, base64String) => {
-  /* hard-coded for jpeg TODO: check for magic numbers to identify the file type and add png support
-https://en.wikipedia.org/wiki/List_of_file_signatures
-or use image-type package
- */
   const hash = crypto.randomBytes(8).toString('hex');
   const base64Image = base64String.split(';base64,').pop();
+  // had to do this.. i'm sorry.. gonna refactor later
+  // eslint-disable-next-line no-nested-ternary
+  const fileFormat = (base64Image.charAt(0) === '/')
+    ? 'jpg'
+    : (base64Image.charAt(0) === 'i')
+      ? 'png'
+      : null;
+  if (!fileFormat) throw new Error('Invalid file format');
+  console.log(fileFormat);
   if (!directoryExists(`../public/images/${uid}`)) fs.mkdirSync(`../public/images/${uid}`, { recursive: true });
-  fs.writeFile(`../public/images/${uid}/${hash}.jpg`, base64Image, { encoding: 'base64' }, (err) => {
+  fs.writeFile(`../public/images/${uid}/${hash}.${fileFormat}`, base64Image, { encoding: 'base64' }, (err) => {
     if (err) console.log(err);
     else console.log('File created ');
   }); // TODO: .env for file path?
