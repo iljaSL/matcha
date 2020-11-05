@@ -1,14 +1,17 @@
 import crypto from 'crypto';
 import fs from 'fs'; // TODO: use promises?
-import path from 'path';
 import dotenv from 'dotenv';
 import pool from '../config/database.js';
 
 dotenv.config();
 
-const directoryExists = (filePath) => {
-  const dirName = path.dirname(filePath);
-  return fs.existsSync(dirName);
+const getUserImages = async (uid) => {
+  const result = await pool.query({
+    sql: 'SELECT * FROM user_photo WHERE uid=?',
+    values: [uid],
+  });
+  if (result.err) throw result.err;
+  return result;
 };
 
 const saveImageBlob = async (uid, base64String) => {
@@ -22,12 +25,20 @@ const saveImageBlob = async (uid, base64String) => {
     : (base64Image.charAt(0) === 'i')
       ? 'png'
       : null;
-  if (!fileFormat) throw new Error('Invalid file format');
-  console.log(fileFormat);
-  if (!directoryExists(`${imagePath}/${uid}`)) fs.mkdirSync(`${imagePath}/${uid}`, { recursive: true });
+  if (!fileFormat) { throw new Error('Invalid file format'); }
+  await fs.access(`${imagePath}/${uid}`, async (err) => {
+    if (err) {
+      fs.mkdir(`${imagePath}/${uid}`, { recursive: true }, async (err2) => {
+        if (err2) { throw err; }
+      });
+    }
+  });
+
   fs.writeFile(`${imagePath}/${uid}/${hash}.${fileFormat}`, base64Image, { encoding: 'base64' }, (err) => {
-    if (err) throw new Error('Error writing');
-    console.log('File created ');
+    if (err) {
+      console.log(err.message);
+      throw new Error('Error writing');
+    }
   });
   return (`${imagePath}/${uid}/${hash}.${fileFormat}`);
 };
@@ -42,5 +53,7 @@ const addImageLink = async (uid, imageLink) => {
 };
 
 export default {
-  addImageLink, saveImageBlob,
+  addImageLink,
+  saveImageBlob,
+  getUserImages,
 };
