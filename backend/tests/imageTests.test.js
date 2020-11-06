@@ -33,7 +33,8 @@ describe('image upload tests', () => {
             })
             .expect(200)).body.token);
     })
-    test('valid png upload adds file to server', async () => {
+    test('valid png upload adds file to server and a link to db', async () => {
+        images = await imageModel.getUserImages(userId)
         let returnValue = (await request
                 .post(`/api/images/${userId}`)
                 .set('Authorization', `${token}`)
@@ -42,8 +43,11 @@ describe('image upload tests', () => {
         )
         const savedPath = (new URL(returnValue.body)).pathname;
         expect(fs.existsSync(`${process.cwd()}${savedPath}`)).toBe(true)
+        const newImages = await imageModel.getUserImages(userId)
+        expect(newImages.length).toBe(images.length + 1)
     })
-    test('valid jpg upload adds file to server', async () => {
+    test('valid jpg upload adds file to server and a link to db', async () => {
+        images = await imageModel.getUserImages(userId)
         let returnValue = (await request
                 .post(`/api/images/${userId}`)
                 .set('Authorization', token)
@@ -52,6 +56,8 @@ describe('image upload tests', () => {
         )
         const savedPath = (new URL(returnValue.body)).pathname;
         expect(fs.existsSync(`${process.cwd()}${savedPath}`)).toBe(true)
+        const newImages = await imageModel.getUserImages(userId)
+        expect(newImages.length).toBe(images.length + 1)
     })
     test('invalid filetype upload returns 400', async () => {
         await request
@@ -59,6 +65,17 @@ describe('image upload tests', () => {
                 .send(imageTestUtils.invalidFormatGIF)
                 .set('Authorization', token)
                 .expect(400)
+    })
+    test('file uploading with no auth returns 401', async () => {
+        await request
+            .post(`/api/images/${userId}`)
+            .send(imageTestUtils.validPNG)
+            .expect(401)
+    })
+    test('file uploading with empty file returns 401', async () => {
+        await request
+            .post(`/api/images/${userId}`)
+            .expect(401)
     })
 })
 describe('image link posting', () => {
