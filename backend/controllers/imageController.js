@@ -10,7 +10,7 @@ const checkUrlValidity = async (url) => {
   } catch (err) { if (err.errno === -61) return false; throw err; } // invalid url returns false
 };
 
-const addImage = async (request, response, next) => {
+const addImage = async (request, response, next) => { // TODO: refactor
   const { image } = request.body;
   let { link } = request.body;
   const { id } = request.params;
@@ -24,14 +24,13 @@ const addImage = async (request, response, next) => {
     }
   } else if (link) {
     try {
-      if (!(await checkUrlValidity(link))) return response.status(400).json('Invalid link');
+      if (!(await checkUrlValidity(link))) { next(new Error('link invalid')); }
       await imageModel.addImageLink(id, link);
       return response.status(200).json(link);
     } catch (err) {
       next(err);
     }
   }
-  return response.status(400).json(link);
 };
 
 export default {

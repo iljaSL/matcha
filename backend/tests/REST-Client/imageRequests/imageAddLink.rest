@@ -1,7 +1,17 @@
 POST http://localhost:3001/api/images/4 HTTP/1.1
 content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJwbHVzdGlnIiwiaWF0IjoxNjA0NjQ3NjAwLCJleHAiOjE2MDQ3MzQwMDB9.ZR2LK_JP2clwgFeCVE2r0EoTiwEsvbP1CdWLbg3ap8g
 
 {
-  "link": "https://en.wikipedia.org/wiki/Barack_Obama#/media/File:President_Barack_Obama.jpg"
+  "link": "https://png.pngtree.com/png-clipart/20190516/original/pngtree-whatsapp-icon-png-image_3584844.jpg"
 }
 
+####
+
+POST http://localhost:3001/api/images/4 HTTP/1.1
+content-Type: application/json
+Authorization: Bearer eyJhdbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJwbHVzdGlnIiwiaWF0IjoxNjA0NjQ3NjAwLCJleHAiOjE2MDQ3MzQwMDB9.ZR2LK_JP2clwgFeCVE2r0EoTiwEsvbP1CdWLbg3ap8g
+
+{
+  "link": "ersdtfyghjjk"
+}

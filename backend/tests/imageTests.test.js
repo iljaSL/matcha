@@ -21,19 +21,22 @@ beforeAll(async () => {
     userId = (await request
         .post('/api/users/')
         .send(userTestUtils.validUsers[2])).body.id
-    token = (await request
-        .post('/api/login')
-        .send({
-            username: userTestUtils.validUsers[2].username,
-            password: userTestUtils.validUsers[2].password,
-        })
-        .expect(200)).body.token;
 })
 
 describe('image upload tests', () => {
+    beforeEach(async () => {
+        token = 'Bearer ' + ((await request
+            .post('/api/login')
+            .send({
+                username: userTestUtils.validUsers[2].username,
+                password: userTestUtils.validUsers[2].password,
+            })
+            .expect(200)).body.token);
+    })
     test('valid png upload adds file to server', async () => {
         let returnValue = (await request
                 .post(`/api/images/${userId}`)
+                .set('Authorization', `${token}`)
                 .send(imageTestUtils.validPNG)
                 .expect(200)
         )
@@ -43,6 +46,7 @@ describe('image upload tests', () => {
     test('valid jpg upload adds file to server', async () => {
         let returnValue = (await request
                 .post(`/api/images/${userId}`)
+                .set('Authorization', token)
                 .send(imageTestUtils.validJPG)
                 .expect(200)
         )
@@ -53,10 +57,20 @@ describe('image upload tests', () => {
         await request
                 .post(`/api/images/${userId}`)
                 .send(imageTestUtils.invalidFormatGIF)
+                .set('Authorization', token)
                 .expect(400)
     })
 })
 describe('image link posting', () => {
+    beforeEach(async () => {
+        token = 'Bearer ' + ((await request
+            .post('/api/login')
+            .send({
+                username: userTestUtils.validUsers[2].username,
+                password: userTestUtils.validUsers[2].password,
+            })
+            .expect(200)).body.token);
+    })
     test('valid http link added to database', async () => {
         for (const image of imageTestUtils.validLinks)
         {
@@ -64,19 +78,18 @@ describe('image link posting', () => {
             await request
                 .post(`/api/images/${userId}`)
                 .send(imageTestUtils.validLinks[1])
+                .set('Authorization', token)
                 .expect(200)
         const newImages = await imageModel.getUserImages(userId)
         expect(newImages.length).toBe(images.length + 1)
         }
     })
     test('invalid link returns 400', async () => {
-        for (const link of imageTestUtils.invalidLinks)
-        {
             await request
                 .post(`/api/images/${userId}`)
                 .send(imageTestUtils.invalidLinks[1])
+                .set('Authorization', token)
                 .expect(400)
-        }
     })
 })
 

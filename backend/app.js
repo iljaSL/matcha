@@ -15,6 +15,8 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: 100000000 }));
 
+app.use(middleware.tokenExtractor);
+
 app.use('/api/users', userRoute);
 app.use('/api/login', loginRoute);
 app.use('/api/tags', tagRoute);
