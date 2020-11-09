@@ -18,10 +18,10 @@ const saveImageBlob = async (uid, base64String) => { // TODO: refactor
   const imagePath = process.env.IMAGE_PATH;
   const hash = crypto.randomBytes(16).toString('hex');
   const base64Image = base64String.split(';base64,').pop();
-  // had to do this.. i'm sorry.. gonna refactor later
-  // eslint-disable-next-line no-nested-ternary
   const buffer = Buffer.from(base64Image);
   if (buffer.length > 5e+6) throw new Error('Image is too large');
+  // had to do this.. i'm sorry.. gonna refactor later
+  // eslint-disable-next-line no-nested-ternary
   const fileFormat = (base64Image.charAt(0) === '/')
     ? 'jpg'
     : (base64Image.charAt(0) === 'i')
