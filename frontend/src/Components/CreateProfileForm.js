@@ -20,6 +20,7 @@ import ListItem from '@material-ui/core/ListItem';
 
 import Checkbox from '@material-ui/core/Checkbox';
 
+import Dropzone from 'react-dropzone'
 
 const CreateProfileForm = () => {
 
@@ -47,7 +48,7 @@ const CreateProfileForm = () => {
     const [fieldData, setData] = useState({
         currentStep: 0,
         gender: 'female',
-        preferences: ['female'],
+        preferences: ['female', 'male', 'nb'],
         bio: '',
         tagList: [],
         profilePic: '',
@@ -139,7 +140,16 @@ const CreateProfileForm = () => {
                 )
             case 4:
                 return (
-                    <div>add image uploading here yo...</div>
+                    <Dropzone onDrop={acceptedFiles => console.log(acceptedFiles)} >
+                        {({getRootProps, getInputProps}) => (
+                            <section>
+                                <div {...getRootProps()}>
+                                    <input {...getInputProps()} />
+                                    <p>Drag 'n' drop some files here, or click to select files</p>
+                                </div>
+                            </section>
+                        )}
+                    </Dropzone>
                 )
             case 5:
                 return (
