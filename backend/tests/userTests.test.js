@@ -1,6 +1,7 @@
 import supertest from 'supertest';
 import app from '../app.js';
 import userTestUtils from './userTestUtils.js';
+import pool from '../config/database';
 
 /* eslint-disable */
 
@@ -78,6 +79,76 @@ describe('user creation and modification', () => {
 
       await request.delete(`/api/users/${userId}`).set('Authorization', `${wrongToken}`).expect(401)
   })
+
+    test('forgot-password route should find user and return 200', async () => {
+        await request
+            .post('/api/users/forgot-password')
+            .send({
+                login: userTestUtils.newValidUser.username,
+            })
+            .expect(200);
+    });
+
+  test('forgot-password route should return 404 with wrong login', async () => {
+        await request
+            .post('/api/users/forgot-password')
+            .send({
+                login: 'plust',
+            })
+            .expect(404);
+    });
+
+    test('forgot-password route should find user and return 200', async () => {
+        let idDb = await pool.query({
+            sql: `SELECT reset_password_key FROM users WHERE username LIKE "${userTestUtils.newValidUser.username}"`
+        });
+        await request
+            .get(`/api/users/reset-password/${idDb[0].reset_password_key}`)
+            .expect(200);
+    });
+
+    test('forgot-password route should not find invalid user and return 404', async () => {
+        await request
+            .get(`/api/users/reset-password/427427241`)
+            .expect(404);
+    });
+
+    test('reset-password route update password, should return 201', async () => {
+        let idDb = await pool.query({
+            sql: `SELECT reset_password_key FROM users WHERE username LIKE "${userTestUtils.newValidUser.username}"`
+        });
+        await request
+            .post(`/api/users/reset-password/${idDb[0].reset_password_key}`).send({
+                new_password: "Peter123",
+                repeat_password: "Peter123"
+            })
+            .expect(201);
+    });
+
+    test('reset-password route, passwords do not match, expect 400', async () => {
+        let idDb = await pool.query({
+            sql: `SELECT reset_password_key FROM users WHERE username LIKE "${userTestUtils.newValidUser.username}"`
+        });
+        await request
+            .post(`/api/users/reset-password/${idDb[0].reset_password_key}`).send({
+                new_password: "Peter12",
+                repeat_password: "Peter123"
+            })
+            .expect(400);
+    });
+
+    test('reset-password route, wrong password format, expect 400', async () => {
+        let idDb = await pool.query({
+            sql: `SELECT reset_password_key FROM users WHERE username LIKE "${userTestUtils.newValidUser.username}"`
+        });
+        await request
+            .post(`/api/users/reset-password/${idDb[0].reset_password_key}`).send({
+                new_password: "123",
+                repeat_password: "123"
+            })
+            .expect(400);
+    });
+
   test ('delete user should return 200',async () => {
       let login = await request.post('/api/login').send({
           username: userTestUtils.newValidUser.username,
@@ -91,6 +162,7 @@ describe('user creation and modification', () => {
       await request.delete(`/api/users/${userId}`).set('Authorization', `${token}`).expect(200)
   })
 });
+
 
 afterAll(async () => {
   await new Promise((resolve) => setTimeout(resolve, 5000));
