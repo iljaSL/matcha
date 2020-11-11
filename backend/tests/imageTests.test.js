@@ -8,6 +8,7 @@ import imageTestUtils from './imageTestUtils';
 import imageModel from '../models/imageModel';
 import truncateAllTables from './testDbUtils';
 import userModel from '../models/userModel';
+import pool from '../config/database';
 
 /* eslint-disable */
 dotenv.config();
@@ -15,12 +16,18 @@ dotenv.config();
 const request = supertest(app);
 let id, token, tag, userId, images
 const imagePath = process.env.IMAGE_PATH;
+function validateUser () {
+    pool.query({
+        sql: `UPDATE users SET \`key\` = NULL, status = 1 WHERE username LIKE "${userTestUtils.validUsers[2].username}"`,
+    });
+}
 
 beforeAll(async () => {
     await truncateAllTables();
     userId = (await request
         .post('/api/users/')
         .send(userTestUtils.validUsers[2])).body.id
+    validateUser();
 })
 
 describe('image upload tests', () => {
