@@ -1,12 +1,22 @@
 import supertest from 'supertest';
 import app from '../app.js';
 import userTestUtils from './userTestUtils.js';
+import pool from '../config/database';
 
 /* eslint-disable */
 
 const request = supertest(app);
 
 let id, tag, token, userid
+
+function validateUser () {
+    pool.query({
+        sql: `UPDATE users SET \`key\` = NULL, status = 1 WHERE username LIKE "${userTestUtils.validUsers[0].username}"`,
+    });
+    pool.query({
+        sql: `UPDATE users SET \`key\` = NULL, status = 1 WHERE username LIKE "${userTestUtils.validUsers[1].username}"`,
+    });
+}
 
 beforeAll(async () => {
     await request
@@ -15,6 +25,7 @@ beforeAll(async () => {
     userid = await request
         .post('/api/users/')
         .send(userTestUtils.validUsers[1])
+    validateUser();
      token = (await request
         .post('/api/login')
         .send({
