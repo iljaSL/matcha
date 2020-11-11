@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS `users` (
     -- `tag_min` int(11) NOT NULL DEFAULT '1',
     -- `tag_max` int(11) NOT NULL DEFAULT '25',
     -- `tags` tinyint(1) DEFAULT NULL,
-                                       `key` varchar(255) DEFAULT NULL
-    -- `password_key` varchar(255) DEFAULT NULL,
+                                       `key` varchar(255) DEFAULT NULL,
+  `reset_password_key` varchar(255) DEFAULT NULL
     -- `status` tinyint(1) NOT NULL DEFAULT '0',
     -- `online` tinyint(1) NOT NULL DEFAULT '0',
     -- `last_connection` datetime DEFAULT NULL
