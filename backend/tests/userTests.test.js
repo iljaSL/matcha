@@ -7,6 +7,11 @@ import pool from '../config/database';
 
 const request = supertest(app);
 let token;
+function validateUser () {
+    pool.query({
+        sql: `UPDATE users SET \`key\` = NULL, status = 1 WHERE username LIKE "${userTestUtils.newValidUser.username}"`,
+    });
+}
 
 // TODO: should drop the test database here to start w/ a blank slate?
 
@@ -22,10 +27,6 @@ describe('user creation and modification', () => {
       .expect(201);
   });
 
-  test('user did not validate account and server returns 400', async () => {
-
-  })
-
   test('user creation with missing values returns 400', async () => {
     await request
       .post('/api/users/')
@@ -39,15 +40,28 @@ describe('user creation and modification', () => {
       .expect(409);
   });
 
+    test('login with valid username & pw, but no validation, server should return 400', async () => {
+        const { token } = (await request
+            .post('/api/login')
+            .send({
+                username: userTestUtils.newValidUser.username,
+                password: userTestUtils.newValidUser.password,
+            })
+            .expect(401)).body;
+    });
+
   test('login with valid username & pw returns 200', async () => {
-    const { token } = (await request
-      .post('/api/login')
-      .send({
-        username: userTestUtils.newValidUser.username,
-        password: userTestUtils.newValidUser.password,
-      })
-      .expect(200)).body;
+      validateUser();
+
+      const { token } = (await request
+          .post('/api/login')
+          .send({
+              username: userTestUtils.newValidUser.username,
+              password: userTestUtils.newValidUser.password,
+          })
+          .expect(200)).body;
   });
+
   test('invalid login returns 401', async () => {
     await request
       .post('/api/login')
