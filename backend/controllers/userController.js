@@ -6,11 +6,22 @@ import jasonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
 import sendmail from '../utils/emailUtil.js';
 import tagModel from '../models/tagModel.js';
 
+const validateUserAfterRegistration = async (request, response) => {
+  const result = await userModel.findUser('key', request.params.key);
+
+  if (result !== '') {
+    const validated = await userModel.validateUser(request.params.key);
+
+    if (validated) return response.status(200).json({ message: 'user has been validate.' });
+    return response.status(400).json({ message: 'user could not be validated.' });
+  } return response.status(400).json({ message: 'user could not be validated.' });
+};
+
 const updatePasswordWithResetKey = async (request, response) => {
   const newPassword = request.body.new_password;
   const repeatPassword = request.body.repeat_password;
   const { key } = request.params;
-  console.log('CHECK OUT THIS', request.body);
+
   if (input.password(newPassword).error) return response.status(400).json({ error: 'new password does not work' });
   if (input.password(repeatPassword).error) return response.status(400).json({ error: 'password 2 does not work' });
   if (newPassword !== repeatPassword) return response.status(400).json({ error: 'passwords do not match!' });
@@ -80,6 +91,8 @@ const auth = async (username, password) => {
 const login = async (request, response) => {
   const { username, password } = request.body;
   const user = (await userModel.findUser('username', username))[0];
+
+  if (user.status === 0) return response.status(401).json({ message: 'user account has not been activated' });
   if (!user || !password) return response.status(404).json({ message: 'user not found' });
   const match = await bcrypt.compare(password, user.password);
   if (!match) return response.status(401).json({ message: 'invalid username/password' });
@@ -100,7 +113,8 @@ const createUser = async (request, response) => {
   body.uuid = (new Date().getTime() + Math.floor(Math.random() * 10000 + 1)).toString(16);
   const created = await userModel.registerUser(body);
   if (created) {
-    const link = `https://localhost:3000/users/register/${body.uuid}`;
+    console.log('CHEKC', body.uuid);
+    const link = `http://localhost:3001/api/users/register/${body.uuid}`;
     await sendmail.confirmRegistrationWithEmail(body.mail, body.username, link);
     return response.status(201).json({ status: 'User created with success', id: created });
   }
@@ -147,4 +161,5 @@ export default {
   forgotPassword,
   checkPasswordResetKey,
   updatePasswordWithResetKey,
+  validateUserAfterRegistration,
 };

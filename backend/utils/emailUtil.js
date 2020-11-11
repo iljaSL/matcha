@@ -39,9 +39,7 @@ const emailForForgotPassword = (mail, username, link) => {
   });
 };
 
-const confirmRegistrationWithEmail = (mail, link) => {
-  const username = inputUtil.username();
-
+const confirmRegistrationWithEmail = (mail, username, link) => {
   const message = `
         <html>
         <head>
@@ -58,7 +56,7 @@ const confirmRegistrationWithEmail = (mail, link) => {
   link
 }">Click here</a></p>
           <br>
-          <p>See you soon on Matcha. The place to be, for desperated people!</p>
+          <p>See you soon on Matcha. The place to be, for desperate people!</p>
         </body>
       </html>`;
 
