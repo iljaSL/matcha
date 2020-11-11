@@ -25,7 +25,7 @@ pool.getConnection((err, connection) => {
     if (err.code === 'ECONNREFUSED') {
       console.error('DB connection was refused.');
     }
-  } else {
+  } else if (process.env.NODE_ENV !== 'test') { // otherwise supertest gives an error
     console.log('DB is connected!');
   }
   if (connection) connection.release();

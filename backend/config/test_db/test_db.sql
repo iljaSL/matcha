@@ -38,11 +38,20 @@ CREATE TABLE IF NOT EXISTS `tags` (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `usertags` (
-                                          `id` int PRIMARY KEY AUTO_INCREMENT NOT NULL,
-                                          `uid` int,
-                                          `tagId` int,
-                                          FOREIGN KEY (uid) REFERENCES users (id),
-                                          FOREIGN KEY (tagId) REFERENCES tags (id)
+`id` int PRIMARY KEY AUTO_INCREMENT NOT NULL,
+`uid` int,
+`tagId` int,
+FOREIGN KEY (uid) REFERENCES users (id),
+FOREIGN KEY (tagId) REFERENCES tags (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `user_photo` (
+`id` int PRIMARY KEY AUTO_INCREMENT NOT NULL,
+`uid` int,
+`link` text,
+`details` text,
+`time_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY (uid) REFERENCES users (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `usertags` ADD UNIQUE (`uid` , `tagId`)

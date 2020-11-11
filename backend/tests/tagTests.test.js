@@ -6,10 +6,7 @@ import userTestUtils from './userTestUtils.js';
 
 const request = supertest(app);
 
-let id
-let tag
-let token
-let userid
+let id, tag, token, userid
 
 beforeAll(async () => {
     await request

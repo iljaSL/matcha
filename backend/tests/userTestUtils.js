@@ -23,6 +23,13 @@ const validUsers = [
     mail: 'mail@de.de',
     password: 'Peter123',
   },
+  {
+    lastname: 'Biden',
+    firstname: 'Joe',
+    username: 'happyJoe',
+    mail: 'mail@de.de',
+    password: 'Peter123',
+  },
 ];
 
 const newUserMissingUsername = {
