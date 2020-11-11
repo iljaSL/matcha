@@ -1,6 +1,18 @@
 import bcrypt from 'bcrypt';
 import pool from '../config/database.js';
 
+const validateUser = async (data) => {
+  try {
+    const result = await pool.query({
+      sql: 'UPDATE users SET `key` = NULL, status = 1 WHERE `key` = ?',
+      values: [data],
+    });
+    return result.affectedRows;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 const updatePasswordWithResetKey = async (newPassword, key) => {
   const saltRounds = 10;
   const salt = bcrypt.genSaltSync(saltRounds);
@@ -125,4 +137,5 @@ export default {
   removeUserTag,
   setResetKeyForPassword,
   updatePasswordWithResetKey,
+  validateUser,
 };

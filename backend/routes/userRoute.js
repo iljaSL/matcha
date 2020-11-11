@@ -3,6 +3,10 @@ import userController from '../controllers/userController.js';
 
 const userRouter = express.Router();
 
+userRouter.get('/register/:key', async (request, response, err) => {
+  await userController.validateUserAfterRegistration(request, response, err);
+});
+
 userRouter.post('/forgot-password', async (request, response, err) => {
   await userController.forgotPassword(request, response, err);
 });

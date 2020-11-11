@@ -21,6 +21,11 @@ describe('user creation and modification', () => {
       .send(userTestUtils.newValidUser)
       .expect(201);
   });
+
+  test('user did not validate account and server returns 400', async () => {
+
+  })
+
   test('user creation with missing values returns 400', async () => {
     await request
       .post('/api/users/')
