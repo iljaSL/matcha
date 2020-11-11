@@ -20,7 +20,7 @@ import ListItem from '@material-ui/core/ListItem';
 
 import Checkbox from '@material-ui/core/Checkbox';
 
-import Dropzone from 'react-dropzone'
+import {DropzoneArea} from "material-ui-dropzone";
 
 const CreateProfileForm = () => {
 
@@ -31,8 +31,28 @@ const CreateProfileForm = () => {
     })(Typography);
 
 
-    const steps = ['Select your gender', 'Select your sexual preferences', 'Write a short bio',
-        'Select your interests', 'Upload your profile picture', 'Finished!']
+    const initialSteps = [
+        {
+            name: 'Select your gender',
+            success: false
+        },
+        {
+            name: 'Select your sexual preferences',
+            success: false
+        },
+        {
+            name: 'Write a short bio',
+            success: false
+        },
+        {
+            name: 'Select your interests',
+            success: false,
+        },
+        {
+            name: 'Upload your profile picture',
+            success: false
+        },
+        {name: 'Finished!', success: false},]
 
     const genderList = ['male', 'female', 'nb']
 
@@ -52,7 +72,8 @@ const CreateProfileForm = () => {
         bio: '',
         tagList: [],
         profilePic: '',
-        signupSuccess: false
+        signupSuccess: false,
+        steps: initialSteps
     })
 
 
@@ -73,7 +94,7 @@ const CreateProfileForm = () => {
         alert('OMG YOU MADE IT')
     }
 
-    const {currentStep, gender, preferences, bio, tagList, profilePic, signupSuccess} = fieldData;
+    const {currentStep, steps, gender, preferences, bio, tagList, profilePic, signupSuccess} = fieldData;
 
     const handleSwitch = (gender) => {
         const newList = preferences.indexOf(gender) === -1
@@ -131,8 +152,8 @@ const CreateProfileForm = () => {
                 return (
                     <List>
                         {initialTags.map((tag, index) =>
-                            <ListItem key={index} onClick={() => handleListItem(tag)} >
-                                <Checkbox edge="start" checked={tagList.indexOf(tag) !== -1} />
+                            <ListItem key={index} onClick={() => handleListItem(tag)}>
+                                <Checkbox edge="start" checked={tagList.indexOf(tag) !== -1}/>
                                 {tag}
                             </ListItem>
                         )}
@@ -140,16 +161,9 @@ const CreateProfileForm = () => {
                 )
             case 4:
                 return (
-                    <Dropzone onDrop={acceptedFiles => console.log(acceptedFiles)} >
-                        {({getRootProps, getInputProps}) => (
-                            <section>
-                                <div {...getRootProps()}>
-                                    <input {...getInputProps()} />
-                                    <p>Drag 'n' drop some files here, or click to select files</p>
-                                </div>
-                            </section>
-                        )}
-                    </Dropzone>
+                    <DropzoneArea
+                        acceptedFiles={['image/png', 'image/jpg', 'image/jpeg']}
+                        onChange={(files) => console.log(files)}/>
                 )
             case 5:
                 return (
@@ -165,9 +179,9 @@ const CreateProfileForm = () => {
     return (
         <div>
             <Stepper activeStep={currentStep}>
-                {steps.map((label, index) =>
-                    <Step key={label}>
-                        <StepLabel onClick={() => jump(index)}>{label}</StepLabel>
+                {steps.map((entry, index) =>
+                    <Step key={entry.name}>
+                        <StepLabel onClick={() => jump(index)}>{entry.name}</StepLabel>
                     </Step>
                 )}
             </Stepper>
