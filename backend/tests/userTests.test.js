@@ -2,6 +2,7 @@ import supertest from 'supertest';
 import app from '../app.js';
 import userTestUtils from './userTestUtils.js';
 import pool from '../config/database';
+import userRouter from '../routes/userRoute';
 
 /* eslint-disable */
 
@@ -40,7 +41,7 @@ describe('user creation and modification', () => {
       .expect(409);
   });
 
-    test('login with valid username & pw, but no validation, server should return 400', async () => {
+    test('login with valid username & pw, but no validation, server should return 401', async () => {
         const { token } = (await request
             .post('/api/login')
             .send({
@@ -48,6 +49,10 @@ describe('user creation and modification', () => {
                 password: userTestUtils.newValidUser.password,
             })
             .expect(401)).body;
+    });
+
+    test('wrong validation key, server should response with 404', async () => {
+        await request.get('/register/w4r6o65ng').expect(404);
     });
 
   test('login with valid username & pw returns 200', async () => {
