@@ -54,4 +54,10 @@ CREATE TABLE IF NOT EXISTS `user_photo` (
 FOREIGN KEY (uid) REFERENCES users (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `report` (
+`id` int PRIMARY KEY AUTO_INCREMENT NOT NULL,
+`user_id` int(11) NOT NULL,
+`reported_user_id` int(11) NOT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 ALTER TABLE `usertags` ADD UNIQUE (`uid` , `tagId`)

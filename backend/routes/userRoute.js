@@ -3,6 +3,10 @@ import userController from '../controllers/userController.js';
 
 const userRouter = express.Router();
 
+userRouter.get('/report/:userId/:reportedUserId', async (request, response, next) => {
+  await userController.reportUser(request, response, next);
+});
+
 userRouter.get('/register/:key', async (request, response, err) => {
   await userController.validateUserAfterRegistration(request, response, err);
 });

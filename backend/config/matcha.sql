@@ -32,6 +32,12 @@ CREATE TABLE IF NOT EXISTS `users` (
   -- `last_connection` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `report` (
+`id` int PRIMARY KEY AUTO_INCREMENT NOT NULL,
+`user_id` int(11) NOT NULL,
+`reported_user_id` int(11) NOT NULL
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `tags` (
 `id` int PRIMARY KEY AUTO_INCREMENT NOT NULL,
 `tag` varchar(50)
