@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import pool from '../config/database.js';
 
-const reportUser = async (data) => {
+const reportUser = async (data, next) => {
   try {
     const result = await pool.query({
       sql: 'INSERT INTO report (user_id, reported_user_id) VALUES (?)',
@@ -9,7 +9,7 @@ const reportUser = async (data) => {
     });
     return result.affectedRows;
   } catch (err) {
-    throw new Error(err);
+    next(err);
   }
 };
 

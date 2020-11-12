@@ -34,8 +34,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 CREATE TABLE IF NOT EXISTS `report` (
 `id` int PRIMARY KEY AUTO_INCREMENT NOT NULL,
-`user_id` int(11) NOT NULL,
-`reported_user_id` int(11) NOT NULL
+`user_id` int NOT NULL,
+`reported_user_id` int NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `tags` (
@@ -61,4 +61,5 @@ FOREIGN KEY (uid) REFERENCES users (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-ALTER TABLE `usertags` ADD UNIQUE (`uid` , `tagId`) -- TO ENSURE UNIQUENESS OF ALL TAGS PER USER, NO DUPLICATES
+ALTER TABLE `usertags` ADD UNIQUE (`uid` , `tagId`);-- TO ENSURE UNIQUENESS OF ALL TAGS PER USER, NO DUPLICATES
+ALTER TABLE `report` ADD UNIQUE (`user_id` , `reported_user_id`);
