@@ -60,4 +60,5 @@ CREATE TABLE IF NOT EXISTS `report` (
 `reported_user_id` int(11) NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-ALTER TABLE `usertags` ADD UNIQUE (`uid` , `tagId`)
+ALTER TABLE `usertags` ADD UNIQUE (`uid` , `tagId`);-- TO ENSURE UNIQUENESS OF ALL TAGS PER USER, NO DUPLICATES
+ALTER TABLE `report` ADD UNIQUE (`user_id` , `reported_user_id`);
