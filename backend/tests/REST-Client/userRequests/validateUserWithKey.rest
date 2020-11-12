@@ -1,2 +1,2 @@
-GET http://localhost:3001/api/users/register/17593ede124 HTTP/1.1
+GET http://localhost:3001/api/users/register/175bc27dce5 HTTP/1.1
 content-Type: application/json

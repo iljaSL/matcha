@@ -6,6 +6,17 @@ import jasonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
 import sendmail from '../utils/emailUtil.js';
 import tagModel from '../models/tagModel.js';
 
+const reportUser = async (request, response, next) => {
+  const { userId } = request.params;
+  const { reportedUserId } = request.params;
+
+  if (userId !== reportedUserId) {
+    const result = await userModel.reportUser([reportedUserId, userId]);
+    if (result) return response.status(200).json({ message: 'user has been reported' });
+  }
+  return response.status(400).json({ message: 'user could not be reported' });
+};
+
 const validateUserAfterRegistration = async (request, response) => {
   const result = await userModel.findUser('key', request.params.key);
 
@@ -162,4 +173,5 @@ export default {
   checkPasswordResetKey,
   updatePasswordWithResetKey,
   validateUserAfterRegistration,
+  reportUser,
 };

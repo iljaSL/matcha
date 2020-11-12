@@ -1,6 +1,18 @@
 import bcrypt from 'bcrypt';
 import pool from '../config/database.js';
 
+const reportUser = async (data) => {
+  try {
+    const result = await pool.query({
+      sql: 'INSERT INTO report (user_id, reported_user_id) VALUES (?)',
+      values: [data],
+    });
+    return result.affectedRows;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 const validateUser = async (data) => {
   try {
     const result = await pool.query({
@@ -138,4 +150,5 @@ export default {
   setResetKeyForPassword,
   updatePasswordWithResetKey,
   validateUser,
+  reportUser,
 };
