@@ -70,6 +70,10 @@ export const PictureDropZone = () =>
         onChange={(files) => console.log(files)}/>
 
 export const FinalPage = ({formData}) => {
-    console.log(formData)
-    return <div>made it!</div>
+    const {preferences, bio, tagList, gender} = formData
+    return <div>
+        So you're a {gender} looking for company from {preferences.map(pref => `${pref}s `)}
+        interested in {tagList.map(tag => `${tag} `)} with the bio {bio}.
+        Is that correct?
+    </div>
 }

@@ -21,7 +21,7 @@ const CreateProfileForm = () => {
 
     useEffect(() => {
         dispatch(checkFormValidity(registrationData))
-    }, [registrationData])
+    }, [dispatch, registrationData])
 
     const next = () => {
         dispatch(changePage(registrationData.currentStep + 1))
