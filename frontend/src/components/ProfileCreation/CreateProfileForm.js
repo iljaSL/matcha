@@ -17,6 +17,7 @@ const CreateProfileForm = () => {
 
 
     const registrationData = useSelector(state => state.registration)
+    const {currentStep, preferences, bio, tagList, gender, steps} = registrationData
 
     useEffect(() => {
         dispatch(checkFormValidity(registrationData))
@@ -30,6 +31,13 @@ const CreateProfileForm = () => {
 
     const jump = (page) => dispatch(changePage(page))
 
+    const checkError = (index) => {
+        if (currentStep > index)
+         return !registrationData.steps[index].success
+        else
+            return false;
+    }
+
     const handleChange = input => e => {
         dispatch(updateField(input, e.target.value))
     }
@@ -38,7 +46,7 @@ const CreateProfileForm = () => {
         dispatch(submitProfileForm(registrationData))
     }
 
-    const {currentStep, preferences, bio, tagList, gender, steps} = registrationData
+
 
     const handleSwitch = (gender) => {
         const newList = preferences.indexOf(gender) === -1
@@ -84,11 +92,10 @@ const CreateProfileForm = () => {
             <Stepper
                 activeStep={currentStep}>
                 {steps.map((entry, index) => {
-                        console.log(entry.success)
                         return (
                             <Step
                                 key={entry.name}>
-                                <StepLabel
+                                <StepLabel error={checkError(index)}
                                     onClick={() => jump(index)}>{entry.name}</StepLabel>
                             </Step>
                         )

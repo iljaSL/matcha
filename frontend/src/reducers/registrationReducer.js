@@ -12,7 +12,6 @@ const initialState = {
 }
 
 const checkFieldValidity = (formData) => {
-    console.log(formData)
     switch (formData.currentStep) {
         case 0:
             formData.steps[0].success = !!formData.gender;
@@ -36,9 +35,6 @@ const checkFieldValidity = (formData) => {
         default:
             return;
     }
-    if (formData.currentStep > 0 && formData.gender)
-        formData.steps[0].success = true;
-    console.log(formData)
 }
 
 const registrationReducer = (state = initialState, action) => {
