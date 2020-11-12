@@ -11,6 +11,36 @@ const initialState = {
     steps: initialSteps
 }
 
+const checkFieldValidity = (formData) => {
+    console.log(formData)
+    switch (formData.currentStep) {
+        case 0:
+            formData.steps[0].success = !!formData.gender;
+            return;
+        case 1:
+            formData.steps[1].success = formData.preferences.length > 0;
+            return;
+        case 2:
+            formData.steps[2].success = formData.bio.length > 0 && formData.bio[0].length <= 140;
+            return;
+        case 3:
+            formData.steps[3].success = formData.tagList.length > 0;
+            return;
+        case 4:
+            // if profilePic = OK
+            // success
+            return;
+        case 5:
+            formData.steps[4].success = !(formData.steps.map(step => step.success !== true));
+            return;
+        default:
+            return;
+    }
+    if (formData.currentStep > 0 && formData.gender)
+        formData.steps[0].success = true;
+    console.log(formData)
+}
+
 const registrationReducer = (state = initialState, action) => {
     switch (action.type) {
         case 'CHOOSE_GENDER':
@@ -27,6 +57,8 @@ const registrationReducer = (state = initialState, action) => {
             return {...state, currentStep: action.data}
         case 'FORM_SUCCESS':
             return {...state, signupSuccess: true}
+        case 'VALIDATE_STEPS':
+                return state
         default:
             return state;
     }
@@ -41,6 +73,13 @@ export const changePage = (newPage) => {
 export const updateField = (field, value) => {
     return dispatch => {
         dispatch({type: 'UPDATE_FIELD', data: {field: field, value: value}})
+    }
+}
+
+export const checkFormValidity = (formData) => {
+    return dispatch => {
+        const validatedFormData = checkFieldValidity(formData)
+        dispatch({type: 'VALIDATE_STEPS', data: validatedFormData})
     }
 }
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 
 import {useSelector, useDispatch} from 'react-redux'
 
-import {changePage, updateField, submitProfileForm} from '../../reducers/registrationReducer'
+import {changePage, updateField, submitProfileForm, checkFormValidity} from '../../reducers/registrationReducer'
 
 import {Bio, ChooseGender, ChoosePreferredGender, ChooseTags, FinalPage, PictureDropZone} from './CreateProfileFields'
 
@@ -18,7 +18,13 @@ const CreateProfileForm = () => {
 
     const registrationData = useSelector(state => state.registration)
 
-    const next = () => dispatch(changePage(registrationData.currentStep + 1))
+    useEffect(() => {
+        dispatch(checkFormValidity(registrationData))
+    }, [registrationData])
+
+    const next = () => {
+        dispatch(changePage(registrationData.currentStep + 1))
+    }
 
     const prev = () => dispatch(changePage(registrationData.currentStep - 1))
 
@@ -77,12 +83,16 @@ const CreateProfileForm = () => {
         <div>
             <Stepper
                 activeStep={currentStep}>
-                {steps.map((entry, index) =>
-                    <Step
-                        key={entry.name}>
-                        <StepLabel
-                            onClick={() => jump(index)}>{entry.name}</StepLabel>
-                    </Step>
+                {steps.map((entry, index) => {
+                        console.log(entry.success)
+                        return (
+                            <Step
+                                key={entry.name}>
+                                <StepLabel
+                                    onClick={() => jump(index)}>{entry.name}</StepLabel>
+                            </Step>
+                        )
+                    }
                 )}
             </Stepper>
             {getStepContent(currentStep)}
