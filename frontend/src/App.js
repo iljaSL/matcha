@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import CreateProfileForm from "./Components/CreateProfileForm";
+import CreateProfileForm from "./components/ProfileCreation/CreateProfileForm";
 
 function App() {
   return (
