@@ -17,7 +17,6 @@ function validateUser () {
 // TODO: should drop the test database here to start w/ a blank slate?
 
 beforeAll(async () => {
-  // drop table users
 });
 
 describe('user creation and modification', () => {
@@ -181,7 +180,6 @@ describe('user creation and modification', () => {
 
       let token = login.body.token;
       let userId = login.body.id;
-      console.log('Im HERE!', login.body);
 
       await request.delete(`/api/users/${userId}`).set('Authorization', `${token}`).expect(200)
   })

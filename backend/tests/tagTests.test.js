@@ -55,6 +55,7 @@ describe('tests for tags', () => {
             .set('Authorization', `${token}`)
             .expect(201)
     })
+
     test('usertag deletion with auth', async () => {
         await request
             .delete(`/api/users/tags/${id}`)

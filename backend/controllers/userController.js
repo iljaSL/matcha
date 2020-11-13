@@ -10,11 +10,11 @@ const reportUser = async (request, response, next) => {
   const { userId } = request.params;
   const { reportedUserId } = request.params;
 
-  if (userId !== reportedUserId) {
-    const result = await userModel.reportUser([reportedUserId, userId], next);
-    if (result) return response.status(200).json({ message: 'user has been reported' });
+  if (userId === reportedUserId) {
+    return response.status(400).json({ error: 'user has been NOT reported' });
   }
-  return response.status(400).json({ message: 'user could not be reported' });
+  const result = await userModel.reportUser([userId, reportedUserId], next);
+  if (result) return response.status(200).json({ message: 'user has been reported' });
 };
 
 const validateUserAfterRegistration = async (request, response) => {

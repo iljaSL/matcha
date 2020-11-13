@@ -30,6 +30,20 @@ const validUsers = [
     mail: 'mail@de.de',
     password: 'Peter123',
   },
+  {
+    lastname: 'Lustig',
+    firstname: 'Nena',
+    username: 'nlustig',
+    mail: 'mailll@de.de',
+    password: 'Nena123',
+  },
+  {
+    lastname: 'Mary',
+    firstname: 'Hail',
+    username: 'hmarry',
+    mail: 'mail@dede.de',
+    password: 'Mary123',
+  },
 ];
 
 const newUserMissingUsername = {
