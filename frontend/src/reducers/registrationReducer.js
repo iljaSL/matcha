@@ -7,6 +7,7 @@ const initialState = {
     bio: '',
     tagList: [],
     profilePic: '',
+    profileBlob: '',
     signupSuccess: false,
     steps: initialSteps
 }
@@ -26,11 +27,10 @@ const checkFieldValidity = (formData) => {
             formData.steps[3].success = formData.tagList.length > 0;
             return;
         case 4:
-            // if profilePic = OK
-            // success
+            formData.steps[4].success = !!formData.profilePic;
             return;
         case 5:
-            formData.steps[4].success = !(formData.steps.map(step => step.success !== true));
+            formData.steps[5].success = !(formData.steps.map(step => step.success !== true));
             return;
         default:
             return;
@@ -45,7 +45,6 @@ const registrationReducer = (state = initialState, action) => {
                 gender: action.data,
                 steps: state.steps.map((step, index) => index === 0 ? {...step, success: true} : step)
             }
-
         case 'UPDATE_FIELD':
             const { field, value } = action.data
             return {...state, [field]: value}
@@ -54,7 +53,7 @@ const registrationReducer = (state = initialState, action) => {
         case 'FORM_SUCCESS':
             return {...state, signupSuccess: true}
         case 'VALIDATE_STEPS':
-                return state
+                return state;
         default:
             return state;
     }
@@ -76,6 +75,24 @@ export const checkFormValidity = (formData) => {
     return dispatch => {
         const validatedFormData = checkFieldValidity(formData)
         dispatch({type: 'VALIDATE_STEPS', data: validatedFormData})
+    }
+}
+const readFile = async (file) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(reader.error.message);
+        reader.onload = () => {
+            resolve(reader.result)
+        };
+        reader.readAsDataURL(file);
+    });
+}
+export const addProfilePicture =  (file) => {
+
+    return async dispatch => {
+        const base64Picture = await readFile(file);
+        dispatch({type: 'UPDATE_FIELD', data: {field: 'profileBlob', value: base64Picture}})
+        dispatch({type: 'UPDATE_FIELD', data: {field: 'profilePic', value: file}})
     }
 }
 

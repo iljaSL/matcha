@@ -7,7 +7,13 @@ import Button from '@material-ui/core/Button';
 
 import {useSelector, useDispatch} from 'react-redux'
 
-import {changePage, updateField, submitProfileForm, checkFormValidity} from '../../reducers/registrationReducer'
+import {
+    changePage,
+    updateField,
+    submitProfileForm,
+    checkFormValidity,
+    addProfilePicture
+} from '../../reducers/registrationReducer'
 
 import {Bio, ChooseGender, ChoosePreferredGender, ChooseTags, FinalPage, PictureDropZone} from './CreateProfileFields'
 
@@ -17,7 +23,7 @@ const CreateProfileForm = () => {
 
 
     const registrationData = useSelector(state => state.registration)
-    const {currentStep, preferences, bio, tagList, gender, steps} = registrationData
+    const {currentStep, preferences, bio, tagList, gender, profilePic, steps} = registrationData
 
     useEffect(() => {
         dispatch(checkFormValidity(registrationData))
@@ -42,8 +48,16 @@ const CreateProfileForm = () => {
         dispatch(updateField(input, e.target.value))
     }
 
+    const handleUpload = base64String => {
+        dispatch(addProfilePicture(base64String))
+    }
+
     const handleSubmit = () => {
         dispatch(submitProfileForm(registrationData))
+    }
+
+    const handleDelete = (field) => {
+        dispatch(updateField(field, null))
     }
 
 
@@ -80,9 +94,9 @@ const CreateProfileForm = () => {
             case 3:
                 return <ChooseTags handleListItem={handleListItem} tagList={tagList}/>
             case 4:
-                return <PictureDropZone/>
+                return <PictureDropZone handleUpload={handleUpload} initialFile={profilePic} handleDelete={handleDelete}/>
             case 5:
-                return <FinalPage formData={registrationData}/>
+                return <FinalPage formData={registrationData} />
             default:
                 return <div></div>
         }

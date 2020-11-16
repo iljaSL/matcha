@@ -15,6 +15,11 @@ import ListItem from "@material-ui/core/ListItem";
 import Checkbox from "@material-ui/core/Checkbox";
 import {DropzoneArea} from "material-ui-dropzone";
 
+
+import Card from '@material-ui/core/Card';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from "@material-ui/core/CardContent";
+
 const RedText = withStyles({
     root: {
         color: "#FF0000"
@@ -64,16 +69,33 @@ export const ChooseTags = ({handleListItem, tagList}) =>
         )}
     </List>
 
-export const PictureDropZone = () =>
-    <DropzoneArea
-        acceptedFiles={['image/png', 'image/jpg', 'image/jpeg']}
-        onChange={(files) => console.log(files)}/>
+export const PictureDropZone = ({handleUpload, initialFile, handleDelete}) => {
+    if (!initialFile)
+        initialFile = '';
+    return (
+        <DropzoneArea
+            acceptedFiles={['image/png', 'image/jpg', 'image/jpeg']}
+            maxFileSize={5000000}
+            filesLimit={1}
+            initialFiles={[initialFile]}
+            clearOnUnmount={false}
+            onChange={async (files) => handleUpload(files[0])}
+            onDelete={() => handleDelete('profilePic')}
+        />
+    )
+}
 
-export const FinalPage = ({formData}) => {
-    const {preferences, bio, tagList, gender} = formData
-    return <div>
-        So you're a {gender} looking for company from {preferences.map(pref => `${pref}s `)}
-        interested in {tagList.map(tag => `${tag} `)} with the bio {bio}.
-        Is that correct?
-    </div>
+
+export const FinalPage = ({formData}) => { // why don't we sketch a 'tinder card' here?
+    const {profileBlob, preferences, bio, tagList, gender} = formData
+    return <Card style={{height: '80vh', width: 'auto'}}>
+        <CardMedia image={profileBlob} style={{height: '100%', width: '100%'}}/>
+        <CardContent>
+            <Typography>
+                So you're a {gender} looking for company from {preferences.map(pref => `${pref}s `)}
+                interested in {tagList.map(tag => `${tag} `)} with the bio {bio}.
+                Is that correct?
+            </Typography>
+        </CardContent>
+    </Card>
 }
