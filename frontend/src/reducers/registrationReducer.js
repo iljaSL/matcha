@@ -1,4 +1,5 @@
 import {initialSteps} from "../components/ProfileCreation/ProfileFormUtils";
+import axios from 'axios';
 
 const initialState = {
     currentStep: 0,
@@ -51,7 +52,7 @@ const registrationReducer = (state = initialState, action) => {
         case 'CHANGE_PAGE':
             return {...state, currentStep: action.data}
         case 'FORM_SUCCESS':
-            return {...state, signupSuccess: true}
+            return {...state, signupSuccess: action.data}
         case 'VALIDATE_STEPS':
                 return state;
         default:
@@ -97,11 +98,26 @@ export const addProfilePicture =  (file) => {
 }
 
 export const submitProfileForm = (formData) => {
-    return dispatch => {
-        // add to db w/ thunk here
-        // if OK, then
-        dispatch({type: 'FORM_SUCCESS'})
-        console.log('success', formData)
+    return async dispatch => {
+        // a complicated way to check if all are ok...
+        let success, response;
+        if (!((formData.steps
+            .map((step, index) => index < 5
+                ? step.success
+                : true))
+            .every(value => value === true))) {
+            alert('Insert all the stuff');
+            return;
+        }
+        try {
+            response = await axios.post('http://localhost:3001/api/users/profile', formData)
+            success = true;
+        } catch (error) {
+            console.log(error)
+            success = false;
+        }
+        dispatch({type: 'FORM_SUCCESS', data: success});
+        console.log(response)
     }
 }
 

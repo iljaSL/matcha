@@ -89,7 +89,9 @@ export const PictureDropZone = ({handleUpload, initialFile, handleDelete}) => {
 export const FinalPage = ({formData}) => { // why don't we sketch a 'tinder card' here?
     const {profileBlob, preferences, bio, tagList, gender} = formData
     return <Card style={{height: '80vh', width: 'auto'}}>
-        <CardMedia image={profileBlob} style={{height: '100%', width: '100%'}}/>
+        {profileBlob ?
+            <CardMedia image={profileBlob} style={{height: '80%', width: '80%'}}/>
+            : <div>need to add a skeleton here</div> }
         <CardContent>
             <Typography>
                 So you're a {gender} looking for company from {preferences.map(pref => `${pref}s `)}
