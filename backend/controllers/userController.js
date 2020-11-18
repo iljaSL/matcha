@@ -86,7 +86,7 @@ const login = async (request, response) => {
   return response.status(200).json({
     id: user.id,
     message: 'Login successful!',
-    body: username,
+    username,
     token: jasonWebTokenUtils.tokenGenerator([user.id, user.username]),
   });
 };
@@ -106,6 +106,14 @@ const createUser = async (request, response) => {
   }
   return response.status(500).json({ status: 'An error has occurred' });
 };
+
+// USER PROFILE CREATION
+
+const createProfile = async (request, response, next) => {
+  return response.status(401);
+};
+
+// USER TAGS
 
 const getTagsById = async (request, response) => {
   const tagList = await userModel.getTagsById(request.params.id);
@@ -137,6 +145,7 @@ const removeTagById = async (request, response) => {
 
 export default {
   createUser,
+  createProfile,
   auth,
   login,
   updatePasswordWithUserId,
