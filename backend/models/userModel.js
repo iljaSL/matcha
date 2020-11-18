@@ -1,6 +1,18 @@
 import bcrypt from 'bcrypt';
 import pool from '../config/database.js';
 
+const checkIfUserIsBlocked = async (userId, blockedUserId, next) => {
+  try {
+    const result = await pool.query({
+      sql: 'SELECT * FROM block WHERE user_id = ? AND blocked_user_id = ?',
+      values: [userId, blockedUserId],
+    });
+    return result.length > 0;
+  } catch (err) {
+    next(err);
+  }
+};
+
 const unblockUser = async (userId, blockUserId, next) => {
   try {
     const result = await pool.query({
@@ -177,4 +189,5 @@ export default {
   reportUser,
   blockUser,
   unblockUser,
+  checkIfUserIsBlocked,
 };

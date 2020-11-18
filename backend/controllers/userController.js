@@ -6,6 +6,17 @@ import jasonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
 import sendmail from '../utils/emailUtil.js';
 import tagModel from '../models/tagModel.js';
 
+const checkIfUserIsBlocked = async (request, response, next) => {
+  const { userId } = request.params;
+  const { blockedUserId } = request.params;
+
+  if (userId === blockedUserId) { return response.status(400).json({ error: 'you can not do that!' }); }
+
+  const result = await userModel.checkIfUserIsBlocked(userId, blockedUserId, next);
+  if (result) return response.status(200).json({ message: 'user is blocked' });
+  return response.status(204).json({ message: 'user is not blocked' });
+};
+
 const unblockUser = async (request, response, next) => {
   const { userId } = request.params;
   const { blockedUserId } = request.params;
@@ -200,4 +211,5 @@ export default {
   reportUser,
   blockUser,
   unblockUser,
+  checkIfUserIsBlocked,
 };
