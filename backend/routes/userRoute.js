@@ -3,6 +3,10 @@ import userController from '../controllers/userController.js';
 
 const userRouter = express.Router();
 
+userRouter.get('/blocked/:userId/:blockedUserId', async (request, response, next) => {
+  await userController.checkIfUserIsBlocked(request, response, next);
+});
+
 userRouter.post('/unblock/:userId/:blockedUserId', async (request, response, error) => {
   await userController.unblockUser(request, response, error);
 });
