@@ -97,6 +97,49 @@ describe('test for reports', () => {
 
     await request.post(`/api/users/block/${userId1}/${userId1}`).expect(400);
   });
+
+  test('unblock user, server returns 200', async () => {
+    const login1 = await request.post('/api/login').send({
+      username: userTestUtils.validUsers[1].username,
+      password: userTestUtils.validUsers[1].password,
+    });
+    const login2 = await request.post('/api/login').send({
+      username: userTestUtils.validUsers[2].username,
+      password: userTestUtils.validUsers[2].password,
+    });
+
+    let userId1 = login1.body.id;
+    let userId2 = login2.body.id;
+
+    await request.post(`/api/users/unblock/${userId1}/${userId2}`).expect(200);
+  });
+
+  test('unblock user again fails, server returns 400', async () => {
+    const login1 = await request.post('/api/login').send({
+      username: userTestUtils.validUsers[1].username,
+      password: userTestUtils.validUsers[1].password,
+    });
+    const login2 = await request.post('/api/login').send({
+      username: userTestUtils.validUsers[2].username,
+      password: userTestUtils.validUsers[2].password,
+    });
+
+    let userId1 = login1.body.id;
+    let userId2 = login2.body.id;
+
+    await request.post(`/api/users/unblock/${userId1}/${userId2}`).expect(400);
+  });
+
+  test('unblock yourself fails, server returns 400', async () => {
+    const login1 = await request.post('/api/login').send({
+      username: userTestUtils.validUsers[1].username,
+      password: userTestUtils.validUsers[1].password,
+    });
+
+    let userId1 = login1.body.id;
+
+    await request.post(`/api/users/unblock/${userId1}/${userId1}`).expect(400);
+  });
 });
 
 afterAll(async () => {
