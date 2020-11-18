@@ -1,6 +1,18 @@
 import bcrypt from 'bcrypt';
 import pool from '../config/database.js';
 
+const blockUser = async (userId, blockedUserId, next) => {
+  try {
+    const result = await pool.query({
+      sql: 'INSERT INTO block (user_id, blocked_user_id) VALUES (?, ?)',
+      values: [userId, blockedUserId],
+    });
+    return result.affectedRows > 0;
+  } catch (err) {
+    next(err);
+  }
+};
+
 const reportUser = async (data, next) => {
   try {
     const result = await pool.query({
@@ -151,4 +163,5 @@ export default {
   updatePasswordWithResetKey,
   validateUser,
   reportUser,
+  blockUser,
 };

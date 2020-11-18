@@ -6,6 +6,19 @@ import jasonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
 import sendmail from '../utils/emailUtil.js';
 import tagModel from '../models/tagModel.js';
 
+const blockUser = async (request, response, next) => {
+  const { userId } = request.params;
+  const { blockedUserId } = request.params;
+
+  if (userId === blockedUserId) {
+    return response.status(400).json({ error: 'you can not block yourself!' });
+  }
+
+  const result = await userModel.blockUser(userId, blockedUserId, next);
+  if (result) return response.status(200).json({ message: 'user has been blocked ' });
+  return response.status(400).json({ message: 'user could not be blocked ' });
+};
+
 const reportUser = async (request, response, next) => {
   const { userId } = request.params;
   const { reportedUserId } = request.params;
@@ -174,4 +187,5 @@ export default {
   updatePasswordWithResetKey,
   validateUserAfterRegistration,
   reportUser,
+  blockUser,
 };
