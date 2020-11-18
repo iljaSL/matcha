@@ -24,7 +24,7 @@ beforeAll(async () => {
 })
 
 describe('image upload tests', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
         token = 'Bearer ' + ((await request
             .post('/api/login')
             .send({
@@ -79,7 +79,7 @@ describe('image upload tests', () => {
     })
 })
 describe('image link posting', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
         token = 'Bearer ' + ((await request
             .post('/api/login')
             .send({
