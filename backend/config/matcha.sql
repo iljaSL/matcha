@@ -60,6 +60,13 @@ CREATE TABLE IF NOT EXISTS `user_photo` (
 FOREIGN KEY (uid) REFERENCES users (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `block` (
+`id` int PRIMARY KEY  AUTO_INCREMENT NOT NULL,
+`user_id` int NOT NULL,
+`blocked_user_id` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 ALTER TABLE `usertags` ADD UNIQUE (`uid` , `tagId`);-- TO ENSURE UNIQUENESS OF ALL TAGS PER USER, NO DUPLICATES
 ALTER TABLE `report` ADD UNIQUE (`user_id` , `reported_user_id`);
+ALTER TABLE `block` ADD UNIQUE (`user_id` , `blocked_user_id`);
