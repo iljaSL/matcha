@@ -6,6 +6,18 @@ import jasonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
 import sendmail from '../utils/emailUtil.js';
 import tagModel from '../models/tagModel.js';
 
+const unblockUser = async (request, response, next) => {
+  const { userId } = request.params;
+  const { blockedUserId } = request.params;
+
+  if (userId === blockedUserId) { return response.status(400).json({ error: 'you can not unblock yourself!' }); }
+
+  const result = await userModel.unblockUser(userId, blockedUserId, next);
+
+  if (result) return response.status(200).json({ message: 'user has been unblocked' });
+  return response.status(400).json({ error: 'unblocking failed' });
+};
+
 const blockUser = async (request, response, next) => {
   const { userId } = request.params;
   const { blockedUserId } = request.params;
@@ -187,4 +199,5 @@ export default {
   validateUserAfterRegistration,
   reportUser,
   blockUser,
+  unblockUser,
 };

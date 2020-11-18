@@ -1,6 +1,18 @@
 import bcrypt from 'bcrypt';
 import pool from '../config/database.js';
 
+const unblockUser = async (userId, blockUserId, next) => {
+  try {
+    const result = await pool.query({
+      sql: 'DELETE FROM block WHERE user_id = ? AND blocked_user_id = ?',
+      values: [userId, blockUserId],
+    });
+    return result.affectedRows > 0;
+  } catch (err) {
+    next(err);
+  }
+};
+
 const blockUser = async (userId, blockedUserId, next) => {
   try {
     const result = await pool.query({
@@ -164,4 +176,5 @@ export default {
   validateUser,
   reportUser,
   blockUser,
+  unblockUser,
 };
