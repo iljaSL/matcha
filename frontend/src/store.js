@@ -3,9 +3,11 @@ import {composeWithDevTools} from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 
 import registrationReducer from "./reducers/registrationReducer";
+import userReducer from "./reducers/userReducer";
 
 const reducer = combineReducers({
-    registration: registrationReducer
+    registration: registrationReducer,
+    user: userReducer
 })
 
 const store = createStore(reducer,

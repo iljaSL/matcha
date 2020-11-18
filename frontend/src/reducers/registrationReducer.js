@@ -97,7 +97,7 @@ export const addProfilePicture =  (file) => {
     }
 }
 
-export const submitProfileForm = (formData) => {
+export const submitProfileForm = (formData) => { // TODO: add token and actually add the stuff to db
     return async dispatch => {
         // a complicated way to check if all are ok...
         let success, response;
@@ -106,7 +106,7 @@ export const submitProfileForm = (formData) => {
                 ? step.success
                 : true))
             .every(value => value === true))) {
-            alert('Insert all the stuff');
+            alert('Error: Insert all the stuff');
             return;
         }
         try {
