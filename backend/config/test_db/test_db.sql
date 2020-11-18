@@ -68,3 +68,4 @@ CREATE TABLE IF NOT EXISTS `block` (
 
 ALTER TABLE `usertags` ADD UNIQUE (`uid` , `tagId`);-- TO ENSURE UNIQUENESS OF ALL TAGS PER USER, NO DUPLICATES
 ALTER TABLE `report` ADD UNIQUE (`user_id` , `reported_user_id`);
+ALTER TABLE `block` ADD UNIQUE (`user_id` , `blocked_user_id`);

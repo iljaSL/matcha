@@ -16,7 +16,6 @@ const blockUser = async (request, response, next) => {
 
   const result = await userModel.blockUser(userId, blockedUserId, next);
   if (result) return response.status(200).json({ message: 'user has been blocked ' });
-  return response.status(400).json({ message: 'user could not be blocked ' });
 };
 
 const reportUser = async (request, response, next) => {
