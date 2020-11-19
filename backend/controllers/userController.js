@@ -41,6 +41,16 @@ const blockUser = async (request, response, next) => {
   if (result) return response.status(200).json({ message: 'user has been blocked ' });
 };
 
+const checkIfUserIsReported = async (request, response, next) => {
+  const { userId } = request.params;
+  const { reportedUserId } = request.params;
+
+  if (userId === reportedUserId) { return response.status(400).json({ error: 'you can not do that!' }); }
+  const result = await userModel.checkIfUserIsBlocked(userId, reportedUserId, next);
+  if (result) return response.status(200).json({ message: 'user reported' });
+  return response.status(204).json({ message: 'user is has not reported' });
+};
+
 const reportUser = async (request, response, next) => {
   const { userId } = request.params;
   const { reportedUserId } = request.params;
@@ -212,4 +222,5 @@ export default {
   blockUser,
   unblockUser,
   checkIfUserIsBlocked,
+  checkIfUserIsReported,
 };

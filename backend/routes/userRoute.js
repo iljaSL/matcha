@@ -15,7 +15,11 @@ userRouter.post('/block/:userId/:blockedUserId', async (request, response, error
   await userController.blockUser(request, response, error);
 });
 
-userRouter.get('/report/:userId/:reportedUserId', async (request, response, next) => {
+userRouter.get('/reported/:userId/:reportedUserId', async (request, response, next) => {
+  await userController.checkIfUserIsReported(request, response, next);
+});
+
+userRouter.post('/report/:userId/:reportedUserId', async (request, response, next) => {
   await userController.reportUser(request, response, next);
 });
 
