@@ -37,6 +37,18 @@ const blockUser = async (userId, blockedUserId, next) => {
   }
 };
 
+const checkIfUserIsReported = async (userId, reportedUserId, next) => {
+  try {
+    const result = await pool.query({
+      sql: 'SELECT * FROM report WHERE user_id = ? AND reported_user_id = ?',
+      values: [userId, reportedUserId],
+    });
+    return result.length > 0;
+  } catch (err) {
+    next(err);
+  }
+};
+
 const reportUser = async (data, next) => {
   try {
     const result = await pool.query({
@@ -190,4 +202,5 @@ export default {
   blockUser,
   unblockUser,
   checkIfUserIsBlocked,
+  checkIfUserIsReported,
 };

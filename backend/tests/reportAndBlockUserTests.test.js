@@ -25,7 +25,7 @@ describe('test for reports', () => {
     let userId1 = login1.body.id;
     let userId2 = login2.body.id;
 
-    await request.get(`/api/users/report/${userId1}/${userId2}`).expect(200);
+    await request.post(`/api/users/report/${userId1}/${userId2}`).expect(200);
   });
 
   test('report user again, server returns 403', async () => {
@@ -41,7 +41,7 @@ describe('test for reports', () => {
     let userId1 = login1.body.id;
     let userId2 = login2.body.id;
 
-    await request.get(`/api/users/report/${userId1}/${userId2}`).expect(403);
+    await request.post(`/api/users/report/${userId1}/${userId2}`).expect(403);
   });
 
   test('report yourself should not be possible, server returns 400', async () => {
@@ -52,7 +52,7 @@ describe('test for reports', () => {
 
     let userId1 = login1.body.id;
 
-    await request.get(`/api/users/report/${userId1}/${userId1}`).expect(400);
+    await request.post(`/api/users/report/${userId1}/${userId1}`).expect(400);
   });
 
   test('block user, server returns 200', async () => {
