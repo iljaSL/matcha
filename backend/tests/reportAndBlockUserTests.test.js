@@ -11,7 +11,7 @@ beforeAll(async () => {
 
 });
 
-describe('test for reports', () => {
+describe('test for reports and blocks', () => {
   test('report user, server returns 200', async () => {
     const login1 = await request.post('/api/login').send({
       username: userTestUtils.validUsers[1].username,
@@ -53,6 +53,28 @@ describe('test for reports', () => {
     let userId1 = login1.body.id;
 
     await request.post(`/api/users/report/${userId1}/${userId1}`).expect(400);
+  });
+
+  test('checking yourself for reports is not possible, server returns 400', async () => {
+    const login1 = await request.post('/api/login').send({
+      username: userTestUtils.validUsers[1].username,
+      password: userTestUtils.validUsers[1].password,
+    });
+
+    let userId1 = login1.body.id;
+
+    await request.get(`/api/users/reported/${userId1}/${userId1}`).expect(400);
+  });
+
+  test('no reported user on the db, server returns 204', async () => {
+    const login1 = await request.post('/api/login').send({
+      username: userTestUtils.validUsers[1].username,
+      password: userTestUtils.validUsers[1].password,
+    });
+
+    let userId1 = login1.body.id;
+
+    await request.get(`/api/users/reported/${userId1}/random`).expect(204);
   });
 
   test('block user, server returns 200', async () => {
