@@ -12,6 +12,8 @@ body {
 }
 
 h1 {
-    color: black;
+    text-align: center;
+    color: #f50057;
+    font-size: 3vh;
 }
 

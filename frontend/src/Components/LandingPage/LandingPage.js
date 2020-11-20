@@ -1,33 +1,22 @@
 import React from 'react'
 import Particles from "react-particles-js";
 import './LandingPage.css'
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        backgroundColor: 'white',
-        marginTop: theme.spacing(8),
+        background: "rgba(255, 250, 250, 0.6)",
+        marginTop: theme.spacing(20),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
+        borderRadius: "45px",
     },
     form: {
-        width: '100%', // Fix IE 11 issue.
+        width: '100%',
         marginTop: theme.spacing(1),
     },
     submit: {
@@ -54,6 +43,12 @@ const LandingPage = () => {
                 "speed": 0.3,
 
             },
+            "polygon": {
+                "enable": true,
+                "move": {
+                    "radius": 10
+                },
+            },
             "shape": {
                 "type": [
                     "image",
@@ -62,7 +57,7 @@ const LandingPage = () => {
                     {
                         "src": "https://avatars2.githubusercontent.com/u/47740286?s=460&v=4",
                         "height": 400,
-                        "width": 400,
+                        "width": 400
                     },
                     {
                         "src": "https://avatars1.githubusercontent.com/u/52207442?s=460&u=cf5611342017c2f1c66577a286f69aee74e29768&v=4",
@@ -107,32 +102,37 @@ const LandingPage = () => {
                     {
                         "src": "https://images.unsplash.com/photo-1519084278803-b94f11e1c63b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=60",
                         "height": 400,
-                        "width": 400,
+                        "width": 400
                     },
                     {
                         "src": "https://images.unsplash.com/photo-1535324708031-0f7255090f89?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=60",
                         "height": 400,
-                        "width": 400,
+                        "width": 400
                     },
                     {
                         "src": "https://images.unsplash.com/photo-1489388433353-df7543dd66e9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=60",
                         "height": 400,
-                        "width": 400,
+                        "width": 400
                     },
                     {
                         "src": "https://images.unsplash.com/photo-1523111567642-f71bebeb173f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=60",
                         "height": 400,
-                        "width": 400,
+                        "width": 400
                     },
                     {
                         "src": "https://images.unsplash.com/photo-1536704258323-f2f4935acf41?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=60",
                         "height": 400,
-                        "width": 400,
+                        "width": 400
+                    },
+                    {
+                        "src": " https://avatars1.githubusercontent.com/u/51363730?s=460&u=d7996d1fd86eae9bf6e43f2dd75b9a46bb9ae731&v=4",
+                        "height": 400,
+                        "width": 400
                     },
                 ],
             },
             "opacity": {
-                "value": 1.5,
+                "value": 2.0,
                 "anim": {
                     "enable": true,
                 }
@@ -153,68 +153,31 @@ const LandingPage = () => {
 
     return (
         <div>
-            <h1>Find you love...On matcha!</h1>
-            <Container component="main" maxWidth="xs">
+            <Container component="main" maxWidth="xs" className={classes.paper}>
                 <CssBaseline />
-                <div className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign in
-                    </Typography>
-                    <form className={classes.form} noValidate>
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
-                            autoFocus
-                        />
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
-                        />
+                <div>
+                    <h1>Are you lonely? Are you desperate? Say no more! <br/>
+                        Matcha is the right place for you!</h1>
                         <Button
                             type="submit"
                             fullWidth
                             variant="contained"
-                            color="primary"
+                            color="secondary"
                             className={classes.submit}
                         >
-                            Sign In
+                            Create an account
                         </Button>
-                        <Grid container>
-                            <Grid item xs>
-                                <Link href="#" variant="body2">
-                                    Forgot password?
-                                </Link>
-                            </Grid>
-                            <Grid item>
-                                <Link href="#" variant="body2">
-                                    {"Don't have an account? Sign Up"}
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </form>
+                    <h1>or</h1>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="secondary"
+                        className={classes.submit}
+                    >
+                        Log In
+                    </Button>
                 </div>
-                <Box mt={8}>
-
-                </Box>
             </Container>
             <Particles className="particles" params={particlesOptions} />
 
