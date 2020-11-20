@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "NODE_ENV=test NODE_OPTIONS='--experimental-vm-modules' jest -f --verbose --runInBand --detectOpenHandles && exit 0",
+    "test": "NODE_ENV=test NODE_OPTIONS='--experimental-vm-modules' jest -f --verbose --runInBand --detectOpenHandles",
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development nodemon index.js ",
     "lint": "eslint . ; exit 0"
@@ -14,6 +14,7 @@
   "type": "module",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",

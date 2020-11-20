@@ -1,0 +1,12 @@
+POST http://localhost:3001/api/tags/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "tag": "unierexe"
+}
+
+###
+
+POST http://localhost:3001/api/users/tags/5 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJwbHVzdGlnIiwiaWF0IjoxNjA0NTg3NDAyLCJleHAiOjE2MDQ2NzM4MDJ9.Dros0qa7lz3M2Ca3lhk1p2wQBhhWijIjp_dtMcsqus4
+

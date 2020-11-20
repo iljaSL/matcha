@@ -3,12 +3,52 @@ import userController from '../controllers/userController.js';
 
 const userRouter = express.Router();
 
+userRouter.get('/blocked/:userId/:blockedUserId', async (request, response, next) => {
+  await userController.checkIfUserIsBlocked(request, response, next);
+});
+
+userRouter.post('/unblock/:userId/:blockedUserId', async (request, response, error) => {
+  await userController.unblockUser(request, response, error);
+});
+
+userRouter.post('/block/:userId/:blockedUserId', async (request, response, error) => {
+  await userController.blockUser(request, response, error);
+});
+
+userRouter.get('/reported/:userId/:reportedUserId', async (request, response, next) => {
+  await userController.checkIfUserIsReported(request, response, next);
+});
+
+userRouter.post('/report/:userId/:reportedUserId', async (request, response, next) => {
+  await userController.reportUser(request, response, next);
+});
+
+userRouter.get('/register/:key', async (request, response, err) => {
+  await userController.validateUserAfterRegistration(request, response, err);
+});
+
+userRouter.post('/forgot-password', async (request, response, err) => {
+  await userController.forgotPassword(request, response, err);
+});
+
+userRouter.get('/reset-password/:key', async (request, response, err) => {
+  await userController.checkPasswordResetKey(request, response, err);
+});
+
+userRouter.post('/reset-password/:key', async (request, response, err) => {
+  await userController.updatePasswordWithResetKey(request, response, err);
+});
+
 userRouter.delete('/:id', async (request, response, err) => {
   await userController.deleteUser(request, response, err);
 });
 
-userRouter.post('/', async (req, res, err) => {
-  await userController.createUser(req, res, err);
+userRouter.post('/', async (request, response, err) => {
+  await userController.createUser(request, response, err);
+});
+
+userRouter.post('/profile/', async (request, response, next) => {
+  await userController.createProfile(request, response, next);
 });
 
 userRouter
@@ -18,5 +58,17 @@ userRouter
 userRouter
   .route('/update/password/:id')
   .post(userController.updatePasswordWithUserId);
+
+userRouter.get('/tags/:id', async (request, response, err) => {
+  await userController.getTagsById(request, response, err);
+});
+
+userRouter.post('/tags/:id', async (request, response, err) => {
+  await userController.addTagById(request, response, err);
+});
+
+userRouter.delete('/tags/:id', async (request, response, err) => {
+  await userController.removeTagById(request, response, err);
+});
 
 export default userRouter;

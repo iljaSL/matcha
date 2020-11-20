@@ -1,0 +1,2 @@
+GET http://localhost:3001/api/users/register/175bc41d129 HTTP/1.1
+content-Type: application/json
