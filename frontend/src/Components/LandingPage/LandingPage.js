@@ -5,6 +5,13 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+} from "react-router-dom";
+import LoginForm from '../LoginForm'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -152,6 +159,7 @@ const LandingPage = () => {
 
 
     return (
+        <Router>
         <div>
             <Container component="main" maxWidth="xs" className={classes.paper}>
                 <CssBaseline />
@@ -168,6 +176,7 @@ const LandingPage = () => {
                             Create an account
                         </Button>
                     <h1>or</h1>
+                    <Link to="/login">
                     <Button
                         type="submit"
                         fullWidth
@@ -175,13 +184,20 @@ const LandingPage = () => {
                         color="secondary"
                         className={classes.submit}
                     >
-                        Log In
+                        Log in
                     </Button>
+                    </Link>
+
                 </div>
             </Container>
             <Particles className="particles" params={particlesOptions} />
-
         </div>
+            <Switch>
+                <Route path='/login'>
+                    <LoginForm />
+                </Route>
+            </Switch>
+        </Router>
 
     )
 }
