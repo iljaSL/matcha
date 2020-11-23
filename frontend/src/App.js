@@ -10,6 +10,7 @@ import './App.css';
 
 import CreateProfileForm from "./Components/ProfileCreation/CreateProfileForm";
 import LoginForm from "./Components/LoginForm";
+import SignUpForm from './Components/SignUp'
 import {useSelector} from "react-redux";
 import LandingPage from './Components/LandingPage/LandingPage'
 import Button from '@material-ui/core/Button';
@@ -54,11 +55,11 @@ const App = () => {
                 <Link to="/login">Login</Link> <br/>
             </Button>
 
-            {/*<Link to="/createProfile">Create profile</Link>*/}
+            <Link to="/signup">Create profile</Link>
 
             <Switch>
-                <Route path="/createProfile">
-                    <CreateProfileForm/>
+                <Route path="/signup">
+                    <SignUpForm />
                 </Route>
                 <Route path="/login">
                    <LoginForm/>
