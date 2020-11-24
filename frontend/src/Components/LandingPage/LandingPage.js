@@ -1,38 +1,8 @@
 import React from 'react'
 import Particles from "react-particles-js";
 import './LandingPage.css'
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link
-} from "react-router-dom";
-import LoginForm from '../LoginForm'
-
-const useStyles = makeStyles((theme) => ({
-    paper: {
-        background: "rgba(255, 250, 250, 0.6)",
-        marginTop: theme.spacing(20),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        borderRadius: "45px",
-    },
-    form: {
-        width: '100%',
-        marginTop: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-}));
 
 const LandingPage = () => {
-    const classes = useStyles();
     const particlesOptions = {
         "particles": {
             "number": {
@@ -157,48 +127,10 @@ const LandingPage = () => {
         "retina_detect": false
     }
 
-
     return (
-        <Router>
         <div>
-            <Container component="main" maxWidth="xs" className={classes.paper}>
-                <CssBaseline />
-                <div>
-                    <h1>Are you lonely? Are you desperate? Say no more! <br/>
-                        Matcha is the right place for you!</h1>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="secondary"
-                            className={classes.submit}
-                        >
-                            Create an account
-                        </Button>
-                    <h1>or</h1>
-                    <Link to="/login">
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="secondary"
-                        className={classes.submit}
-                    >
-                        Log in
-                    </Button>
-                    </Link>
-
-                </div>
-            </Container>
             <Particles className="particles" params={particlesOptions} />
         </div>
-            <Switch>
-                <Route path='/login'>
-                    <LoginForm />
-                </Route>
-            </Switch>
-        </Router>
-
     )
 }
 
