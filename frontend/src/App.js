@@ -7,11 +7,8 @@ import {
 } from "react-router-dom";
 
 import './App.css';
-
-// import CreateProfileForm from "./Components/ProfileCreation/CreateProfileForm";
-import LoginForm from "./Components/LoginForm";
-import SignUpForm from './Components/SignUp'
-import {useSelector} from "react-redux";
+import LoginForm from "./Components/LoginForm/LoginForm";
+import SignUpForm from './Components/SignUp/SignUp'
 import LandingPage from './Components/LandingPage/LandingPage'
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
@@ -49,7 +46,7 @@ const App = () => {
                         <div className='flip'>
                             <div><div>LOVE</div></div>
                             <div><div>JOCKE</div></div>
-                            <div><div>DATA SCIENTISTS</div></div>
+                            <div><div>FRIENDS</div></div>
                         </div>
                         on Matcha!
                     </div>
