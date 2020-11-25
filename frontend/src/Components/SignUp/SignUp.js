@@ -1,13 +1,11 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
@@ -44,8 +42,20 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SignUpForm() {
+const SignUpForm = () => {
     const classes = useStyles();
+    const form = useRef();
+    const checkBtn = useRef();
+
+    const [username, setUsername] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [successful, setSuccessful] = useState(false);
+
+    const { message } = useSelector(state => state.message);
+    const dispatch = useDispatch();
 
     return (
         <Grid container component="main" className={classes.root}>
@@ -83,6 +93,18 @@ export default function SignUpForm() {
                                     label="Last Name"
                                     name="lastName"
                                     autoComplete="lname"
+                                    color="secondary"
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="username"
+                                    label="Username"
+                                    name="username"
+                                    autoComplete="username"
                                     color="secondary"
                                 />
                             </Grid>
@@ -134,3 +156,5 @@ export default function SignUpForm() {
         </Grid>
     );
 }
+
+export default SignUpForm;
