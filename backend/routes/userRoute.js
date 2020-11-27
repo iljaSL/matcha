@@ -24,7 +24,7 @@ userRouter.post('/', async (request, response, err) => {
 });
 
 userRouter.post('/profile/', async (request, response, next) => {
-  await userController.createProfile(request, response, next);
+   await userController.createProfile(request, response, next);
 });
 
 userRouter

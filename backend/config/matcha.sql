@@ -6,14 +6,14 @@ CREATE TABLE IF NOT EXISTS `users` (
   `lastname` varchar(255) NOT NULL,
   `firstname` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
-  -- `gender` enum('man','woman', 'nonbinary') DEFAULT NULL,
-  -- `sexual_orientation` enum('bisexual','homosexual','heterosexual') NOT NULL DEFAULT 'bisexual',
+  `gender` enum('man','woman','nonbinary') DEFAULT NULL,
+  `sexual_orientation` enum('bisexual','homosexual','heterosexual') NOT NULL DEFAULT 'bisexual',
   `mail` varchar(255) NOT NULL,
-  -- `bio` varchar(255) DEFAULT NULL,
+  `bio` varchar(255) DEFAULT NULL,
   -- `birthdate` date DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   -- `city` varchar(255) DEFAULT NULL,
-  -- `profile_picture_url` longtext,
+  `profile_picture_id` int,
   -- `pop_score` int(11) NOT NULL DEFAULT '0',
   -- `geo_lat` float DEFAULT NULL,
   -- `geo_long` float DEFAULT NULL,
@@ -54,5 +54,5 @@ CREATE TABLE IF NOT EXISTS `user_photo` (
 FOREIGN KEY (uid) REFERENCES users (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
+ALTER TABLE `users` ADD FOREIGN KEY (profile_picture_id) REFERENCES user_photo (id);
 ALTER TABLE `usertags` ADD UNIQUE (`uid` , `tagId`) -- TO ENSURE UNIQUENESS OF ALL TAGS PER USER, NO DUPLICATES

@@ -13,7 +13,9 @@ const updatePasswordWithResetKey = async (newPassword, key) => {
     });
     try {
       const keyReset = await pool.query({
-        sql: 'UPDATE users SET `reset_password_key` = NULL WHERE `reset_password_key` = ?',
+        sql: `UPDATE users 
+                SET reset_password_key = NULL 
+                WHERE reset_password_key = ?`,
         values: key,
       });
       return result.affectedRows + keyReset.affectedRows;
@@ -23,6 +25,21 @@ const updatePasswordWithResetKey = async (newPassword, key) => {
   } catch (err) {
     throw new Error(err);
   }
+};
+
+const addUserProfile = async (uid, formData) => {
+  try {
+    const result = await pool.query({
+      sql: `UPDATE users SET 
+                gender = ?,
+                sexual_orientation = ?,
+                bio = ?,
+                profile_picture_id = ?
+                WHERE id = ?`,
+      values: [formData.gender, formData.sexualOrientation, formData.bio,
+        formData.profilePicID, 1],
+    });
+  } catch (err) { throw new Error(err); }
 };
 
 const setResetKeyForPassword = async (id, key) => {
@@ -125,4 +142,5 @@ export default {
   removeUserTag,
   setResetKeyForPassword,
   updatePasswordWithResetKey,
+  addUserProfile,
 };
