@@ -129,12 +129,11 @@ const updatePasswordWithUserId = async (password, id) => {
   return result.affectedRows;
 };
 
-const findUser = async (field, data) => {
+const findUser = async (data) => {
   try {
-    const result = await pool.query({
-      sql: 'SELECT * FROM ?? WHERE ?? = ?',
-      values: ['users', field, data],
-    });
+    console.log('DATA', data)
+    const result = await pool.query('SELECT * FROM users WHERE username = ($1)', [data]);
+    console.log('RESULT FINDUSER', result)
     if (result) return result;
   } catch (err) {
     console.log('Error: ', err.message);
@@ -142,19 +141,18 @@ const findUser = async (field, data) => {
 };
 
 const isDuplicateUser = async (username) => {
-  const result = await findUser('username', username);
-  return result.length !== 0;
+  const result = await findUser(username);
+  return result.length === 0;
 };
 
 const registerUser = async (user) => {
   const saltRounds = 10;
   const salt = bcrypt.genSaltSync(saltRounds);
   const pwHash = bcrypt.hashSync(user.password, salt);
-  const result = await pool.query({
-    sql:
-            'INSERT INTO users (lastname, firstname, username, mail, password, `key`) VALUES (?)',
-    values: [[user.lastname, user.firstname, user.username, user.mail, pwHash, user.uuid]],
-  });
+  const result = await pool.query('INSERT INTO users (lastname, firstname, username, mail, password, key) VALUES ($1)',
+    [[user.lastname, user.firstname, user.username, user.mail, pwHash, user.uuid]]
+  );
+  console.log('RESULT', result)
   if (result.err) console.log('Error: ', result.err.message);
   return result.insertId;
 };

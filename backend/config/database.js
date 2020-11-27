@@ -1,20 +1,24 @@
-import mysql from 'mysql';
+// import mysql from 'mysql';
 import util from 'util';
 import dotenv from 'dotenv';
 
+import pkg from 'pg';
+
+const { Pool } = pkg;
+
 dotenv.config();
 
-const database = process.env.NODE_ENV === 'test' ? 'matcha_test' : 'matcha';
+const database = process.env.NODE_ENV === 'test' ? 'matcha_test' : 'ismelich';
 
-const pool = mysql.createPool({
+const pool = new Pool({
   connectionLimit: 10,
-  host: 'localhost',
+  host: '127.0.0.1',
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database,
 });
 
-pool.getConnection((err, connection) => {
+pool.connect((err, connection) => {
   if (err) {
     if (err.code === 'PROTOCOL_CONNECTION_LOST') {
       console.error('DB connection was closed.');
@@ -30,7 +34,5 @@ pool.getConnection((err, connection) => {
   }
   if (connection) connection.release();
 });
-
-pool.query = util.promisify(pool.query);
 
 export default pool;
