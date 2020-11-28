@@ -6,10 +6,8 @@ import pool from '../config/database.js';
 dotenv.config();
 
 const getUserImages = async (uid) => {
-  const result = await pool.query({
-    sql: 'SELECT * FROM user_photo WHERE uid=?',
-    values: [uid],
-  });
+  const result = await pool.query('SELECT * FROM user_photo WHERE uid=?',
+    [uid]);
   if (result.err) throw result.err;
   return result;
 };
@@ -46,10 +44,7 @@ const saveImageBlob = async (uid, base64String) => { // TODO: refactor
 };
 
 const addImageLink = async (uid, imageLink) => {
-  const result = await pool.query({
-    sql: 'INSERT INTO user_photo (uid, link) VALUES (?, ?)',
-    values: [uid, imageLink],
-  });
+  const result = await pool.query('INSERT INTO user_photo (uid, link) VALUES (?, ?)', [uid, imageLink]);
   if (result.err) throw result.err;
   return result;
 };
