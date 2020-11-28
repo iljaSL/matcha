@@ -146,11 +146,13 @@ const isDuplicateUser = async (username) => {
 };
 
 const registerUser = async (user) => {
+  const { lastname, firstname, username, mail, password, uuid } = user;
   const saltRounds = 10;
   const salt = bcrypt.genSaltSync(saltRounds);
-  const pwHash = bcrypt.hashSync(user.password, salt);
-  const result = await pool.query('INSERT INTO users (lastname, firstname, username, mail, password, key) VALUES ($1)',
-    [[user.lastname, user.firstname, user.username, user.mail, pwHash, user.uuid]]
+  const pwHash = bcrypt.hashSync(password, salt);
+  console.log('USER', user);
+  const result = await pool.query(`INSERT INTO users (lastname, firstname, username, mail, password, key) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`,
+    [lastname, firstname, username, mail, pwHash, uuid]
   );
   console.log('RESULT', result)
   if (result.err) console.log('Error: ', result.err.message);

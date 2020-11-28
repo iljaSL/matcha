@@ -8,7 +8,7 @@ const { Pool } = pkg;
 
 dotenv.config();
 
-const database = process.env.NODE_ENV === 'test' ? 'matcha_test' : 'ismelich';
+const database = process.env.NODE_ENV === 'test' ? 'matcha_test' : 'matcha';
 
 const pool = new Pool({
   connectionLimit: 10,
@@ -35,4 +35,6 @@ pool.connect((err, connection) => {
   if (connection) connection.release();
 });
 
-export default pool;
+export default {
+  query: (text, params) => pool.query(text, params),
+};
