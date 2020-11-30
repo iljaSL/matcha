@@ -32,11 +32,11 @@ describe('user creation and modification', () => {
       .send(userTestUtils.newUserMissingUsername)
       .expect(400);
   });
-  test('duplicate username on creation returns 403', async () => {
+  test('duplicate username on creation returns 409', async () => {
     await request
       .post('/api/users/')
       .send(userTestUtils.newValidUser)
-      .expect(403);
+      .expect(409);
   });
 
     test('login with valid username & pw, but no validation, server should return 401', async () => {
@@ -70,7 +70,8 @@ describe('user creation and modification', () => {
             .expect(200);
     });
 
-  test('login with valid username & pw returns 200', async () => {
+    test('login with valid username & pw returns 200', async () => {
+      console.log('HERE IS THE BODY', body)
      token = (await request
           .post('/api/login')
           .send({
@@ -78,7 +79,7 @@ describe('user creation and modification', () => {
               password: userTestUtils.newValidUser.password,
           })
           .expect(200)).body.token;
-  });
+    });
 
   test('invalid users should return 400', () => {
       userTestUtils.invalidUsers.forEach(async invalidUser => {
@@ -129,9 +130,10 @@ describe('user creation and modification', () => {
     });
 
     test('forgot-password route should find user and return 200', async () => {
-        let idDb = await pool.query({
-            sql: `SELECT reset_password_key FROM users WHERE username LIKE "${userTestUtils.newValidUser.username}"`
-        });
+        let idDb = await pool.query(
+           `SELECT reset_password_key FROM users WHERE username LIKE ${userTestUtils.newValidUser.username}`
+        );
+        console.log('IN DB FOROGT PASSWORD', inDb);
         await request
             .get(`/api/users/reset-password/${idDb[0].reset_password_key}`)
             .expect(200);
@@ -186,8 +188,6 @@ describe('user creation and modification', () => {
       });
       let token = login.body.token;
       let userId = login.body.id;
-      console.log('DELETE TEST token', token)
-      console.log('DELETE TEST userId', userId)
 
       await request.delete(`/api/users/${userId}`).set('Authorization', `${token}`).expect(200)
   })

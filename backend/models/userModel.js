@@ -66,7 +66,6 @@ const validateUser = async (data) => {
     const result = await pool.query(
       `UPDATE users SET key = 0, status = 1 WHERE key = $1`, [data]
     );
-    console.log('RESULT IN MODEL VALID', result)
     return result;
   } catch (err) {
     throw new Error(err);
@@ -97,15 +96,14 @@ const updatePasswordWithResetKey = async (newPassword, key) => {
   }
 };
 
-const setResetKeyForPassword = async (id, key) => {
+const setResetKeyForPassword = async (id, key, next) => {
   try {
-    const result = await pool.query({
-      sql: 'UPDATE users SET `reset_password_key` = ? WHERE `id` = ?',
-      values: [key, id],
-    });
-    return result.affectedRows;
-  } catch (error) {
-    return console.log('error');
+    const result = await pool.query(
+      `UPDATE users SET reset_password_key = $1 WHERE id = $2`, [key, id],
+    );
+    return result;
+  } catch (err) {
+    next(err);
   }
 };
 
@@ -130,16 +128,16 @@ const updatePasswordWithUserId = async (password, id) => {
 
 const findUser = async (data, next) => {
   try {
-    const result = await pool.query('SELECT * FROM users WHERE username = ($1)', [data]);
-    if (result) return result;
+    const result = await pool.query(`SELECT * FROM users WHERE username = ($1)`, [data]);
+    if (result) return result.rows[0];
   } catch (err) {
     next(err);
   }
 };
 
-const isDuplicateUser = async (username) => {
-  const result = await findUser(username);
-  return result.length === 0;
+const isDuplicateUser = async (username, next) => {
+  const result = await findUser(username, next);
+  return result !== undefined;
 };
 
 const registerUser = async (user, next) => {
