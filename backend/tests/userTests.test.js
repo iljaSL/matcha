@@ -7,11 +7,11 @@ import userRouter from '../routes/userRoute';
 /* eslint-disable */
 
 const request = supertest(app);
-let token;
 function validateUser () {
-    pool.query({
-        sql: `UPDATE users SET \`key\` = NULL, status = 1 WHERE username LIKE "${userTestUtils.newValidUser.username}"`,
-    });
+    console.log('GEIL', userTestUtils.newValidUser.username)
+    pool.query(
+       `UPDATE users SET key = 0, status = 1 WHERE username LIKE ${userTestUtils.newValidUser.username}`,
+    );
 }
 
 // TODO: should drop the test database here to start w/ a blank slate?
@@ -33,11 +33,11 @@ describe('user creation and modification', () => {
       .send(userTestUtils.newUserMissingUsername)
       .expect(400);
   });
-  test('duplicate username on creation returns 409', async () => {
+  test('duplicate username on creation returns 403', async () => {
     await request
       .post('/api/users/')
       .send(userTestUtils.newValidUser)
-      .expect(409);
+      .expect(403);
   });
 
     test('login with valid username & pw, but no validation, server should return 401', async () => {
@@ -57,13 +57,13 @@ describe('user creation and modification', () => {
   test('login with valid username & pw returns 200', async () => {
       validateUser();
 
-      const { token } = (await request
+     await request
           .post('/api/login')
           .send({
               username: userTestUtils.newValidUser.username,
               password: userTestUtils.newValidUser.password,
           })
-          .expect(200)).body;
+          .expect(200).body;
   });
 
   test('invalid login returns 401', async () => {

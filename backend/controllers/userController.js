@@ -63,7 +63,7 @@ const reportUser = async (request, response, next) => {
 };
 
 const validateUserAfterRegistration = async (request, response) => {
-  const result = await userModel.findUser('key', request.params.key);
+  const result = await userModel.findUser(request.params.key);
 
   if (result !== '') {
     const validated = await userModel.validateUser(request.params.key);
@@ -161,19 +161,17 @@ const login = async (request, response) => {
 
 // REGISTER CONTROLLER
 
-const createUser = async (request, response) => {
+const createUser = async (request, response, next) => {
   const { body } = request;
   if (await userModel.isDuplicateUser(body.username) === true) return response.status(409).json({ error: 'duplicate user exists!' });
   if (!UserUtil.checkUserValidity(body)) return response.status(400).json({ error: 'invalid user' });
   body.uuid = (new Date().getTime() + Math.floor(Math.random() * 10000 + 1)).toString(16);
-  const created = await userModel.registerUser(body);
+  const created = await userModel.registerUser(body, next);
   if (created) {
-    console.log('CHEKC', body.uuid);
     const link = `http://localhost:3001/api/users/register/${body.uuid}`;
     await sendmail.confirmRegistrationWithEmail(body.mail, body.username, link);
     return response.status(201).json({ status: 'User created with success', id: created });
   }
-  return response.status(500).json({ status: 'An error has occurred' });
 };
 
 // USER PROFILE CREATION

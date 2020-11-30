@@ -66,7 +66,8 @@ const validateUser = async (data) => {
     const result = await pool.query(
       `UPDATE users SET key = 0, status = 1 WHERE key = $1`, [data]
     );
-    return result.rows[0];
+    console.log('RESULT IN MODEL VALID', result)
+    return result;
   } catch (err) {
     throw new Error(err);
   }
@@ -142,16 +143,19 @@ const isDuplicateUser = async (username) => {
   return result.length === 0;
 };
 
-const registerUser = async (user) => {
-  const { lastname, firstname, username, mail, password, uuid } = user;
-  const saltRounds = 10;
-  const salt = bcrypt.genSaltSync(saltRounds);
-  const pwHash = bcrypt.hashSync(password, salt);
-  const result = await pool.query(`INSERT INTO users (lastname, firstname, username, mail, password, key) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`,
-    [lastname, firstname, username, mail, pwHash, uuid]
-  );
-  if (result.err) console.log('Error: ', result.err.message);
-  return result.rows[0];
+const registerUser = async (user, next) => {
+  try {
+    const { lastname, firstname, username, mail, password, uuid } = user;
+    const saltRounds = 10;
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const pwHash = bcrypt.hashSync(password, salt);
+    const result = await pool.query(`INSERT INTO users (lastname, firstname, username, mail, password, key) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`,
+        [lastname, firstname, username, mail, pwHash, uuid]
+    );
+    return result.rows[0];
+  } catch (err) {
+    next(err);
+  }
 };
 
 const getTagsById = async (id) => pool.query({
