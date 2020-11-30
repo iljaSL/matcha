@@ -14,32 +14,30 @@ import pool from '../config/database';
 dotenv.config();
 
 const request = supertest(app);
-let id, token, tag, userId, images
+let id, token, tag, userId, images, key
 const imagePath = process.env.IMAGE_PATH;
-function validateUser () {
-    pool.query({
-        sql: `UPDATE users SET \`key\` = NULL, status = 1 WHERE username LIKE "${userTestUtils.validUsers[2].username}"`,
-    });
-}
+
 
 beforeAll(async () => {
     await truncateAllTables();
-    userId = (await request
+    const { body } = (await request
         .post('/api/users/')
-        .send(userTestUtils.validUsers[2])).body.id
-    validateUser();
+        .send(userTestUtils.validUsers[1]))
+    key  = body.data.key;
+    userId = body.data.id
+    await request
+        .get(`/api/users/register/${key}`)
+        .expect(200);
+    token = 'Bearer ' + ((await request
+        .post('/api/login')
+        .send({
+            username: userTestUtils.validUsers[1].username,
+            password: userTestUtils.validUsers[1].password,
+        })
+        .expect(200)).body.token);
 })
 
 describe('image upload tests', () => {
-    beforeAll(async () => {
-        token = 'Bearer ' + ((await request
-            .post('/api/login')
-            .send({
-                username: userTestUtils.validUsers[2].username,
-                password: userTestUtils.validUsers[2].password,
-            })
-            .expect(200)).body.token);
-    })
     test('valid png upload adds file to server and a link to db', async () => {
         images = await imageModel.getUserImages(userId)
         let returnValue = (await request
@@ -48,7 +46,7 @@ describe('image upload tests', () => {
                 .send(imageTestUtils.validPNG)
                 .expect(200)
         )
-        const savedPath = (new URL(returnValue.body)).pathname;
+        const savedPath = (new URL(`http://localhost:3001/${returnValue.body}`)).pathname;
         expect(fs.existsSync(`${process.cwd()}${savedPath}`)).toBe(true)
         const newImages = await imageModel.getUserImages(userId)
         expect(newImages.length).toBe(images.length + 1)
@@ -61,7 +59,7 @@ describe('image upload tests', () => {
                 .send(imageTestUtils.validJPG)
                 .expect(200)
         )
-        const savedPath = (new URL(returnValue.body)).pathname;
+        const savedPath = (new URL(`http://localhost:3001/${returnValue.body}`)).pathname;
         expect(fs.existsSync(`${process.cwd()}${savedPath}`)).toBe(true)
         const newImages = await imageModel.getUserImages(userId)
         expect(newImages.length).toBe(images.length + 1)
@@ -85,40 +83,6 @@ describe('image upload tests', () => {
             .expect(401)
     })
 })
-describe('image link posting', () => {
-    beforeAll(async () => {
-        token = 'Bearer ' + ((await request
-            .post('/api/login')
-            .send({
-                username: userTestUtils.validUsers[2].username,
-                password: userTestUtils.validUsers[2].password,
-            })
-            .expect(200)).body.token);
-    })
-    test('valid http link added to database', async () => {
-        for (const image of imageTestUtils.validLinks)
-        {
-            images = await imageModel.getUserImages(userId)
-            await request
-                .post(`/api/images/${userId}`)
-                .send(imageTestUtils.validLinks[1])
-                .set('Authorization', token)
-                .expect(200)
-        const newImages = await imageModel.getUserImages(userId)
-        expect(newImages.length).toBe(images.length + 1)
-        }
-    })
-    test('invalid link returns 400', async () => {
-            await request
-                .post(`/api/images/${userId}`)
-                .send(imageTestUtils.invalidLinks[1])
-                .set('Authorization', token)
-                .expect(400)
-    })
-})
-
-
-
 
 afterAll(async () => {
     await new Promise((resolve) => setTimeout(resolve, 500));
