@@ -168,18 +168,6 @@ describe('user creation and modification', () => {
             .expect(400);
     });
 
-    test('reset-password route, wrong password format, expect 400', async () => {
-        let resetKey = await pool.query(
-            `SELECT reset_password_key FROM users WHERE username LIKE '${userTestUtils.newValidUser.username}'`
-        ).rows[0].reset_password_key;
-        await request
-            .post(`/api/users/reset-password/${resetKey}`).send({
-                new_password: "123",
-                repeat_password: "123"
-            })
-            .expect(400);
-    });
-
   test ('delete user should return 200',async () => {
       let login = await request.post('/api/login').send({
           username: userTestUtils.newValidUser.username,

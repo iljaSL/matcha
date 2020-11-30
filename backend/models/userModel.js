@@ -81,14 +81,12 @@ const updatePasswordWithResetKey = async (newPassword, key) => {
 
   try {
     const result = await pool.query(
-      `UPDATE users SET password = ($1) WHERE reset_password_key = ($2)`, [hashedPassword, key],
+      `UPDATE users SET password = ($1) WHERE reset_password_key = ($2) RETURNING *`, [hashedPassword, key],
     );
-    console.log('FIRST RESULT', result);
     try {
       const keyReset = await pool.query(
-        `UPDATE users SET reset_password_key = 0 WHERE reset_password_key = ($1)`, [key],
+        `UPDATE users SET reset_password_key = 0 WHERE reset_password_key = ($1) RETURNING *`, [key],
       );
-      console.log('KEy reSET', keyReset)
       return result.rows[0] + keyReset.rows[0];
     } catch (err) {
       throw new Error(err);

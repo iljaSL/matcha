@@ -83,7 +83,6 @@ const updatePasswordWithResetKey = async (request, response) => {
   if (newPassword !== repeatPassword) return response.status(400).json({ error: 'passwords do not match!' });
 
   const result = await UserUtil.updatePasswordWithResetKey(newPassword, key);
-  console.log('RESULT', result);
   if (result.status === 'success') return response.status(201).json({ status: 'password has been updated' });
   return response.status(400).json({ error: 'something went wrong' });
 };
