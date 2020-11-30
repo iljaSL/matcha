@@ -2,37 +2,32 @@ import supertest from 'supertest';
 import app from '../app.js';
 import userTestUtils from './userTestUtils.js';
 import pool from '../config/database';
+import truncateAllTables from "./testDbUtils";
 
 /* eslint-disable */
 
 const request = supertest(app);
 
-let id, tag, token, userid
+let id, tag, token, userId, key
 
-function validateUser () {
-    pool.query({
-        sql: `UPDATE users SET \`key\` = NULL, status = 1 WHERE username LIKE "${userTestUtils.validUsers[0].username}"`,
-    });
-    pool.query({
-        sql: `UPDATE users SET \`key\` = NULL, status = 1 WHERE username LIKE "${userTestUtils.validUsers[1].username}"`,
-    });
-}
 
 beforeAll(async () => {
+    await truncateAllTables();
+    const { body } = (await request
+        .post('/api/users/')
+        .send(userTestUtils.validUsers[1]))
+    key  = body.data.key;
+    userId = body.data.id
     await request
-        .post('/api/users/')
-        .send(userTestUtils.validUsers[0])
-    userid = await request
-        .post('/api/users/')
-        .send(userTestUtils.validUsers[1])
-    validateUser();
-     token = (await request
+        .get(`/api/users/register/${key}`)
+        .expect(200);
+    token = 'Bearer ' + ((await request
         .post('/api/login')
         .send({
-            username: userTestUtils.validUsers[0].username,
-            password: userTestUtils.validUsers[0].password,
+            username: userTestUtils.validUsers[1].username,
+            password: userTestUtils.validUsers[1].password,
         })
-        .expect(200)).body.token;
+        .expect(200)).body.token);
 })
 
 describe('tests for tags', () => {
