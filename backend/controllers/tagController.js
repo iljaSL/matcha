@@ -7,7 +7,7 @@ const getTags = async (request, response, next) => {
 
 const getTagById = async (request, response, next) => {
   const tag = await tagModel.getTagById(request.params.id);
-  if (tag.length) return response.status(200).json(tag[0]);
+  if (tag) return response.status(200).json(tag);
   return response.status(400).json({ message: 'no such tag' });
 };
 
@@ -15,7 +15,7 @@ const addTag = async (request, response, next) => {
   const { tag } = request.body;
   if (await tagModel.isDuplicate(tag)) return response.status(409).json({ error: 'Duplicate' });
   const result = await tagModel.addTag(tag);
-  if (result) return response.status(201).json({ status: 'success', id: result.insertId});
+  if (result) return response.status(201).json({ status: 'success', id: result });
 };
 
 const getTagUsers = async (request, response, next) => {

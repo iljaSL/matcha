@@ -1,3 +1,3 @@
-DELETE http://localhost:3001/api/users/4 HTTP/1.1
+DELETE http://localhost:3001/api/users/2 HTTP/1.1
 content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJwbHVzdGlnIiwiaWF0IjoxNjAyMTY0OTAxLCJleHAiOjE2MDIyNTEzMDF9.r4Wi4U0tv7S9sXC6F2EIL_u2wZzq8qO0Ek539RVDl5I
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIiLCJ1c2VybmFtZSI6Im5sdXN0aWciLCJpYXQiOjE2MDY3NDMwODksImV4cCI6MTYwNjgyOTQ4OX0.i8Qm_SlXiN3AjpU2qDXc6Zk_5wN0IQUti5RRy6fT5PI
