@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS users (
   id bigserial PRIMARY KEY NOT NULL,
   lastname varchar(32) NOT NULL,
   firstname varchar(32) NOT NULL,
-  username varchar(32) UNIQUE NULL,
+  username varchar(32) NOT NULL,
   -- `gender` enum('man','woman', 'nonbinary') DEFAULT NULL,
   -- `sexual_orientation` enum('bisexual','homosexual','heterosexual') NOT NULL DEFAULT 'bisexual',
   mail varchar(64) UNIQUE NOT NULL,

@@ -107,8 +107,7 @@ const forgotPassword = async (request, response) => {
 const deleteUser = async (request, response) => {
   const { authorization } = request.headers;
   const userId = jasonWebTokenUtils.getUserId(authorization);
-
-  if (Number(request.params.id) === userId) {
+  if (request.params.id === userId) {
     await userModel.deleteUser(userId);
     return response.status(200).json({ message: 'User has been deleted' });
   }
@@ -144,19 +143,25 @@ const auth = async (username, password) => {
 
 // LOGIN CONTROLLER
 
-const login = async (request, response) => {
-  const { username, password } = request.body;
-  const user = (await userModel.findUser(username)).rows[0];
-  if (user.status === 0) return response.status(401).json({ message: 'user account has not been activated' });
-  if (!user || !password) return response.status(404).json({ message: 'user not found' });
-  const match = await bcrypt.compare(password, user.password);
-  if (!match) return response.status(401).json({ message: 'invalid username/password' });
-  return response.status(200).json({
-    id: user.id,
-    message: 'Login successful!',
-    username,
-    token: jasonWebTokenUtils.tokenGenerator([user.id, user.username]),
-  });
+const login = async (request, response, next) => {
+  try {
+    const { username, password } = request.body;
+    const user = (await userModel.findUser(username, next)).rows[0];
+    if (user.status === 0) return response.status(401).json({ message: 'user account has not been activated' });
+    if (!user || !password) return response.status(404).json({ message: 'user not found' });
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) return response.status(401).json({ message: 'invalid username/password' });
+    const token = jasonWebTokenUtils.tokenGenerator([user.id, user.username]);
+    return response.status(200).json({
+      id: user.id,
+      message: 'Login successful!',
+      username,
+      token: token,
+    });
+  } catch (err) {
+    next(err);
+  }
+
 };
 
 // REGISTER CONTROLLER
@@ -170,7 +175,7 @@ const createUser = async (request, response, next) => {
   if (created) {
     const link = `http://localhost:3001/api/users/register/${body.uuid}`;
     await sendmail.confirmRegistrationWithEmail(body.mail, body.username, link);
-    return response.status(201).json({ status: 'User created with success', id: created });
+    return response.status(201).json({ status: 'User created with success', data: created });
   }
 };
 

@@ -7,6 +7,6 @@ const truncateAllTables = async () => { // super fiddly due to syntax limitation
   await pool.query('TRUNCATE table user_photo CASCADE;');
   await pool.query('TRUNCATE table block CASCADE;');
   await pool.query('TRUNCATE table report CASCADE;');
-}
+};
 
 export default truncateAllTables;

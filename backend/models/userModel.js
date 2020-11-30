@@ -110,11 +110,10 @@ const setResetKeyForPassword = async (id, key) => {
 };
 
 const deleteUser = async (userId) => {
-  const result = await pool.query({
-    sql: 'DELETE FROM users WHERE `id` = ?',
-    values: userId,
-  });
-  return result.affectedRows;
+  const result = await pool.query(
+    `DELETE FROM users WHERE id = $1`, [userId]
+  );
+  return result;
 };
 
 const updatePasswordWithUserId = async (password, id) => {
@@ -129,12 +128,12 @@ const updatePasswordWithUserId = async (password, id) => {
   return result.affectedRows;
 };
 
-const findUser = async (data) => {
+const findUser = async (data, next) => {
   try {
     const result = await pool.query('SELECT * FROM users WHERE username = ($1)', [data]);
     if (result) return result;
   } catch (err) {
-    console.log('Error: ', err.message);
+    next(err);
   }
 };
 
