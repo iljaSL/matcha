@@ -16,7 +16,7 @@ const addImage = async (request, response, next) => { // TODO: refactor
   const { id } = request.params;
   if (image) {
     try {
-      link = `http://${request.headers.host}/${await imageModel.saveImageBlob(id, image)}`;
+      link = `${await imageModel.saveImageBlob(id, image)}`;
       await imageModel.addImageLink(id, link);
       return response.status(200).json(link);
     } catch (err) {
