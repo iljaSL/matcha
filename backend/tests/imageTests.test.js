@@ -48,6 +48,7 @@ describe('image upload tests', () => {
         )
         const savedPath = (new URL(`http://localhost:3001/${returnValue.body}`)).pathname;
         expect(fs.existsSync(`${process.cwd()}${savedPath}`)).toBe(true)
+
         const newImages = await imageModel.getUserImages(userId)
         expect(newImages.length).toBe(images.length + 1)
     })
