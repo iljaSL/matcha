@@ -95,12 +95,12 @@ const checkPasswordResetKey = async (request, response, next) => {
   return response.status(404).json({ message: 'key is not valid' });
 };
 
-const forgotPassword = async (request, response) => {
+const forgotPassword = async (request, response, next) => {
   const user = await UserUtil.checkIfUsernameExist({
     login: request.body.login,
   });
   if (user.error) return response.status(404).json({ error: 'user does not exist' });
-  await UserUtil.resetUserPassword(user.userData);
+  await UserUtil.resetUserPassword(user.userData, next);
   return response.status(200).json({ status: 'success' });
 };
 
@@ -144,31 +144,25 @@ const auth = async (username, password) => {
 // LOGIN CONTROLLER
 
 const login = async (request, response, next) => {
-  try {
-    const { username, password } = request.body;
-    const user = (await userModel.findUser(username, next)).rows[0];
-    if (user.status === 0) return response.status(401).json({ message: 'user account has not been activated' });
-    if (!user || !password) return response.status(404).json({ message: 'user not found' });
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) return response.status(401).json({ message: 'invalid username/password' });
-    const token = jasonWebTokenUtils.tokenGenerator([user.id, user.username]);
-    return response.status(200).json({
-      id: user.id,
-      message: 'Login successful!',
-      username,
-      token: token,
-    });
-  } catch (err) {
-    next(err);
-  }
-
+  const { username, password } = request.body;
+  const user = (await userModel.findUser(username, next));
+  if (user.status === 0) return response.status(401).json({ message: 'user account has not been activated' });
+  if (!user || !password) return response.status(404).json({ message: 'user not found' });
+  const match = await bcrypt.compare(password, user.password);
+  if (!match) return response.status(401).json({ message: 'invalid username/password' });
+  return response.status(200).json({
+    id: user.id,
+    message: 'Login successful!',
+    username,
+    token: jasonWebTokenUtils.tokenGenerator([user.id, user.username])
+  });
 };
 
 // REGISTER CONTROLLER
 
 const createUser = async (request, response, next) => {
   const { body } = request;
-  if (await userModel.isDuplicateUser(body.username) === true) return response.status(409).json({ error: 'duplicate user exists!' });
+  if (await userModel.isDuplicateUser(body.username, next) === true) return response.status(409).json({ error: 'duplicate user exists!' });
   if (!UserUtil.checkUserValidity(body)) return response.status(400).json({ error: 'invalid user' });
   body.uuid = (new Date().getTime() + Math.floor(Math.random() * 10000 + 1)).toString(16);
   const created = await userModel.registerUser(body, next);
