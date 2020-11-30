@@ -146,8 +146,7 @@ const auth = async (username, password) => {
 
 const login = async (request, response) => {
   const { username, password } = request.body;
-  const user = (await userModel.findUser('username', username))[0];
-
+  const user = (await userModel.findUser(username)).rows[0];
   if (user.status === 0) return response.status(401).json({ message: 'user account has not been activated' });
   if (!user || !password) return response.status(404).json({ message: 'user not found' });
   const match = await bcrypt.compare(password, user.password);

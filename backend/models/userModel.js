@@ -63,11 +63,10 @@ const reportUser = async (data, next) => {
 
 const validateUser = async (data) => {
   try {
-    const result = await pool.query({
-      sql: 'UPDATE users SET `key` = NULL, status = 1 WHERE `key` = ?',
-      values: [data],
-    });
-    return result.affectedRows;
+    const result = await pool.query(
+      `UPDATE users SET key = 0, status = 1 WHERE key = $1`, [data]
+    );
+    return result.rows[0];
   } catch (err) {
     throw new Error(err);
   }
@@ -131,9 +130,7 @@ const updatePasswordWithUserId = async (password, id) => {
 
 const findUser = async (data) => {
   try {
-    console.log('DATA', data)
     const result = await pool.query('SELECT * FROM users WHERE username = ($1)', [data]);
-    console.log('RESULT FINDUSER', result)
     if (result) return result;
   } catch (err) {
     console.log('Error: ', err.message);
@@ -150,13 +147,11 @@ const registerUser = async (user) => {
   const saltRounds = 10;
   const salt = bcrypt.genSaltSync(saltRounds);
   const pwHash = bcrypt.hashSync(password, salt);
-  console.log('USER', user);
   const result = await pool.query(`INSERT INTO users (lastname, firstname, username, mail, password, key) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`,
     [lastname, firstname, username, mail, pwHash, uuid]
   );
-  console.log('RESULT', result)
   if (result.err) console.log('Error: ', result.err.message);
-  return result.insertId;
+  return result.rows[0];
 };
 
 const getTagsById = async (id) => pool.query({
