@@ -83,13 +83,14 @@ const updatePasswordWithResetKey = async (request, response) => {
   if (newPassword !== repeatPassword) return response.status(400).json({ error: 'passwords do not match!' });
 
   const result = await UserUtil.updatePasswordWithResetKey(newPassword, key);
+  console.log('RESULT', result);
   if (result.status === 'success') return response.status(201).json({ status: 'password has been updated' });
   return response.status(400).json({ error: 'something went wrong' });
 };
 
 const checkPasswordResetKey = async (request, response, next) => {
-  const result = await userModel.findUser('reset_password_key', request.params.key);
-  if (result.length !== 0) {
+  const result = await userModel.findUserKey(request.params.key, next);
+  if (result !== undefined) {
     return response.status(200).json({ message: 'success' });
   }
   return response.status(404).json({ message: 'key is not valid' });

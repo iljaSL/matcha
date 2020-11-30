@@ -73,21 +73,23 @@ const validateUser = async (data) => {
 };
 
 const updatePasswordWithResetKey = async (newPassword, key) => {
+  console.log('NEW PASSWORD', newPassword);
+  console.log('key', key);
   const saltRounds = 10;
   const salt = bcrypt.genSaltSync(saltRounds);
   const hashedPassword = bcrypt.hashSync(newPassword, salt);
 
   try {
-    const result = await pool.query({
-      sql: 'UPDATE users SET `password` = ? WHERE `reset_password_key` = ?',
-      values: [hashedPassword, key],
-    });
+    const result = await pool.query(
+      `UPDATE users SET password = ($1) WHERE reset_password_key = ($2)`, [hashedPassword, key],
+    );
+    console.log('FIRST RESULT', result);
     try {
-      const keyReset = await pool.query({
-        sql: 'UPDATE users SET `reset_password_key` = NULL WHERE `reset_password_key` = ?',
-        values: key,
-      });
-      return result.affectedRows + keyReset.affectedRows;
+      const keyReset = await pool.query(
+        `UPDATE users SET reset_password_key = 0 WHERE reset_password_key = ($1)`, [key],
+      );
+      console.log('KEy reSET', keyReset)
+      return result.rows[0] + keyReset.rows[0];
     } catch (err) {
       throw new Error(err);
     }
@@ -118,10 +120,9 @@ const updatePasswordWithUserId = async (password, id) => {
   const saltRounds = 10;
   const salt = bcrypt.genSaltSync(saltRounds);
   const pwHash = bcrypt.hashSync(password, salt);
-  const result = await pool.query({
-    sql: 'UPDATE users SET `password` = ? WHERE `id` = ?',
-    values: [pwHash, id],
-  });
+  const result = await pool.query(
+    `UPDATE users SET password = $1 WHERE id = $2`, [pwHash, id],
+  );
   if (result.err) console.log('Error: ', result.err.message);
   return result.affectedRows;
 };
@@ -134,6 +135,15 @@ const findUser = async (data, next) => {
     next(err);
   }
 };
+
+const findUserKey = async (data, next) => {
+  try {
+    const result = await pool.query(`SELECT * FROM users WHERE reset_password_key = ($1)`, [data]);
+    if (result) return result.rows[0];
+  } catch (err) {
+    next(err);
+  }
+}
 
 const isDuplicateUser = async (username, next) => {
   const result = await findUser(username, next);
@@ -199,4 +209,5 @@ export default {
   unblockUser,
   checkIfUserIsBlocked,
   checkIfUserIsReported,
+  findUserKey,
 };
