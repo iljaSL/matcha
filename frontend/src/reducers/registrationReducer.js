@@ -1,4 +1,4 @@
-import {initialSteps} from "../components/ProfileCreation/ProfileFormUtils";
+import {initialSteps} from "../Components/ProfileCreation/ProfileFormUtils";
 import axios from 'axios';
 
 const initialState = {

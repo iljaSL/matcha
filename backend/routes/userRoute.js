@@ -3,6 +3,30 @@ import userController from '../controllers/userController.js';
 
 const userRouter = express.Router();
 
+userRouter.get('/blocked/:userId/:blockedUserId', async (request, response, next) => {
+  await userController.checkIfUserIsBlocked(request, response, next);
+});
+
+userRouter.post('/unblock/:userId/:blockedUserId', async (request, response, error) => {
+  await userController.unblockUser(request, response, error);
+});
+
+userRouter.post('/block/:userId/:blockedUserId', async (request, response, error) => {
+  await userController.blockUser(request, response, error);
+});
+
+userRouter.get('/reported/:userId/:reportedUserId', async (request, response, next) => {
+  await userController.checkIfUserIsReported(request, response, next);
+});
+
+userRouter.post('/report/:userId/:reportedUserId', async (request, response, next) => {
+  await userController.reportUser(request, response, next);
+});
+
+userRouter.get('/register/:key', async (request, response, err) => {
+  await userController.validateUserAfterRegistration(request, response, err);
+});
+
 userRouter.post('/forgot-password', async (request, response, err) => {
   await userController.forgotPassword(request, response, err);
 });

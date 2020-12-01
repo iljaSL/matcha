@@ -4,26 +4,26 @@ import sendmail from './emailUtil.js';
 
 const updatePasswordWithResetKey = async (newPassword, key) => {
   const updatedPassword = await userModel.updatePasswordWithResetKey(newPassword, key);
+  console.log('UTIL', updatedPassword);
   if (updatedPassword) {
     return { status: 'success' };
   }
   return { status: 'error' };
 };
 
-const resetUserPassword = async (data) => {
+const resetUserPassword = async (data, next) => {
   const resetId = (
     new Date().getTime() + Math.floor(Math.random() * 1000 + 1)
   ).toString(16);
-
-  const createdId = await userModel.setResetKeyForPassword(data[0].id, resetId);
+  const createdId = await userModel.setResetKeyForPassword(data.id, resetId, next);
 
   if (!createdId) {
     return { status: 'something went wrong' };
   }
   const link = `https://localhost:3000/users/reset-password/${resetId}`;
   await sendmail.emailForForgotPassword(
-    data[0].mail,
-    data[0].username,
+    data.mail,
+    data.username,
     link,
   );
   return { status: 'email has been sent with the reset link' };
@@ -31,8 +31,8 @@ const resetUserPassword = async (data) => {
 
 const checkIfUsernameExist = async (data) => {
   const user = data.login;
-  const result = await userModel.findUser('username', user);
-  if (result.length === 0) {
+  const result = await userModel.findUser(user);
+  if (result === undefined) {
     return { error: 'user does not exist' };
   } return { message: 'user exists', userData: result };
 };
