@@ -4,7 +4,12 @@ content-Type: application/json
 {
   "lastname": "Lustig",
   "firstname": "Nena",
+<<<<<<< HEAD
   "username": "pplustig",
   "mail": "o1ddssdsd22@rvemold.com",
+=======
+  "username": "nlustig",
+  "mail": "o1ddsdss22@rvemold.com",
+>>>>>>> master
   "password": "Nena123"
 }
