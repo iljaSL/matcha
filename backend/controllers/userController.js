@@ -13,25 +13,22 @@ const checkIfUserIsBlocked = async (request, response, next) => {
   if (userId === blockedUserId) { return response.status(400).json({ error: 'you can not do that!' }); }
 
   const result = await userModel.checkIfUserIsBlocked(userId, blockedUserId, next);
-  if (result) return response.status(200).json({ message: 'user is blocked' });
-  return response.status(204).json({ message: 'user is not blocked' });
+  if (result === undefined) return response.status(204).json({ message: 'user is not blocked' });
+  return response.status(200).json({ message: 'user is blocked' });
 };
 
 const unblockUser = async (request, response, next) => {
-  const { userId } = request.params;
-  const { blockedUserId } = request.params;
+  const { userId, blockedUserId } = request.params;
 
   if (userId === blockedUserId) { return response.status(400).json({ error: 'you can not unblock yourself!' }); }
 
   const result = await userModel.unblockUser(userId, blockedUserId, next);
-
-  if (result) return response.status(200).json({ message: 'user has been unblocked' });
+  if (result === undefined) return response.status(200).json({ message: 'user has been unblocked' });
   return response.status(400).json({ error: 'unblocking failed' });
 };
 
 const blockUser = async (request, response, next) => {
-  const { userId } = request.params;
-  const { blockedUserId } = request.params;
+  const { userId, blockedUserId } = request.params;
 
   if (userId === blockedUserId) {
     return response.status(400).json({ error: 'you can not block yourself!' });
@@ -42,23 +39,21 @@ const blockUser = async (request, response, next) => {
 };
 
 const checkIfUserIsReported = async (request, response, next) => {
-  const { userId } = request.params;
-  const { reportedUserId } = request.params;
+  const body = request.params;
 
-  if (userId === reportedUserId) { return response.status(400).json({ error: 'you can not do that!' }); }
-  const result = await userModel.checkIfUserIsBlocked(userId, reportedUserId, next);
-  if (result) return response.status(200).json({ message: 'user reported' });
-  return response.status(204).json({ message: 'user is not reported' });
+  if (body.userId === body.reportedUserId) { return response.status(400).json({ error: 'you can not do that!' }); }
+  const result = await userModel.checkIfUserIsReported(body.userId, body.reportedUserId, next);
+  if (result === undefined) return response.status(204).json({ message: 'user is not reported' });
+  return response.status(200).json({ message: 'user reported' });
 };
 
 const reportUser = async (request, response, next) => {
-  const { userId } = request.params;
-  const { reportedUserId } = request.params;
+  const body = request.params;
 
-  if (userId === reportedUserId) {
+  if (body.userId === body.reportedUserId) {
     return response.status(400).json({ error: 'user has been NOT reported' });
   }
-  const result = await userModel.reportUser([userId, reportedUserId], next);
+  const result = await userModel.reportUser(body, next);
   if (result) return response.status(200).json({ message: 'user has been reported' });
 };
 

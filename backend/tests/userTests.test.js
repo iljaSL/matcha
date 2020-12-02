@@ -68,10 +68,10 @@ describe('user creation and modification', () => {
         await request
             .get(`/api/users/register/${key}`)
             .expect(200);
-    });
+		});
+
 
     test('login with valid username & pw returns 200', async () => {
-      console.log('HERE IS THE BODY', body)
      token = (await request
           .post('/api/login')
           .send({

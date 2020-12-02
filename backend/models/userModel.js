@@ -3,11 +3,11 @@ import pool from '../config/database.js';
 
 const checkIfUserIsBlocked = async (userId, blockedUserId, next) => {
   try {
-    const result = await pool.query({
-      sql: 'SELECT * FROM block WHERE user_id = ? AND blocked_user_id = ?',
-      values: [userId, blockedUserId],
-    });
-    return result.length > 0;
+    const result = await pool.query(
+      `SELECT * FROM block WHERE user_id = $1 AND blocked_user_id = $2`,
+      [userId, blockedUserId],
+    );
+    return result.rows[0];
   } catch (err) {
     next(err);
   }
@@ -15,11 +15,12 @@ const checkIfUserIsBlocked = async (userId, blockedUserId, next) => {
 
 const unblockUser = async (userId, blockUserId, next) => {
   try {
-    const result = await pool.query({
-      sql: 'DELETE FROM block WHERE user_id = ? AND blocked_user_id = ?',
-      values: [userId, blockUserId],
-    });
-    return result.affectedRows > 0;
+    const result = await pool.query(
+      `DELETE FROM block WHERE user_id = $1 AND blocked_user_id = $2`,
+      [userId, blockUserId],
+    );
+    console.log('RESULT IN MODEL', result);
+    return result.rows[0];
   } catch (err) {
     next(err);
   }
@@ -27,11 +28,11 @@ const unblockUser = async (userId, blockUserId, next) => {
 
 const blockUser = async (userId, blockedUserId, next) => {
   try {
-    const result = await pool.query({
-      sql: 'INSERT INTO block (user_id, blocked_user_id) VALUES (?, ?)',
-      values: [userId, blockedUserId],
-    });
-    return result.affectedRows > 0;
+    const result = await pool.query(
+      `INSERT INTO block (user_id, blocked_user_id) VALUES ($1, $2) RETURNING *`,
+      [userId, blockedUserId],
+    );
+    return result.rows[0];
   } catch (err) {
     next(err);
   }
@@ -39,11 +40,11 @@ const blockUser = async (userId, blockedUserId, next) => {
 
 const checkIfUserIsReported = async (userId, reportedUserId, next) => {
   try {
-    const result = await pool.query({
-      sql: 'SELECT * FROM report WHERE user_id = ? AND reported_user_id = ?',
-      values: [userId, reportedUserId],
-    });
-    return result.length > 0;
+    const result = await pool.query(
+      `SELECT * FROM report WHERE user_id = $1 AND reported_user_id = $2`,
+      [userId, reportedUserId],
+    );
+    return result.rows[0];
   } catch (err) {
     next(err);
   }
@@ -51,11 +52,12 @@ const checkIfUserIsReported = async (userId, reportedUserId, next) => {
 
 const reportUser = async (data, next) => {
   try {
-    const result = await pool.query({
-      sql: 'INSERT INTO report (user_id, reported_user_id) VALUES (?)',
-      values: [data],
-    });
-    return result.affectedRows;
+    const { userId, reportedUserId } = data;
+    const result = await pool.query(
+      `INSERT INTO report (user_id, reported_user_id) VALUES ($1, $2) RETURNING *`,
+      [userId, reportedUserId],
+    );
+    return result.rows[0];
   } catch (err) {
     next(err);
   }
@@ -73,8 +75,6 @@ const validateUser = async (data) => {
 };
 
 const updatePasswordWithResetKey = async (newPassword, key) => {
-  console.log('NEW PASSWORD', newPassword);
-  console.log('key', key);
   const saltRounds = 10;
   const salt = bcrypt.genSaltSync(saltRounds);
   const hashedPassword = bcrypt.hashSync(newPassword, salt);
