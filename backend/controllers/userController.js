@@ -13,7 +13,7 @@ const checkIfUserIsBlocked = async (request, response, next) => {
   if (userId === blockedUserId) { return response.status(400).json({ error: 'you can not do that!' }); }
 
   const result = await userModel.checkIfUserIsBlocked(userId, blockedUserId, next);
-  if (result === undefined) return response.status(204).json({ message: 'user is not blocked' });
+  if (result === undefined) return response.status(204).end();
   return response.status(200).json({ message: 'user is blocked' });
 };
 
@@ -43,7 +43,7 @@ const checkIfUserIsReported = async (request, response, next) => {
 
   if (body.userId === body.reportedUserId) { return response.status(400).json({ error: 'you can not do that!' }); }
   const result = await userModel.checkIfUserIsReported(body.userId, body.reportedUserId, next);
-  if (result === undefined) return response.status(204).json({ message: 'user is not reported' });
+  if (result === undefined) return response.status(204).end();
   return response.status(200).json({ message: 'user reported' });
 };
 
