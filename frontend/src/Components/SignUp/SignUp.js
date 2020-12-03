@@ -13,9 +13,6 @@ import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
-import { isEmail } from "validator";
 
 import { register } from '../../actions/auth';
 
@@ -53,7 +50,6 @@ const useStyles = makeStyles((theme) => ({
 const SignUpForm = () => {
     const classes = useStyles();
     const form = useRef();
-    const checkBtn = useRef();
 
     const [username, setUsername] = useState("");
     const [firstName, setFirstName] = useState("");
@@ -187,7 +183,7 @@ const SignUpForm = () => {
                                     required
                                     fullWidth
                                     name="password"
-                                    label="Password"
+                                    label="Password (at least 6 characters, one lower/upper case letter and number."
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
