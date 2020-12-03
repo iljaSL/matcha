@@ -158,14 +158,14 @@ const login = async (request, response, next) => {
 
 const createUser = async (request, response, next) => {
   const { body } = request;
-  if (await userModel.isDuplicateUser(body.username, next) === true) return response.status(409).json({ error: 'duplicate user exists!' });
-  if (!UserUtil.checkUserValidity(body)) return response.status(400).json({ error: 'invalid user' });
+  if (await userModel.isDuplicateUser(body.username, next) === true) return response.status(409).json({ message: 'That user already exists!' });
+  if (!UserUtil.checkUserValidity(body)) return response.status(400).json({ message: 'Invalid Input!' });
   body.uuid = (new Date().getTime() + Math.floor(Math.random() * 10000 + 1)).toString(16);
   const created = await userModel.registerUser(body, next);
   if (created) {
     const link = `http://localhost:3001/api/users/register/${body.uuid}`;
     await sendmail.confirmRegistrationWithEmail(body.mail, body.username, link);
-    return response.status(201).json({ status: 'User created with success', data: created });
+    return response.status(201).json({ message: 'User created with success, please check your email and activated your account before you login!', data: created });
   }
 };
 
