@@ -10,70 +10,14 @@ import './App.css';
 import LoginForm from "./Components/LoginForm/LoginForm";
 import SignUpForm from './Components/SignUp/SignUp'
 import LandingPage from './Components/LandingPage/LandingPage'
-import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
+import LandingPagePrompt from "./Components/LandingPage/LandingPagePrompt";
 
-const useStyles = makeStyles((theme) => ({
-    paper: {
-        background: "rgba(255, 250, 250, 0.6)",
-        marginTop: theme.spacing(20),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        borderRadius: "45px",
-    },
-    form: {
-        width: '100%',
-        marginTop: theme.spacing(1),
-    },
-    button: {
-        marginBottom: '20px',
-        width: '30%',
-    }
-}));
 
 const App = () => {
-    const classes = useStyles();
     let location = useLocation();
     // const { user }  = useSelector(state => state)
     return (
         <div>
-            { location.pathname === '/login' || location.pathname === '/signup' ?
-                null
-            :   <Link to="/login" style={{ textDecoration: 'none' }}>
-                    <div className='slider'>
-                        Find
-                        <div className='flip'>
-                            <div><div>LOVE</div></div>
-                            <div><div>JOCKE</div></div>
-                            <div><div>FRIENDS</div></div>
-                        </div>
-                        on Matcha!
-                    </div>
-                    <Button
-                        fullWidth
-                        variant="contained"
-                        color="secondary"
-                        className={classes.button}
-                    >
-                        Login
-                    </Button><br/>
-                </Link>}
-
-            {location.pathname === '/signup' || location.pathname === '/login' ?
-                    null
-                :
-                <Link to="/signup" style={{ textDecoration: 'none' }}>
-                <Button
-                fullWidth
-                variant="contained"
-                color="secondary"
-                className={classes.button}
-                >
-                Sign Up <br/>
-                </Button>
-                </Link>
-            }
             <Switch>
                 <Route path="/signup">
                     <SignUpForm />
@@ -83,6 +27,7 @@ const App = () => {
                 </Route>
                 <Route path="/">
                     <LandingPage />
+                    <LandingPagePrompt />
                 </Route>
             </Switch>
         </div>

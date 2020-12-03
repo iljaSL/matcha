@@ -8,6 +8,6 @@ This project is part of the Hive Helsinki curriculum. We are building a single p
 ## Tech stack:
 - React/ Redux
 - nodeJS/ ExpressJS
-- MySQL
+- ~~MySQL~~ PostgreSQL
 
 ### Check out ['Projects'](https://github.com/iljaSL/matcha/projects/1), to learn more about the mandatory parts of Matcha and our progress.
