@@ -47,9 +47,15 @@ const checkUserValidity = (body) => {
     .every((value) => value === true);
 };
 
+// eslint-disable-next-line no-nested-ternary
+const getOrientation = (gender, preferences) => (preferences.includes(gender)
+  ? (preferences.length === 1 ? 'homosexual' : 'bisexual')
+  : 'heterosexual');
+
 export default {
   checkUserValidity,
   checkIfUsernameExist,
   resetUserPassword,
   updatePasswordWithResetKey,
+  getOrientation,
 };

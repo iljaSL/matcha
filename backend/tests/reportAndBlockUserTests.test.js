@@ -102,16 +102,16 @@ describe('test for reports and blocks', () => {
     await request.get(`/api/users/reported/${userId1}/${userId1}`).expect(400);
   });
 
-  // test('no reported user on the db, server returns 204', async () => {
-  //   const login1 = await request.post('/api/login').send({
-  //     username: twoValidUsers[0].username,
-  //     password: twoValidUsers[0].password,
-  //   });
+  test('no reported user on the db, server returns 204', async () => {
+    const login1 = await request.post('/api/login').send({
+      username: twoValidUsers[0].username,
+      password: twoValidUsers[0].password,
+    });
 
-  //   let userId1 = login1.body.id;
+    let userId1 = login1.body.id;
 
-  //   await request.get(`/api/users/reported/${userId1}/random`).expect(204);
-  // });
+    await request.get(`/api/users/reported/${userId1}/29`).expect(204);
+  });
 
   test('block user, server returns 200', async () => {
     const login1 = await request.post('/api/login').send({
@@ -183,16 +183,16 @@ describe('test for reports and blocks', () => {
     await request.get(`/api/users/blocked/${userId1}/${userId1}`).expect(400);
   });
 
-  // test('no blocked user on the db, server returns 204', async () => {
-  //   const login1 = await request.post('/api/login').send({
-  //     username: twoValidUsers[0].username,
-  //     password: twoValidUsers[0].password,
-  //   });
+  test('no blocked user on the db, server returns 204', async () => {
+    const login1 = await request.post('/api/login').send({
+      username: twoValidUsers[0].username,
+      password: twoValidUsers[0].password,
+    });
 
-  //   let userId1 = login1.body.id;
+    let userId1 = login1.body.id;
 
-  //   await request.get(`/api/users/blocked/${userId1}/random`).expect(204);
-  // });
+    await request.get(`/api/users/blocked/${userId1}/242323`).expect(204);
+  });
 
   test('unblock user, server returns 200', async () => {
     const login1 = await request.post('/api/login').send({

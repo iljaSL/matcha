@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import userModel from '../models/userModel.js';
+import imageModel from '../models/imageModel.js';
 import UserUtil from '../utils/userUtil.js';
 import input from '../utils/inputUtil.js';
 import jasonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
@@ -13,7 +14,7 @@ const checkIfUserIsBlocked = async (request, response, next) => {
   if (userId === blockedUserId) { return response.status(400).json({ error: 'you can not do that!' }); }
 
   const result = await userModel.checkIfUserIsBlocked(userId, blockedUserId, next);
-  if (result === undefined) return response.status(204).json({ message: 'user is not blocked' });
+  if (result === undefined) return response.status(204).end();
   return response.status(200).json({ message: 'user is blocked' });
 };
 
@@ -43,7 +44,7 @@ const checkIfUserIsReported = async (request, response, next) => {
 
   if (body.userId === body.reportedUserId) { return response.status(400).json({ error: 'you can not do that!' }); }
   const result = await userModel.checkIfUserIsReported(body.userId, body.reportedUserId, next);
-  if (result === undefined) return response.status(204).json({ message: 'user is not reported' });
+  if (result === undefined) return response.status(204).end();
   return response.status(200).json({ message: 'user reported' });
 };
 
@@ -171,7 +172,16 @@ const createUser = async (request, response, next) => {
 // USER PROFILE CREATION
 
 const createProfile = async (request, response, next) => {
-  return response.status(401);
+  const { profileBlob, ...rest } = request.body;
+  try {
+    const sexualOrientation = UserUtil.getOrientation(rest.gender, rest.preferences);
+    const imagePath = await imageModel.saveImageBlob(1, profileBlob);
+    const profilePicID = (await imageModel.addImageLink(1, imagePath)).insertId;
+    await userModel.addUserProfile(1, {
+      profilePicID, sexualOrientation, ...rest,
+    });
+  } catch (err) { next(err); }
+  return response.status(201).json({ status: 'Profile created' });
 };
 
 // USER TAGS

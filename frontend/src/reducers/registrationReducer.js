@@ -1,4 +1,4 @@
-import {initialSteps} from "../Components/ProfileCreation/ProfileFormUtils";
+import {initialSteps} from "../components/ProfileCreation/ProfileFormUtils";
 import axios from 'axios';
 
 const initialState = {
@@ -111,6 +111,7 @@ export const submitProfileForm = (formData) => { // TODO: add token and actually
         }
         try {
             response = await axios.post('http://localhost:3001/api/users/profile', formData)
+            console.log(formData)
             success = true;
         } catch (error) {
             console.log(error)

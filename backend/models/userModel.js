@@ -81,16 +81,31 @@ const updatePasswordWithResetKey = async (newPassword, key) => {
 
   try {
     const result = await pool.query(
-      `UPDATE users SET password = ($1) WHERE reset_password_key = ($2) RETURNING *`, [hashedPassword, key],
+      'UPDATE users SET password = ($1) WHERE reset_password_key = ($2) RETURNING *', [hashedPassword, key],
     );
     try {
       const keyReset = await pool.query(
-        `UPDATE users SET reset_password_key = 0 WHERE reset_password_key = ($1) RETURNING *`, [key],
+        'UPDATE users SET reset_password_key = 0 WHERE reset_password_key = ($1) RETURNING *', [key],
       );
       return result.rows[0] + keyReset.rows[0];
     } catch (err) {
       throw new Error(err);
     }
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+const addUserProfile = async (uid, formData) => {
+  try {
+    const result = await pool.query(`UPDATE users SET 
+                gender = $1,
+                sexual_orientation = $2,
+                bio = $3,
+                profile_picture_id = $4
+                WHERE id = $4`,
+    [formData.gender, formData.sexualOrientation, formData.bio,
+      formData.profilePicID, 1]);
   } catch (err) {
     throw new Error(err);
   }
@@ -119,7 +134,7 @@ const updatePasswordWithUserId = async (password, id) => {
   const salt = bcrypt.genSaltSync(saltRounds);
   const pwHash = bcrypt.hashSync(password, salt);
   const result = await pool.query(
-    `UPDATE users SET password = $1 WHERE id = $2`, [pwHash, id],
+    'UPDATE users SET password = $1 WHERE id = $2', [pwHash, id],
   );
   if (result.err) console.log('Error: ', result.err.message);
   return result.affectedRows;
@@ -136,12 +151,12 @@ const findUser = async (data, next) => {
 
 const findUserKey = async (data, next) => {
   try {
-    const result = await pool.query(`SELECT * FROM users WHERE reset_password_key = ($1)`, [data]);
+    const result = await pool.query('SELECT * FROM users WHERE reset_password_key = ($1)', [data]);
     if (result) return result.rows[0];
   } catch (err) {
     next(err);
   }
-}
+};
 
 const isDuplicateUser = async (username, next) => {
   const result = await findUser(username, next);
@@ -171,7 +186,8 @@ const addUserTag = async (uid, tagId) => {
   try {
     result = await pool.query('INSERT INTO usertags (uid, tagId) VALUES ($1, $2)', [uid, tagId]);
   } catch (err) {
-    console.log(err); throw err;
+    console.log(err);
+    throw err;
   } // TODO: proper error handling
   return result;
 };
@@ -180,7 +196,10 @@ const removeUserTag = async (userTagId) => {
   let result;
   try {
     result = await pool.query('DELETE FROM usertags WHERE id = ($1)', [userTagId]);
-  } catch (err) { result = null; throw err;} // TODO: proper error handling
+  } catch (err) {
+    result = null;
+    throw err;
+  } // TODO: proper error handling
   return result;
 };
 
@@ -195,6 +214,7 @@ export default {
   removeUserTag,
   setResetKeyForPassword,
   updatePasswordWithResetKey,
+  addUserProfile,
   validateUser,
   reportUser,
   blockUser,
@@ -202,4 +222,5 @@ export default {
   checkIfUserIsBlocked,
   checkIfUserIsReported,
   findUserKey,
+
 };
