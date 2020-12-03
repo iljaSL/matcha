@@ -2,7 +2,7 @@
 // TODO: add custom error class to make this prettier..
 const errorHandler = (error, request, response, next) => {
   // console.log('Errorhandler:', error.message, request.token);
-  if (error.code === '23505') return response.status(403).json({ error: 'Duplicate entry!' });
+  if (error.code === '23505') return response.status(403).json({ message: 'Duplicate entry!' });
   if (!request.token) return response.status(401).json({ error: 'token missing or invalid' });
   if (error.message === 'Invalid file format') return response.status(400).json(error.message);
   if (error.message === 'link invalid') return response.status(400).json(error.message);
