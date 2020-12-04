@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,6 +13,9 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+
+import authService from '../../actions/auth';
+import { login } from '../../reducers/userReducer';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -43,8 +48,49 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function LoginForm() {
+const LoginForm = (props) => {
     const classes = useStyles();
+    const form = useRef();
+
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const { isLoggedIn } = useSelector(state => state.auth);
+    const { message } = useSelector(state => state.message);
+
+    const dispatch = useDispatch();
+
+    const onChangeUsername = (e) => {
+        const username = e.target.value;
+        setUsername(username);
+    }
+
+    const onChangePassword = (e) => {
+        const password = e.target.value;
+        setPassword(password);
+    }
+
+    const handleLogin = (e) => {
+        e.preventDefault();
+
+        setLoading(true);
+
+        form.current.validateAll();
+
+        if (true) {
+            dispatch(authService.login(username, password)).then(() => {
+                props.history.push("/");
+                window.location.reload();
+            }).catch(() => {
+                setLoading(false);
+            })
+        }
+    };
+
+    if (isLoggedIn) {
+        return <Redirect to="/" />;
+    }
 
     return (
         <Grid container component="main" className={classes.root}>
@@ -114,3 +160,5 @@ export default function LoginForm() {
         </Grid>
     );
 }
+
+export default LoginForm;

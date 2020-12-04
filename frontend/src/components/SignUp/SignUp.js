@@ -9,7 +9,12 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
+import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
+
+import Form from "react-validation/build/form";
+
+import authService from '../../actions/auth';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -45,7 +50,6 @@ const useStyles = makeStyles((theme) => ({
 const SignUpForm = () => {
     const classes = useStyles();
     const form = useRef();
-    const checkBtn = useRef();
 
     const [username, setUsername] = useState("");
     const [firstName, setFirstName] = useState("");
@@ -57,7 +61,51 @@ const SignUpForm = () => {
     const { message } = useSelector(state => state.message);
     const dispatch = useDispatch();
 
+    const onChangeUsername = (e) => {
+        const username = e.target.value;
+        setUsername(username);
+      };
+
+    const onChangeFirstName = (e) => {
+        const firstName = e.target.value;
+        setFirstName(firstName);
+    };
+
+    const onChangeLastName = (e) => {
+      const lastName = e.target.value;
+      setLastName(lastName);
+    };
+
+    const onChangeEmail = (e) => {
+        const email = e.target.value;
+        setEmail(email);
+    };
+
+    const onChangePassword = (e) => {
+        const password = e.target.value;
+        setPassword(password);
+    };
+
+    const handleRegister = (e) => {
+      e.preventDefault();
+
+      setSuccessful(false);
+
+      form.current.validateAll();
+
+      if (true) {
+        dispatch(authService.register(username, firstName, lastName, email, password))
+          .then(() => {
+            setSuccessful(true);
+          })
+          .catch(() => {
+            setSuccessful(false);
+          });
+      }
+    };
+
     return (
+      <>
         <Grid container component="main" className={classes.root}>
             <CssBaseline />
             <Grid item xs={false} sm={4} md={7} className={classes.image} />
@@ -69,7 +117,8 @@ const SignUpForm = () => {
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <form className={classes.form} noValidate>
+                    <Form onSubmit={handleRegister} ref={form} className={classes.form}>
+                    {!successful && (
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
@@ -82,6 +131,8 @@ const SignUpForm = () => {
                                     label="First Name"
                                     autoFocus
                                     color="secondary"
+                                    value={firstName}
+                                    onChange={onChangeFirstName}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -94,6 +145,8 @@ const SignUpForm = () => {
                                     name="lastName"
                                     autoComplete="lname"
                                     color="secondary"
+                                    value={lastName}
+                                    onChange={onChangeLastName}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -106,6 +159,8 @@ const SignUpForm = () => {
                                     name="username"
                                     autoComplete="username"
                                     color="secondary"
+                                    value={username}
+                                    onChange={onChangeUsername}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -118,6 +173,8 @@ const SignUpForm = () => {
                                     name="email"
                                     autoComplete="email"
                                     color="secondary"
+                                    value={email}
+                                    onChange={onChangeEmail}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -126,14 +183,17 @@ const SignUpForm = () => {
                                     required
                                     fullWidth
                                     name="password"
-                                    label="Password"
+                                    label="Password (at least 6 characters, one lower/upper case letter and number."
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
                                     color="secondary"
+                                    value={password}
+                                    onChange={onChangePassword}
                                 />
                             </Grid>
                         </Grid>
+                        )}
                         <Button
                             type="submit"
                             fullWidth
@@ -150,10 +210,17 @@ const SignUpForm = () => {
                                 </Link>
                             </Grid>
                         </Grid>
-                    </form>
+                        {message && (
+                            <Alert severity={ successful ? "success" : "error" } role="alert">
+                              {message}
+                            </Alert>
+
+                        )}
+                    </Form>
                 </div>
             </Grid>
         </Grid>
+      </>
     );
 }
 
