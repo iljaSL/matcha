@@ -147,15 +147,15 @@ const auth = async (username, password) => {
 const login = async (request, response, next) => {
   const { username, password } = request.body;
   const user = (await userModel.findUser(username, next));
-  if (user.status === 0) return response.status(401).json({ message: 'user account has not been activated' });
   if (!user || !password) return response.status(404).json({ message: 'user not found' });
+  if (!user.status) return response.status(401).json({ message: 'user account has not been activated' });
   const match = await bcrypt.compare(password, user.password);
   if (!match) return response.status(401).json({ message: 'invalid username/password' });
   return response.status(200).json({
     id: user.id,
     message: 'Login successful!',
     username,
-    token: jasonWebTokenUtils.tokenGenerator([user.id, user.username])
+    token: jasonWebTokenUtils.tokenGenerator([user.id, user.username]),
   });
 };
 
@@ -175,18 +175,18 @@ const createUser = async (request, response, next) => {
 };
 
 // USER PROFILE CREATION
-
-const createProfile = async (request, response, next) => {
+const initProfile = async (request, response, next) => { // todo: replace w/ proper put request
   const { profileBlob, ...rest } = request.body;
+  const uid = request.params.id;
   try {
     const sexualOrientation = UserUtil.getOrientation(rest.gender, rest.preferences);
-    const imagePath = await imageModel.saveImageBlob(1, profileBlob);
-    const profilePicID = (await imageModel.addImageLink(1, imagePath)).insertId;
-    await userModel.addUserProfile(1, {
+    const imagePath = await imageModel.saveImageBlob(uid, profileBlob);
+    const profilePicID = await imageModel.addImageLink(uid, imagePath);
+    await userModel.addUserProfile(uid, {
       profilePicID, sexualOrientation, ...rest,
     });
   } catch (err) { next(err); }
-  return response.status(201).json({ status: 'Profile created' });
+  return response.status(201).json({ status: 'success' });
 };
 
 // USER TAGS
@@ -221,7 +221,7 @@ const removeTagById = async (request, response) => {
 
 export default {
   createUser,
-  createProfile,
+  initProfile,
   auth,
   login,
   updatePasswordWithUserId,

@@ -98,17 +98,15 @@ const updatePasswordWithResetKey = async (newPassword, key) => {
 
 const addUserProfile = async (uid, formData) => {
   try {
-    const result = await pool.query(`UPDATE users SET 
+    return await pool.query(`UPDATE users SET 
                 gender = $1,
                 sexual_orientation = $2,
                 bio = $3,
                 profile_picture_id = $4
-                WHERE id = $4`,
+                WHERE id = $5`,
     [formData.gender, formData.sexualOrientation, formData.bio,
-      formData.profilePicID, 1]);
-  } catch (err) {
-    throw new Error(err);
-  }
+      formData.profilePicID, uid]);
+  } catch (err) {throw new Error(err);}
 };
 
 const setResetKeyForPassword = async (id, key, next) => {
@@ -142,7 +140,7 @@ const updatePasswordWithUserId = async (password, id) => {
 
 const findUser = async (data, next) => {
   try {
-    const result = await pool.query('SELECT * FROM users WHERE username = ($1)', [data]);
+    const result = await pool.query('SELECT * FROM users WHERE username = $1', [data]);
     if (result) return result.rows[0];
   } catch (err) {
     next(err);
