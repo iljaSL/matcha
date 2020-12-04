@@ -12,7 +12,7 @@ const initialState = user
     ? { isLoggedIn: true, user }
     : { isLoggedIn: false, user: null };
 
-export default function (state = initialState, action) {
+const authReducer = (state = initialState, action) => {
     const { type, payload } = action;
 
     switch (type) {
@@ -48,3 +48,5 @@ export default function (state = initialState, action) {
             return state;
     }
 }
+
+export default authReducer;

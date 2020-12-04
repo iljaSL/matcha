@@ -14,7 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import Form from "react-validation/build/form";
 
-import { register } from '../../actions/auth';
+import authService from '../../actions/auth';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -94,7 +94,7 @@ const SignUpForm = () => {
       form.current.validateAll();
 
       if (true) {
-        dispatch(register(username, firstName, lastName, email, password))
+        dispatch(authService.register(username, firstName, lastName, email, password))
           .then(() => {
             setSuccessful(true);
           })
