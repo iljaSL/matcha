@@ -2,8 +2,6 @@ import React from 'react';
 import {
     Switch,
     Route,
-    useLocation,
-    Link
 } from "react-router-dom";
 
 import './App.css';
@@ -14,8 +12,6 @@ import LandingPagePrompt from "./components/LandingPage/LandingPagePrompt";
 
 
 const App = () => {
-    let location = useLocation();
-    // const { user }  = useSelector(state => state)
     return (
         <div>
             <Switch>
