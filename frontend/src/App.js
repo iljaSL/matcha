@@ -6,11 +6,11 @@ import {
 
 import './App.css';
 
-import LoginForm from "./Components/LoginForm/LoginForm";
-import SignUpForm from './Components/SignUp/SignUp'
-import LandingPage from './Components/LandingPage/LandingPage'
-import LandingPagePrompt from "./Components/LandingPage/LandingPagePrompt";
-import CreateProfileForm from "./Components/ProfileCreation/CreateProfileForm";
+import LoginForm from "./components/LoginForm/LoginForm";
+import SignUpForm from './components/SignUp/SignUp'
+import LandingPage from './components/LandingPage/LandingPage'
+import LandingPagePrompt from "./components/LandingPage/LandingPagePrompt";
+import CreateProfileForm from "./components/ProfileCreation/CreateProfileForm";
 
 
 const App = () => {
