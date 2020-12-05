@@ -13,9 +13,11 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Alert from '@material-ui/lab/Alert';
+import Form from "react-validation/build/form";
 
 import authService from '../../actions/auth';
-import { login } from '../../reducers/userReducer';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -104,18 +106,20 @@ const LoginForm = (props) => {
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
-                    <form className={classes.form} noValidate>
+                    <Form onSubmit={handleLogin} ref={form} className={classes.form} >
                         <TextField
                             variant="outlined"
                             margin="normal"
                             required
                             fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
+                            id="username"
+                            label="Username"
+                            name="username"
+                            autoComplete="username"
                             color="secondary"
                             autoFocus
+                            value={username}
+                            onChange={onChangeUsername}
                         />
                         <TextField
                             variant="outlined"
@@ -128,6 +132,8 @@ const LoginForm = (props) => {
                             id="password"
                             autoComplete="current-password"
                             color="secondary"
+                            value={password}
+                            onChange={onChangePassword}
                         />
                         <FormControlLabel
                             control={<Checkbox value="remember" color="secondary" />}
@@ -154,7 +160,16 @@ const LoginForm = (props) => {
                                 </Link>
                             </Grid>
                         </Grid>
-                    </form>
+                        {loading && (
+                            <CircularProgress color="secondary" />
+                            )}
+                        {message && (
+                            <Alert severity="error" role="alert">
+                              {message}
+                            </Alert>
+
+                        )}
+                    </Form>
                 </div>
             </Grid>
         </Grid>
