@@ -111,14 +111,12 @@ export const submitProfileForm = (formData) => { // TODO: add token and actually
         }
         try {
             response = await axios.post('http://localhost:3001/api/users/profile', formData)
-            console.log(formData)
             success = true;
         } catch (error) {
             console.log(error)
             success = false;
         }
         dispatch({type: 'FORM_SUCCESS', data: success});
-        console.log(response)
     }
 }
 

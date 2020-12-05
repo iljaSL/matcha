@@ -1,3 +1,5 @@
+import imageTestUtils from './imageTestUtils.js';
+
 const wrongToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQsInVzZXJuYW1lIjoicGx1c3RpZyIsImlhdCI6MTYwMjI1NTU0MywiZXhwIjoxNjAyMzQxOTQzfQ.zywxu6To--e2yLG3BkjIFJPhaRwrvYPXLp_Hte2u7Qo';
 
 const newValidUser = {
@@ -110,6 +112,21 @@ const invalidUsers = [
   },
 ];
 
+const validNewProfileForm = {
+  profileBlob: imageTestUtils.validJPGString,
+  gender: 'woman',
+  preferences: ['male', 'other'],
+  bio: 'life is wonderful',
+  tagList: ['krautrock'],
+};
+
+const invalidNewProfileForm = {
+  profileBlob: imageTestUtils.validJPGString,
+  gender: 'woman',
+  preferences: ['male', 'other'],
+  bio: 'life is wonderful',
+};
+
 export default {
-  newValidUser, newUserMissingUsername, invalidUsers, wrongToken, validUsers,
+  newValidUser, invalidNewProfileForm, newUserMissingUsername, invalidUsers, wrongToken, validUsers, validNewProfileForm,
 };

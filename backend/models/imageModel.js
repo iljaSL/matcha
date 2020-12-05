@@ -31,18 +31,18 @@ const saveImageBlob = async (uid, base64String) => { // TODO: refactor
   await fs.mkdirSync(savePath, { recursive: true });
   await fs.writeFile(`.${imagePath}/${uid}/${hash}.${fileFormat}`, base64Image, { encoding: 'base64', flag: 'w+' }, (err) => {
     if (err) {
-      throw new Error('Error writing');
+      throw err;
     }
   });
   return (`${imagePath}/${uid}/${hash}.${fileFormat}`);
 };
 
 const addImageLink = async (uid, imageLink) => {
-  const result = await pool.query('INSERT INTO user_photo (uid, link) VALUES ( $1, $2 );', [uid, imageLink]);
+  const result = await pool.query('INSERT INTO user_photo (uid, link) VALUES ( $1, $2 ) RETURNING id;', [uid, imageLink]);
   if (result.err) {
     throw result.err;
   }
-  return result;
+  return result.rows[0].id;
 };
 
 export default {

@@ -43,13 +43,15 @@ userRouter.delete('/:id', async (request, response, err) => {
   await userController.deleteUser(request, response, err);
 });
 
+userRouter.post('/profile/:id', async (request, response, next) => {
+  await userController.initProfile(request, response, next);
+});
+
 userRouter.post('/', async (request, response, err) => {
   await userController.createUser(request, response, err);
 });
 
-userRouter.post('/profile/', async (request, response, next) => {
-   await userController.createProfile(request, response, next);
-});
+
 
 userRouter
   .route('/verify/password/:id')
