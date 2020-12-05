@@ -53,7 +53,6 @@ const CreateProfileForm = () => {
     }
 
     const handleSubmit = () => {
-        console.log('tosa mä olisi')
         dispatch(submitProfileForm(registrationData))
     }
 
