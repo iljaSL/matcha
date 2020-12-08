@@ -8,6 +8,7 @@ import './App.css';
 
 import LoginForm from "./components/LoginForm/LoginForm";
 import SignUpForm from './components/SignUp/SignUp'
+import ForgotPassword from './components/ForgotPassword/ForgotPassword'
 import LandingPage from './components/LandingPage/LandingPage'
 import LandingPagePrompt from "./components/LandingPage/LandingPagePrompt";
 import CreateProfileForm from "./components/ProfileCreation/CreateProfileForm";
@@ -22,6 +23,9 @@ const App = () => {
                 </Route>
                 <Route path="/login">
                    <LoginForm/>
+                </Route>
+                <Route path="/forgot-password">
+                   <ForgotPassword/>
                 </Route>
                 <Route path="/profilecreation">
                     <CreateProfileForm />

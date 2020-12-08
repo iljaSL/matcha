@@ -152,7 +152,7 @@ const LoginForm = (props) => {
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link href="#" variant="body2" color="secondary">
+                                <Link href="/forgot-password" variant="body2" color="secondary">
                                     Forgot password?
                                 </Link>
                             </Grid>
