@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useSelector, useStore } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import {
     Avatar,
     Button,
@@ -32,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+const ForgotPassword = () => {
   const classes = useStyles();
 
   return (
@@ -87,3 +89,5 @@ export default function SignIn() {
     </Container>
   );
 }
+
+export default ForgotPassword;
