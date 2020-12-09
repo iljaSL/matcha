@@ -182,7 +182,7 @@ const initProfile = async (request, response, next) => { // todo: replace w/ pro
       profilePicID, sexualOrientation, ...rest,
     });
   } catch (err) { next(err); }
-  return response.status(201).json({ status: 'success' });
+  return response.status(201).end();
 };
 
 // USER TAGS

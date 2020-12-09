@@ -3,6 +3,7 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
+import { Redirect } from 'react-router-dom'
 
 
 import {useSelector, useDispatch} from 'react-redux'
@@ -23,6 +24,7 @@ const CreateProfileForm = () => {
 
 
     const registrationData = useSelector(state => state.registration)
+    const userData = JSON.parse(localStorage.getItem('user'));
     const {currentStep, preferences, bio, tagList, gender, profilePic, steps} = registrationData
 
     useEffect(() => {
@@ -39,7 +41,7 @@ const CreateProfileForm = () => {
 
     const checkError = (index) => {
         if (currentStep > index)
-         return !registrationData.steps[index].success
+            return !registrationData.steps[index].success
         else
             return false;
     }
@@ -53,13 +55,12 @@ const CreateProfileForm = () => {
     }
 
     const handleSubmit = () => {
-        dispatch(submitProfileForm(registrationData))
+        dispatch(submitProfileForm(registrationData, userData))
     }
 
     const handleDelete = (field) => {
         dispatch(updateField(field, null))
     }
-
 
 
     const handleSwitch = (gender) => {
@@ -94,32 +95,38 @@ const CreateProfileForm = () => {
             case 3:
                 return <ChooseTags handleListItem={handleListItem} tagList={tagList}/>
             case 4:
-                return <PictureDropZone handleUpload={handleUpload} initialFile={profilePic} handleDelete={handleDelete}/>
+                return <PictureDropZone handleUpload={handleUpload} initialFile={profilePic}
+                                        handleDelete={handleDelete}/>
             case 5:
-                return <FinalPage formData={registrationData} />
+                return <FinalPage formData={registrationData}/>
             default:
                 return <div></div>
         }
     }
-    return (
-        <div>
-            <Stepper
-                activeStep={currentStep}>
-                {steps.map((entry, index) => {
-                        return (
-                            <Step
-                                key={entry.name}>
-                                <StepLabel error={checkError(index)}
-                                    onClick={() => jump(index)}>{entry.name}</StepLabel>
-                            </Step>
-                        )
-                    }
-                )}
-            </Stepper>
-            {getStepContent(currentStep)}
-            <StepNavigation/>
-        </div>
-    )
+
+    if (registrationData.signupSuccess)
+        return <Redirect to={'/'}/>
+    else
+        return (
+            <div>
+                <h3>Welcome to Matcha {userData.username}! Let's get started with your profile creation...</h3>
+                <Stepper
+                    activeStep={currentStep}>
+                    {steps.map((entry, index) => {
+                            return (
+                                <Step
+                                    key={entry.name}>
+                                    <StepLabel error={checkError(index)}
+                                               onClick={() => jump(index)}>{entry.name}</StepLabel>
+                                </Step>
+                            )
+                        }
+                    )}
+                </Stepper>
+                {getStepContent(currentStep)}
+                <StepNavigation/>
+            </div>
+        )
 }
 
 export default CreateProfileForm;

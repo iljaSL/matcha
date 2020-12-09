@@ -97,7 +97,7 @@ export const addProfilePicture =  (file) => {
     }
 }
 
-export const submitProfileForm = (formData) => { // TODO: add token and actually add the stuff to db
+export const submitProfileForm = (formData, userData) => { // TODO: add token and actually add the stuff to db
     return async dispatch => {
         // a complicated way to check if all are ok...
         let success, response;
@@ -110,11 +110,12 @@ export const submitProfileForm = (formData) => { // TODO: add token and actually
             return;
         }
         try {
-            response = await axios.post('http://localhost:3001/api/users/profile', formData)
+            axios.defaults.headers.common['Authorization'] = `bearer ${userData.token}`;
+            response = await axios
+                .post(`http://localhost:3001/api/users/profile/${userData.id}`, formData)
             success = true;
         } catch (error) {
             console.log(error)
-            success = false;
         }
         dispatch({type: 'FORM_SUCCESS', data: success});
     }
