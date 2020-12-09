@@ -31,6 +31,7 @@ const addImage = async (request, response, next) => { // TODO: refactor
       next(err);
     }
   }
+  return response.status(500);
 };
 
 export default {
