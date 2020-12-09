@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useSelector, useStore } from 'react-redux';
+import React, {useRef, useState} from 'react';
+import {useDispatch, useSelector, useStore} from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import {
     Avatar,
@@ -13,6 +13,9 @@ import {
 } from '@material-ui/core';
 import ReportProblemSharpIcon from '@material-ui/icons/ReportProblemSharp';
 import { makeStyles } from '@material-ui/core/styles';
+import Form from "react-validation/build/form";
+import authService from '../../actions/auth';
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -34,8 +37,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ForgotPassword = () => {
+const ForgotPassword = (props) => {
   const classes = useStyles();
+  const form = useRef();
+
+  const [username, setUsername] = useState('');
+  const { message } = useSelector(state => state.message);
+
+  const dispatch = useDispatch();
+
+  const onChangeUsername = (e) => {
+    const username = e.target.value;
+    setUsername(username);
+  }
+
+  const handlePasswordForgot = (e) => {
+    e.preventDefault();
+
+    form.current.validateAll();
+
+    dispatch(authService.forgotPassword(username)).then(() => {
+      props.history.push("/");
+    }).catch(() => {
+
+    })
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -47,7 +73,7 @@ const ForgotPassword = () => {
         <Typography component="h1" variant="h5">
           Forgot Password
         </Typography>
-        <form className={classes.form} >
+        <Form onSubmit={handlePasswordForgot} ref={form} className={classes.form} >
           <TextField
             variant="outlined"
             color="secondary"
@@ -59,6 +85,8 @@ const ForgotPassword = () => {
             name="username"
             autoComplete="username"
             autoFocus
+            value={username}
+            onChange={onChangeUsername}
           />
           <Typography variant="subtitle2">
             Please fill in your username and you will get a reset-link sent to your registered email!
@@ -84,7 +112,13 @@ const ForgotPassword = () => {
               </Link>
             </Grid>
           </Grid>
-        </form>
+          {message && (
+              <Alert severity="error" role="alert">
+                {message}
+              </Alert>
+
+          )}
+        </Form>
       </div>
     </Container>
   );

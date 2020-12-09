@@ -115,7 +115,7 @@ describe('user creation and modification', () => {
         await request
             .post('/api/users/forgot-password')
             .send({
-                login: userTestUtils.newValidUser.username,
+                username: userTestUtils.newValidUser.username,
             })
             .expect(200);
     });
