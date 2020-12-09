@@ -4,7 +4,6 @@ import sendmail from './emailUtil.js';
 
 const updatePasswordWithResetKey = async (newPassword, key) => {
   const updatedPassword = await userModel.updatePasswordWithResetKey(newPassword, key);
-  console.log('UTIL', updatedPassword);
   if (updatedPassword) {
     return { status: 'success' };
   }
@@ -30,7 +29,7 @@ const resetUserPassword = async (data, next) => {
 };
 
 const checkIfUsernameExist = async (data) => {
-  const user = data.login;
+  const user = data.username;
   const result = await userModel.findUser(user);
   if (result === undefined) {
     return { error: 'user does not exist' };

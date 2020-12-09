@@ -93,7 +93,7 @@ const checkPasswordResetKey = async (request, response, next) => {
 
 const forgotPassword = async (request, response, next) => {
   const user = await UserUtil.checkIfUsernameExist({
-    login: request.body.login,
+    username: request.body.username,
   });
   if (user.error) return response.status(404).json({ error: 'user does not exist' });
   await UserUtil.resetUserPassword(user.userData, next);
