@@ -12,20 +12,22 @@ const checkIfUserIsBlocked = async (request, response, next) => {
   const { blockedUserId } = request.params;
 
   if (userId === blockedUserId) { return response.status(400).json({ error: 'you can not do that!' }); }
-
-  const result = await userModel.checkIfUserIsBlocked(userId, blockedUserId, next);
-  if (result === undefined) return response.status(204).end();
-  return response.status(200).json({ message: 'user is blocked' });
+  try {
+    const result = await userModel.checkIfUserIsBlocked(userId, blockedUserId);
+    if (result === undefined) return response.status(204).end();
+    return response.status(200).json({ message: 'user is blocked' });
+  } catch (err) { next(err); }
 };
 
 const unblockUser = async (request, response, next) => {
   const { userId, blockedUserId } = request.params;
 
   if (userId === blockedUserId) { return response.status(400).json({ error: 'you can not unblock yourself!' }); }
-
-  const result = await userModel.unblockUser(userId, blockedUserId, next);
-  if (result === undefined) return response.status(200).json({ message: 'user has been unblocked' });
-  return response.status(400).json({ error: 'unblocking failed' });
+  try {
+    const result = await userModel.unblockUser(userId, blockedUserId, next);
+    if (result === undefined) return response.status(200).json({ message: 'user has been unblocked' });
+    return response.status(400).json({ error: 'unblocking failed' });
+  } catch (err) { next(err); }
 };
 
 const blockUser = async (request, response, next) => {
@@ -34,18 +36,21 @@ const blockUser = async (request, response, next) => {
   if (userId === blockedUserId) {
     return response.status(400).json({ error: 'you can not block yourself!' });
   }
-
-  const result = await userModel.blockUser(userId, blockedUserId, next);
-  if (result) return response.status(200).json({ message: 'user has been blocked ' });
+  try {
+    const result = await userModel.blockUser(userId, blockedUserId, next);
+    if (result) return response.status(200).json({ message: 'user has been blocked ' });
+  } catch (err) { next(err); }
 };
 
 const checkIfUserIsReported = async (request, response, next) => {
   const body = request.params;
 
   if (body.userId === body.reportedUserId) { return response.status(400).json({ error: 'you can not do that!' }); }
-  const result = await userModel.checkIfUserIsReported(body.userId, body.reportedUserId, next);
-  if (result === undefined) return response.status(204).end();
-  return response.status(200).json({ message: 'user reported' });
+  try {
+    const result = await userModel.checkIfUserIsReported(body.userId, body.reportedUserId, next);
+    if (result === undefined) return response.status(204).end();
+    return response.status(200).json({ message: 'user reported' });
+  } catch (err) { next(err); }
 };
 
 const reportUser = async (request, response, next) => {
@@ -54,8 +59,10 @@ const reportUser = async (request, response, next) => {
   if (body.userId === body.reportedUserId) {
     return response.status(400).json({ error: 'user has been NOT reported' });
   }
-  const result = await userModel.reportUser(body, next);
-  if (result) return response.status(200).json({ message: 'user has been reported' });
+  try {
+    const result = await userModel.reportUser(body, next);
+    if (result) return response.status(200).json({ message: 'user has been reported' });
+  } catch (err) { next(err); }
 };
 
 const validateUserAfterRegistration = async (request, response) => {
@@ -187,32 +194,31 @@ const initProfile = async (request, response, next) => { // todo: replace w/ pro
 
 // USER TAGS
 
-const getTagsById = async (request, response) => {
-  const tagList = await userModel.getTagsById(request.params.id);
-  response.status(200).json(tagList);
+const getTagsById = async (request, response, next) => {
+  try {
+    return response.status(200).json(await userModel.getTagsById(request.params.id));
+  } catch (err) { next(err); }
+  return response.status(500).end();
 };
 
-const addTagById = async (request, response) => {
+const addTagById = async (request, response, next) => {
   const tagId = request.params.id;
   const { authorization } = request.headers;
   const tokenUserId = jasonWebTokenUtils.getUserId(authorization);
-  if (tokenUserId) {
-    const result = await userModel.addUserTag(tokenUserId, tagId);
-    if (!result) return response.status(409).json({ status: 'duplicate' });
-    return response.status(201).json({ status: 'success' });
-  }
-  return response.status(401).json({ error: 'token missing or invalid' });
+  try {
+    await userModel.addUserTag(tokenUserId, tagId);
+  } catch (err) { next(err); }
+  return response.status(201).json({ status: 'success' });
 };
 
-const removeTagById = async (request, response) => {
+const removeTagById = async (request, response, next) => {
   const userTagId = request.params.id;
   const { authorization } = request.headers;
-  const tokenUserId = jasonWebTokenUtils.getUserId(authorization);
-  if (tokenUserId) {
-    const result = await userModel.removeUserTag(userTagId);
-    return response.status(200).json({ status: 'success' });
-  }
-  return response.status(401).json({ error: 'token missing or invalid' });
+  try {
+    if (!jasonWebTokenUtils.getUserId(authorization)) { throw new Error('Invalid user'); }
+    await userModel.removeUserTag(userTagId);
+  } catch (err) { next(err); }
+  return response.status(200).json({ status: 'success' });
 };
 
 export default {

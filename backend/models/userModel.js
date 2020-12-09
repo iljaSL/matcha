@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import pool from '../config/database.js';
 
-const checkIfUserIsBlocked = async (userId, blockedUserId, next) => {
+const checkIfUserIsBlocked = async (userId, blockedUserId) => {
   const result = await pool.query(
     'SELECT * FROM block WHERE user_id = $1 AND blocked_user_id = $2',
     [userId, blockedUserId],
@@ -9,7 +9,7 @@ const checkIfUserIsBlocked = async (userId, blockedUserId, next) => {
   return result.rows[0];
 };
 
-const unblockUser = async (userId, blockUserId, next) => {
+const unblockUser = async (userId, blockUserId) => {
   const result = await pool.query(
     'DELETE FROM block WHERE user_id = $1 AND blocked_user_id = $2',
     [userId, blockUserId],
@@ -18,7 +18,7 @@ const unblockUser = async (userId, blockUserId, next) => {
   return result.rows[0];
 };
 
-const blockUser = async (userId, blockedUserId, next) => {
+const blockUser = async (userId, blockedUserId) => {
   const result = await pool.query(
     'INSERT INTO block (user_id, blocked_user_id) VALUES ($1, $2) RETURNING *',
     [userId, blockedUserId],
@@ -26,7 +26,7 @@ const blockUser = async (userId, blockedUserId, next) => {
   return result.rows[0];
 };
 
-const checkIfUserIsReported = async (userId, reportedUserId, next) => {
+const checkIfUserIsReported = async (userId, reportedUserId) => {
   const result = await pool.query(
     'SELECT * FROM report WHERE user_id = $1 AND reported_user_id = $2',
     [userId, reportedUserId],
@@ -34,7 +34,7 @@ const checkIfUserIsReported = async (userId, reportedUserId, next) => {
   return result.rows[0];
 };
 
-const reportUser = async (data, next) => {
+const reportUser = async (data) => {
   const { userId, reportedUserId } = data;
   const result = await pool.query(
     'INSERT INTO report (user_id, reported_user_id) VALUES ($1, $2) RETURNING *',
@@ -64,7 +64,7 @@ const updatePasswordWithResetKey = async (newPassword, key) => {
   return result.rows[0] + keyReset.rows[0];
 };
 
-const addUserProfile = async (uid, formData) => await pool.query(`UPDATE users
+const addUserProfile = async (uid, formData) => pool.query(`UPDATE users
                            SET gender             = $1,
                                sexual_orientation = $2,
                                bio                = $3,
@@ -73,19 +73,13 @@ const addUserProfile = async (uid, formData) => await pool.query(`UPDATE users
 [formData.gender, formData.sexualOrientation, formData.bio,
   formData.profilePicID, uid]);
 
-const setResetKeyForPassword = async (id, key, next) => {
-  const result = await pool.query(
-    'UPDATE users SET reset_password_key = $1 WHERE id = $2', [key, id],
-  );
-  return result;
-};
+const setResetKeyForPassword = async (id, key, next) => pool.query(
+  'UPDATE users SET reset_password_key = $1 WHERE id = $2', [key, id],
+);
 
-const deleteUser = async (userId) => {
-  const result = await pool.query(
-    'DELETE FROM users WHERE id = $1', [userId],
-  );
-  return result;
-};
+const deleteUser = async (userId) => pool.query(
+  'DELETE FROM users WHERE id = $1', [userId],
+);
 
 const updatePasswordWithUserId = async (password, id) => {
   const saltRounds = 10;
