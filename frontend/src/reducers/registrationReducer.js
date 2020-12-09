@@ -110,7 +110,7 @@ export const submitProfileForm = (formData, userData) => { // TODO: add token an
             return;
         }
         try {
-            axios.defaults.headers.common['Authorization'] = `bearer ${userData.token}`;
+            axios.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`;
             response = await axios
                 .post(`http://localhost:3001/api/users/profile/${userData.id}`, formData)
             success = true;
