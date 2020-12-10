@@ -40,7 +40,6 @@ beforeAll(async () => {
   body2 = (await request.post('/api/users/').send(twoValidUsers[1])).body;
 
   key1 = body1.data.key;
-  console.log('KEY 1', key1);
   await request.get(`/api/users/register/${key1}`);
 
   key2 = body2.data.key;

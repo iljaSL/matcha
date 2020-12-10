@@ -5,37 +5,34 @@ import UserUtil from '../utils/userUtil.js';
 import input from '../utils/inputUtil.js';
 import jasonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
 import sendmail from '../utils/emailUtil.js';
-import tagModel from '../models/tagModel.js';
+
+const selfBlockError = new Error('You can not block/unblock yourself!');
+selfBlockError.code = '666';
 
 const checkIfUserIsBlocked = async (request, response, next) => {
   const { userId } = request.params;
   const { blockedUserId } = request.params;
 
-  if (userId === blockedUserId) { return response.status(400).json({ error: 'you can not do that!' }); }
+  if (userId === blockedUserId) { next(selfBlockError); }
   try {
     const result = await userModel.checkIfUserIsBlocked(userId, blockedUserId);
     if (result === undefined) return response.status(204).end();
-    return response.status(200).json({ message: 'user is blocked' });
   } catch (err) { next(err); }
+  return response.status(200).json({ message: 'user is blocked' });
 };
 
 const unblockUser = async (request, response, next) => {
   const { userId, blockedUserId } = request.params;
-
-  if (userId === blockedUserId) { return response.status(400).json({ error: 'you can not unblock yourself!' }); }
+  if (userId === blockedUserId) { return next(selfBlockError); }
   try {
-    const result = await userModel.unblockUser(userId, blockedUserId, next);
-    if (result === undefined) return response.status(200).json({ message: 'user has been unblocked' });
-    return response.status(400).json({ error: 'unblocking failed' });
+    await userModel.unblockUser(userId, blockedUserId);
   } catch (err) { next(err); }
+  return response.status(200).json({ message: 'user has been unblocked' });
 };
 
 const blockUser = async (request, response, next) => {
   const { userId, blockedUserId } = request.params;
-
-  if (userId === blockedUserId) {
-    return response.status(400).json({ error: 'you can not block yourself!' });
-  }
+  if (userId === blockedUserId) { return next(selfBlockError); }
   try {
     const result = await userModel.blockUser(userId, blockedUserId, next);
     if (result) return response.status(200).json({ message: 'user has been blocked ' });

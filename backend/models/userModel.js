@@ -9,14 +9,10 @@ const checkIfUserIsBlocked = async (userId, blockedUserId) => {
   return result.rows[0];
 };
 
-const unblockUser = async (userId, blockUserId) => {
-  const result = await pool.query(
-    'DELETE FROM block WHERE user_id = $1 AND blocked_user_id = $2',
-    [userId, blockUserId],
-  );
-  console.log('RESULT IN MODEL', result);
-  return result.rows[0];
-};
+const unblockUser = async (userId, blockUserId) => pool.query(
+  'DELETE FROM block WHERE user_id = $1 AND blocked_user_id = $2',
+  [userId, blockUserId],
+);
 
 const blockUser = async (userId, blockedUserId) => {
   const result = await pool.query(
@@ -88,7 +84,6 @@ const updatePasswordWithUserId = async (password, id) => {
   const result = await pool.query(
     'UPDATE users SET password = $1 WHERE id = $2', [pwHash, id],
   );
-  if (result.err) console.log('Error: ', result.err.message);
   return result.affectedRows;
 };
 
