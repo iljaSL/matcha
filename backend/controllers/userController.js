@@ -95,7 +95,7 @@ const forgotPassword = async (request, response, next) => {
   const user = await UserUtil.checkIfUsernameExist({
     username: request.body.username,
   });
-  if (user.error) return response.status(404).json({ error: 'user does not exist' });
+  if (user.error) return response.status(404).json({ message: 'user does not exist' });
   await UserUtil.resetUserPassword(user.userData, next);
   return response.status(200).json({ status: 'success' });
 };
