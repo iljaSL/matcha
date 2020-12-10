@@ -16,7 +16,6 @@ import CreateProfileForm from "./components/ProfileCreation/CreateProfileForm";
 
 const App = () => {
     return (
-        <div>
             <Switch>
                 <Route path="/signup">
                     <SignUpForm />
@@ -35,7 +34,6 @@ const App = () => {
                     <LandingPagePrompt />
                 </Route>
             </Switch>
-        </div>
     );
 }
 

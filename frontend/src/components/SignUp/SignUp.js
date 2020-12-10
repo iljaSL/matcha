@@ -93,15 +93,13 @@ const SignUpForm = () => {
 
       form.current.validateAll();
 
-      if (true) {
-        dispatch(authService.register(username, firstName, lastName, email, password))
-          .then(() => {
-            setSuccessful(true);
-          })
-          .catch(() => {
-            setSuccessful(false);
-          });
-      }
+      dispatch(authService.register(username, firstName, lastName, email, password))
+            .then(() => {
+                setSuccessful(true);
+            })
+            .catch(() => {
+                setSuccessful(false);
+            });
     };
 
     return (

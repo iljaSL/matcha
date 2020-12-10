@@ -2,15 +2,18 @@ import axios from 'axios';
 
 const baseUrl = 'http://localhost:3001/api';
 
-const register = (username, firstname, lastname, mail, password) => axios.post(`${baseUrl}/users`, {
-  username,
-  firstname,
-  lastname,
-  mail,
-  password,
-});
+const register = async (username, firstname, lastname, mail, password) => {
+  const result = await axios.post(`${baseUrl}/users`, {
+    username,
+    firstname,
+    lastname,
+    mail,
+    password,
+  });
+  return result.data;
+}
 
-const login = (username, password) => axios.post(`${baseUrl}/login`, {
+const login = async (username, password) => axios.post(`${baseUrl}/login`, {
   username,
   password,
 }).then((response) => {

@@ -43,6 +43,7 @@ const ForgotPassword = (props) => {
 
   const [username, setUsername] = useState('');
   const { message } = useSelector(state => state.message);
+  const [successful, setSuccessful] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -54,14 +55,21 @@ const ForgotPassword = (props) => {
   const handlePasswordForgot = (e) => {
     e.preventDefault();
 
+    setSuccessful(false);
+
     form.current.validateAll();
 
     dispatch(authService.forgotPassword(username)).then(() => {
+      setSuccessful(true);
       props.history.push("/");
     }).catch(() => {
-
+      setSuccessful(false);
     })
   };
+
+  if (successful) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -74,6 +82,7 @@ const ForgotPassword = (props) => {
           Forgot Password
         </Typography>
         <Form onSubmit={handlePasswordForgot} ref={form} className={classes.form} >
+          {!successful && (
           <TextField
             variant="outlined"
             color="secondary"
@@ -88,6 +97,7 @@ const ForgotPassword = (props) => {
             value={username}
             onChange={onChangeUsername}
           />
+          )}
           <Typography variant="subtitle2">
             Please fill in your username and you will get a reset-link sent to your registered email!
           </Typography>
@@ -116,7 +126,6 @@ const ForgotPassword = (props) => {
               <Alert severity="error" role="alert">
                 {message}
               </Alert>
-
           )}
         </Form>
       </div>
