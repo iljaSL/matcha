@@ -12,6 +12,7 @@ import ForgotPassword from './components/ForgotPassword/ForgotPassword'
 import LandingPage from './components/LandingPage/LandingPage'
 import LandingPagePrompt from "./components/LandingPage/LandingPagePrompt";
 import CreateProfileForm from "./components/ProfileCreation/CreateProfileForm";
+import RegisterConfirmed from './components/RegisterConfirmed/RegisterConfirmed';
 
 
 const App = () => {
@@ -25,6 +26,9 @@ const App = () => {
                 </Route>
                 <Route path="/forgot-password">
                    <ForgotPassword/>
+                </Route>
+                <Route path="/confirmed">
+                    <RegisterConfirmed />
                 </Route>
                 <Route path="/profilecreation">
                     <CreateProfileForm />
