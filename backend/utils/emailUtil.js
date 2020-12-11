@@ -35,7 +35,6 @@ const emailForForgotPassword = (mail, username, link) => {
     html: message,
     contentType: 'text/html',
   }, (err, info) => {
-    console.log(info.envelope);
   });
 };
 

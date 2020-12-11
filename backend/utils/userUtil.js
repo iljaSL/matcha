@@ -4,7 +4,6 @@ import sendmail from './emailUtil.js';
 
 const updatePasswordWithResetKey = async (newPassword, key) => {
   const updatedPassword = await userModel.updatePasswordWithResetKey(newPassword, key);
-  console.log('UTIL', updatedPassword);
   if (updatedPassword) {
     return { status: 'success' };
   }

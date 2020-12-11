@@ -21,12 +21,8 @@ const getUserId = (authorization) => {
   let userId = 0;
   const token = parseAuthorization(authorization);
   if (token != null) {
-    try {
-      const jwtToken = jsonWebTokenUtil.verify(token, PRIVATE_KEY);
-      if (jwtToken != null) userId = jwtToken.id;
-    } catch (err) {
-      console.log(err);
-    }
+    const jwtToken = jsonWebTokenUtil.verify(token, PRIVATE_KEY);
+    if (jwtToken != null) userId = jwtToken.id;
   }
   return userId;
 };

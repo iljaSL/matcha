@@ -3,6 +3,7 @@
 const errorHandler = (error, request, response, next) => {
   //console.log('Errorhandler:', error);
   if (error.code === '666') return response.status(400).end();
+  if (error.code === '665') return response.status(401).end();
   if (error.code === '22P02') return response.status(500).end();
   if (error.code === '23505') return response.status(403).json({ message: 'Duplicate entry!' });
   if (!request.token) return response.status(401).json({ error: 'token missing or invalid' });

@@ -3,17 +3,20 @@ import userModel from '../models/userModel.js';
 import imageModel from '../models/imageModel.js';
 import UserUtil from '../utils/userUtil.js';
 import input from '../utils/inputUtil.js';
-import jasonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
+import jsonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
 import sendmail from '../utils/emailUtil.js';
 
 const selfBlockError = new Error('You can not block/unblock yourself!');
 selfBlockError.code = '666';
 
+const wrongAuthError = new Error('Wrong authentication');
+wrongAuthError.code = '665';
+
 const checkIfUserIsBlocked = async (request, response, next) => {
   const { userId } = request.params;
   const { blockedUserId } = request.params;
 
-  if (userId === blockedUserId) { next(selfBlockError); }
+  if (userId === blockedUserId) { return next(selfBlockError); }
   try {
     const result = await userModel.checkIfUserIsBlocked(userId, blockedUserId);
     if (result === undefined) return response.status(204).end();
@@ -106,7 +109,7 @@ const forgotPassword = async (request, response, next) => {
 
 const deleteUser = async (request, response) => {
   const { authorization } = request.headers;
-  const userId = jasonWebTokenUtils.getUserId(authorization);
+  const userId = jsonWebTokenUtils.getUserId(authorization);
   if (request.params.id === userId) {
     await userModel.deleteUser(userId);
     return response.status(200).json({ message: 'User has been deleted' });
@@ -155,7 +158,7 @@ const login = async (request, response, next) => {
     id: user.id,
     message: 'Login successful!',
     username,
-    token: jasonWebTokenUtils.tokenGenerator([user.id, user.username]),
+    token: jsonWebTokenUtils.tokenGenerator([user.id, user.username]),
   });
 };
 
@@ -201,7 +204,7 @@ const getTagsById = async (request, response, next) => {
 const addTagById = async (request, response, next) => {
   const tagId = request.params.id;
   const { authorization } = request.headers;
-  const tokenUserId = jasonWebTokenUtils.getUserId(authorization);
+  const tokenUserId = jsonWebTokenUtils.getUserId(authorization);
   try {
     await userModel.addUserTag(tokenUserId, tagId);
   } catch (err) { next(err); }
@@ -212,7 +215,7 @@ const removeTagById = async (request, response, next) => {
   const userTagId = request.params.id;
   const { authorization } = request.headers;
   try {
-    if (!jasonWebTokenUtils.getUserId(authorization)) { throw new Error('Invalid user'); }
+    if (!jsonWebTokenUtils.getUserId(authorization)) { throw new Error('Invalid user'); }
     await userModel.removeUserTag(userTagId);
   } catch (err) { next(err); }
   return response.status(200).json({ status: 'success' });
