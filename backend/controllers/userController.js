@@ -107,14 +107,14 @@ const forgotPassword = async (request, response, next) => {
   return response.status(200).json({ status: 'success' });
 };
 
-const deleteUser = async (request, response) => {
+const deleteUser = async (request, response, next) => {
   const { authorization } = request.headers;
-  const userId = jsonWebTokenUtils.getUserId(authorization);
-  if (request.params.id === userId) {
+  try {
+    const userId = jsonWebTokenUtils.getUserId(authorization);
+    if (!userId) { throw wrongAuthError; }
     await userModel.deleteUser(userId);
     return response.status(200).json({ message: 'User has been deleted' });
-  }
-  return response.status(401).json({ error: 'token missing or invalid' });
+  } catch (err) { next(err); }
 };
 
 const updatePasswordWithUserId = async (request, response, err) => {
