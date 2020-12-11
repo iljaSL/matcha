@@ -29,7 +29,7 @@ const resetUserPassword = async (data, next) => {
 };
 
 const checkIfUsernameExist = async (data) => {
-  const user = data.login;
+  const user = data.username;
   const result = await userModel.findUser(user);
   if (result === undefined) {
     return { error: 'user does not exist' };
