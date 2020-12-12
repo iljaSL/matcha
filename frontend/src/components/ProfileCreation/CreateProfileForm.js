@@ -3,7 +3,7 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import { Redirect } from 'react-router-dom'
+import {Redirect} from 'react-router-dom'
 
 
 import {useSelector, useDispatch} from 'react-redux'
@@ -103,9 +103,8 @@ const CreateProfileForm = () => {
                 return <div></div>
         }
     }
-
-    if (registrationData.signupSuccess)
-        return <Redirect to={'/'}/>
+    if (userData.status === 2)
+        return <Redirect to="/gallery"/>
     else
         return (
             <div>

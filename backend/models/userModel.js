@@ -64,10 +64,11 @@ const addUserProfile = async (uid, formData) => pool.query(`UPDATE users
                            SET gender             = $1,
                                sexual_orientation = $2,
                                bio                = $3,
-                               profile_picture_id = $4
-                           WHERE id = $5`,
+                               profile_picture_id = $4,
+                               status = $5
+                           WHERE id = $6`,
 [formData.gender, formData.sexualOrientation, formData.bio,
-  formData.profilePicID, uid]);
+  formData.profilePicID, 2, uid]);
 
 const setResetKeyForPassword = async (id, key, next) => pool.query(
   'UPDATE users SET reset_password_key = $1 WHERE id = $2', [key, id],

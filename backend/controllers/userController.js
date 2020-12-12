@@ -156,6 +156,7 @@ const login = async (request, response, next) => {
   if (!match) return response.status(401).json({ message: 'invalid username/password' });
   return response.status(200).json({
     id: user.id,
+    status: user.status,
     message: 'Login successful!',
     username,
     token: jsonWebTokenUtils.tokenGenerator([user.id, user.username]),

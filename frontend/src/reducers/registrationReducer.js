@@ -1,5 +1,7 @@
 import {initialSteps} from "../components/ProfileCreation/ProfileFormUtils";
 import axios from 'axios';
+import {Redirect} from "react-router-dom";
+import React from "react";
 
 const initialState = {
     currentStep: 0,
@@ -69,6 +71,7 @@ export const changePage = (newPage) => {
 export const updateField = (field, value) => {
     return dispatch => {
         dispatch({type: 'UPDATE_FIELD', data: {field: field, value: value}})
+
     }
 }
 
@@ -97,7 +100,7 @@ export const addProfilePicture =  (file) => {
     }
 }
 
-export const submitProfileForm = (formData, userData) => { // TODO: add token and actually add the stuff to db
+export const submitProfileForm = (formData, userData) => {
     return async dispatch => {
         // a complicated way to check if all are ok...
         let success, response;
@@ -117,7 +120,11 @@ export const submitProfileForm = (formData, userData) => { // TODO: add token an
         } catch (error) {
             console.log(error)
         }
+        const user = JSON.parse(localStorage.getItem("user"));
+        user.status = 2;
+        localStorage.setItem("user", JSON.stringify(user))
         dispatch({type: 'FORM_SUCCESS', data: success});
+
     }
 }
 
