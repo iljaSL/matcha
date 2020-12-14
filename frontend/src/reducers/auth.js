@@ -4,16 +4,15 @@ import {
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGOUT,
+    PROFILE_CREATION_SUCCESS,
 } from '../actions/types';
 
-const user = JSON.parse(localStorage.getItem("user"));
 
-const initialState = user
-    ? { isLoggedIn: true, user }
-    : { isLoggedIn: false, user: null };
+
+const initialState = {isLoggedIn: false, user: []}
 
 const authReducer = (state = initialState, action) => {
-    const { type, payload } = action;
+    const {type, payload} = action;
 
     switch (type) {
         case REGISTER_SUCCESS:
@@ -27,6 +26,7 @@ const authReducer = (state = initialState, action) => {
                 isLoggedIn: false,
             };
         case LOGIN_SUCCESS:
+            console.log(payload);
             return {
                 ...state,
                 isLoggedIn: true,
@@ -44,6 +44,13 @@ const authReducer = (state = initialState, action) => {
                 isLoggedIn: false,
                 user: null,
             };
+        case PROFILE_CREATION_SUCCESS:
+            let { auth } = state;
+            auth.user.status = 2;
+            return {
+                ...state,
+                auth
+            }
         default:
             return state;
     }

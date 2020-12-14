@@ -31,8 +31,8 @@ export const ChooseGender = ({gender, handleChange}) =>
     <FormControl component="fieldset">
         <FormLabel component="legend">Your gender</FormLabel>
         <RadioGroup aria-label="gender" name="gender1" value={gender} onChange={handleChange('gender')}>
-            <FormControlLabel value="female" control={<Radio/>} label="Female"/>
-            <FormControlLabel value="male" control={<Radio/>} label="Male"/>
+            <FormControlLabel value="man" control={<Radio/>} label="Man"/>
+            <FormControlLabel value="woman" control={<Radio/>} label="Woman"/>
             <FormControlLabel value="other" control={<Radio/>} label="Other"/>
         </RadioGroup>
     </FormControl>

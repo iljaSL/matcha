@@ -7,6 +7,7 @@ import {
   SET_MESSAGE,
   FORGOT_PASSWORD,
   FORGOT_PASSWORD_FAIL,
+  PROFILE_CREATION_SUCCESS,
 } from './types';
 
 import AuthService from '../services/auth.service';
@@ -101,9 +102,14 @@ const logout = () => (dispatch) => {
   });
 };
 
+const profileCreated = () => (dispatch) => {
+  dispatch({type: PROFILE_CREATION_SUCCESS })
+}
+
 export default {
   register,
   login,
   logout,
   forgotPassword,
+  profileCreated,
 };

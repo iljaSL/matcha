@@ -1,6 +1,7 @@
 import React from 'react'
 import Particles from "react-particles-js";
 import './LandingPage.css'
+import LandingPagePrompt from "./LandingPagePrompt";
 
 const LandingPage = () => {
     const particlesOptions = {
@@ -129,6 +130,7 @@ const LandingPage = () => {
 
     return (
         <div>
+            <LandingPagePrompt />
             <Particles className="particles" params={particlesOptions} />
         </div>
     )

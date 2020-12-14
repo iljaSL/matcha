@@ -3,49 +3,54 @@ import userModel from '../models/userModel.js';
 import imageModel from '../models/imageModel.js';
 import UserUtil from '../utils/userUtil.js';
 import input from '../utils/inputUtil.js';
-import jasonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
+import jsonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
 import sendmail from '../utils/emailUtil.js';
-import tagModel from '../models/tagModel.js';
+
+const selfBlockError = new Error('You can not block/unblock yourself!');
+selfBlockError.code = '666';
+
+const wrongAuthError = new Error('Wrong authentication');
+wrongAuthError.code = '665';
 
 const checkIfUserIsBlocked = async (request, response, next) => {
   const { userId } = request.params;
   const { blockedUserId } = request.params;
 
-  if (userId === blockedUserId) { return response.status(400).json({ error: 'you can not do that!' }); }
-
-  const result = await userModel.checkIfUserIsBlocked(userId, blockedUserId, next);
-  if (result === undefined) return response.status(204).end();
+  if (userId === blockedUserId) { return next(selfBlockError); }
+  try {
+    const result = await userModel.checkIfUserIsBlocked(userId, blockedUserId);
+    if (result === undefined) return response.status(204).end();
+  } catch (err) { next(err); }
   return response.status(200).json({ message: 'user is blocked' });
 };
 
 const unblockUser = async (request, response, next) => {
   const { userId, blockedUserId } = request.params;
-
-  if (userId === blockedUserId) { return response.status(400).json({ error: 'you can not unblock yourself!' }); }
-
-  const result = await userModel.unblockUser(userId, blockedUserId, next);
-  if (result === undefined) return response.status(200).json({ message: 'user has been unblocked' });
-  return response.status(400).json({ error: 'unblocking failed' });
+  if (userId === blockedUserId) { return next(selfBlockError); }
+  try {
+    await userModel.unblockUser(userId, blockedUserId);
+  } catch (err) { next(err); }
+  return response.status(200).json({ message: 'user has been unblocked' });
 };
 
 const blockUser = async (request, response, next) => {
   const { userId, blockedUserId } = request.params;
-
-  if (userId === blockedUserId) {
-    return response.status(400).json({ error: 'you can not block yourself!' });
-  }
-
-  const result = await userModel.blockUser(userId, blockedUserId, next);
-  if (result) return response.status(200).json({ message: 'user has been blocked ' });
+  if (userId === blockedUserId) { return next(selfBlockError); }
+  try {
+    const result = await userModel.blockUser(userId, blockedUserId, next);
+    if (result) return response.status(200).json({ message: 'user has been blocked ' });
+  } catch (err) { next(err); }
 };
 
 const checkIfUserIsReported = async (request, response, next) => {
   const body = request.params;
 
   if (body.userId === body.reportedUserId) { return response.status(400).json({ error: 'you can not do that!' }); }
-  const result = await userModel.checkIfUserIsReported(body.userId, body.reportedUserId, next);
-  if (result === undefined) return response.status(204).end();
-  return response.status(200).json({ message: 'user reported' });
+  try {
+    const result = await userModel.checkIfUserIsReported(body.userId, body.reportedUserId, next);
+    if (result === undefined) return response.status(204).end();
+    return response.status(200).json({ message: 'user reported' });
+  } catch (err) { next(err); }
 };
 
 const reportUser = async (request, response, next) => {
@@ -54,8 +59,10 @@ const reportUser = async (request, response, next) => {
   if (body.userId === body.reportedUserId) {
     return response.status(400).json({ error: 'user has been NOT reported' });
   }
-  const result = await userModel.reportUser(body, next);
-  if (result) return response.status(200).json({ message: 'user has been reported' });
+  try {
+    const result = await userModel.reportUser(body, next);
+    if (result) return response.status(200).json({ message: 'user has been reported' });
+  } catch (err) { next(err); }
 };
 
 const validateUserAfterRegistration = async (request, response) => {
@@ -100,14 +107,14 @@ const forgotPassword = async (request, response, next) => {
   return response.status(200).json({ status: 'success' });
 };
 
-const deleteUser = async (request, response) => {
+const deleteUser = async (request, response, next) => {
   const { authorization } = request.headers;
-  const userId = jasonWebTokenUtils.getUserId(authorization);
-  if (request.params.id === userId) {
+  try {
+    const userId = jsonWebTokenUtils.getUserId(authorization);
+    if (!userId) { throw wrongAuthError; }
     await userModel.deleteUser(userId);
     return response.status(200).json({ message: 'User has been deleted' });
-  }
-  return response.status(401).json({ error: 'token missing or invalid' });
+  } catch (err) { next(err); }
 };
 
 const updatePasswordWithUserId = async (request, response, err) => {
@@ -149,9 +156,10 @@ const login = async (request, response, next) => {
   if (!match) return response.status(401).json({ message: 'invalid username/password' });
   return response.status(200).json({
     id: user.id,
+    status: user.status,
     message: 'Login successful!',
     username,
-    token: jasonWebTokenUtils.tokenGenerator([user.id, user.username]),
+    token: jsonWebTokenUtils.tokenGenerator([user.id, user.username]),
   });
 };
 
@@ -182,37 +190,36 @@ const initProfile = async (request, response, next) => { // todo: replace w/ pro
       profilePicID, sexualOrientation, ...rest,
     });
   } catch (err) { next(err); }
-  return response.status(201).json({ status: 'success' });
+  return response.status(201).end();
 };
 
 // USER TAGS
 
-const getTagsById = async (request, response) => {
-  const tagList = await userModel.getTagsById(request.params.id);
-  response.status(200).json(tagList);
+const getTagsById = async (request, response, next) => {
+  try {
+    return response.status(200).json(await userModel.getTagsById(request.params.id));
+  } catch (err) { next(err); }
+  return response.status(500).end();
 };
 
-const addTagById = async (request, response) => {
+const addTagById = async (request, response, next) => {
   const tagId = request.params.id;
   const { authorization } = request.headers;
-  const tokenUserId = jasonWebTokenUtils.getUserId(authorization);
-  if (tokenUserId) {
-    const result = await userModel.addUserTag(tokenUserId, tagId);
-    if (!result) return response.status(409).json({ status: 'duplicate' });
-    return response.status(201).json({ status: 'success' });
-  }
-  return response.status(401).json({ error: 'token missing or invalid' });
+  const tokenUserId = jsonWebTokenUtils.getUserId(authorization);
+  try {
+    await userModel.addUserTag(tokenUserId, tagId);
+  } catch (err) { next(err); }
+  return response.status(201).json({ status: 'success' });
 };
 
-const removeTagById = async (request, response) => {
+const removeTagById = async (request, response, next) => {
   const userTagId = request.params.id;
   const { authorization } = request.headers;
-  const tokenUserId = jasonWebTokenUtils.getUserId(authorization);
-  if (tokenUserId) {
-    const result = await userModel.removeUserTag(userTagId);
-    return response.status(200).json({ status: 'success' });
-  }
-  return response.status(401).json({ error: 'token missing or invalid' });
+  try {
+    if (!jsonWebTokenUtils.getUserId(authorization)) { throw new Error('Invalid user'); }
+    await userModel.removeUserTag(userTagId);
+  } catch (err) { next(err); }
+  return response.status(200).json({ status: 'success' });
 };
 
 export default {
