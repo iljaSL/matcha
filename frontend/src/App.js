@@ -12,6 +12,7 @@ import SignUpForm from './components/SignUp/SignUp'
 import ForgotPassword from './components/ForgotPassword/ForgotPassword'
 import LandingPage from './components/LandingPage/LandingPage'
 import CreateProfileForm from "./components/ProfileCreation/CreateProfileForm";
+import ResetPassword from './components/ResetPassword/ResetPassword';
 import {useSelector, useDispatch} from "react-redux";
 import {LOGIN_SUCCESS} from "./actions/types";
 import RegisterConfirmed from './components/RegisterConfirmed/RegisterConfirmed';
@@ -42,6 +43,9 @@ const App = () => {
             </Route>
             <Route path="/forgot-password">
                 <ForgotPassword/>
+            </Route>
+            <Route path='/reset-password/:resetId'>
+                <ResetPassword/>
             </Route>
             <Route path="/confirmed">
                 <RegisterConfirmed/>
