@@ -19,7 +19,7 @@ const resetUserPassword = async (data, next) => {
   if (!createdId) {
     return { status: 'something went wrong' };
   }
-  const link = `https://localhost:3000/users/reset-password/${resetId}`;
+  const link = `https://localhost:3000/reset-password/${resetId}`;
   await sendmail.emailForForgotPassword(
     data.mail,
     data.username,
