@@ -41,18 +41,24 @@ const ResetPassword = (props) => {
     const classes = useStyles();
     const form = useRef();
 
-    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('')
     const { message } = useSelector(state => state.message);
     const [successful, setSuccessful] = useState(false);
 
     const dispatch = useDispatch();
 
-    const onChangeUsername = (e) => {
-        const username = e.target.value;
-        setUsername(username);
+    const onChangePassword = (e) => {
+        const password = e.target.value;
+        setPassword(password);
     }
 
-    const handlePasswordForgot = (e) => {
+    const onChangeConfirmPassword = (e) => {
+        const confirmPassword = e.target.value;
+        setConfirmPassword(confirmPassword);
+    }
+
+    const handleResetPassword = (e) => {
         e.preventDefault();
 
         setSuccessful(false);
@@ -68,7 +74,7 @@ const ResetPassword = (props) => {
     };
 
     if (successful) {
-        return <Redirect to="/" />;
+        return <Redirect to="/login" />;
     }
 
     return (
@@ -81,7 +87,7 @@ const ResetPassword = (props) => {
                 <Typography component="h1" variant="h5">
                     Reset Password
                 </Typography>
-                <Form onSubmit={handlePasswordForgot} ref={form} className={classes.form} >
+                <Form onSubmit={handleResetPassword} ref={form} className={classes.form} >
                         <TextField
                             variant="outlined"
                             margin="normal"
@@ -93,8 +99,8 @@ const ResetPassword = (props) => {
                             id="password"
                             autoComplete="current-password"
                             color="secondary"
-                            // value={password}
-                            // onChange={onChangePassword}
+                            value={password}
+                            onChange={onChangePassword}
                         />
                         <TextField
                             variant="outlined"
@@ -107,8 +113,8 @@ const ResetPassword = (props) => {
                             id="confirm-password"
                             autoComplete="current-password"
                             color="secondary"
-                            // value={password}
-                            // onChange={onChangePassword}
+                            value={confirmPassword}
+                            onChange={onChangeConfirmPassword}
                         />
                     <Typography variant="subtitle2">
                         Please fill in your new password and confirm it!
