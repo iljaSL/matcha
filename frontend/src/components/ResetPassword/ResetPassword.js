@@ -82,24 +82,36 @@ const ResetPassword = (props) => {
                     Reset Password
                 </Typography>
                 <Form onSubmit={handlePasswordForgot} ref={form} className={classes.form} >
-                    {!successful && (
                         <TextField
                             variant="outlined"
-                            color="secondary"
                             margin="normal"
                             required
                             fullWidth
-                            id="username"
-                            label="Username"
-                            name="username"
-                            autoComplete="username"
-                            autoFocus
-                            value={username}
-                            onChange={onChangeUsername}
+                            name="password"
+                            label="New Password"
+                            type="password"
+                            id="password"
+                            autoComplete="current-password"
+                            color="secondary"
+                            // value={password}
+                            // onChange={onChangePassword}
                         />
-                    )}
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="confirm-password"
+                            label="Confirm Password"
+                            type="confirm-password"
+                            id="confirm-password"
+                            autoComplete="current-password"
+                            color="secondary"
+                            // value={password}
+                            // onChange={onChangePassword}
+                        />
                     <Typography variant="subtitle2">
-                        Please fill in your username and you will get a reset-link sent to your registered email!
+                        Please fill in your new password and confirm it!
                     </Typography>
                     <Button
                         type="submit"
