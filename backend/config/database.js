@@ -17,7 +17,6 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD,
   database,
 });
-
 pool.connect((err, connection) => {
   if (err) {
     if (err.code === 'PROTOCOL_CONNECTION_LOST') {

@@ -29,7 +29,7 @@ const saveImageBlob = async (uid, base64String) => { // TODO: refactor
   if (!fileFormat) { throw new Error('Invalid file format'); }
   const savePath = path.join(path.resolve('./'), `${imagePath}/${uid}`);
   await fs.mkdirSync(savePath, { recursive: true });
-  await fs.writeFile(`.${imagePath}/${uid}/${hash}.${fileFormat}`, base64Image, { encoding: 'base64', flag: 'w+' }, (err) => {
+  await fs.writeFile(`${imagePath}/${uid}/${hash}.${fileFormat}`, base64Image, { encoding: 'base64', flag: 'w+' }, (err) => {
     if (err) {
       throw err;
     }
