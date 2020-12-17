@@ -15,7 +15,6 @@ import CreateProfileForm from "./components/ProfileCreation/CreateProfileForm";
 import ResetPassword from './components/ResetPassword/ResetPassword';
 import {useSelector, useDispatch} from "react-redux";
 import {LOGIN_SUCCESS} from "./actions/types";
-import RegisterConfirmed from './components/RegisterConfirmed/RegisterConfirmed';
 
 
 const App = () => {
@@ -46,9 +45,6 @@ const App = () => {
             </Route>
             <Route path='/reset-password/:resetId'>
                 <ResetPassword/>
-            </Route>
-            <Route path="/confirmed">
-                <RegisterConfirmed/>
             </Route>
             <Route path="/profilecreation">
                 <CreateProfileForm/>
