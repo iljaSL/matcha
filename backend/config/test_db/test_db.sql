@@ -1,6 +1,9 @@
 DROP DATABASE matcha_test;
 CREATE DATABASE matcha_test;
 
+create extension if not exists cube;
+create extension if not exists earthdistance;
+
 CREATE TYPE gender AS ENUM ('man','woman','other');
 CREATE TYPE sexual_orientation AS ENUM ('bisexual', 'homosexual', 'heterosexual');
 
@@ -18,8 +21,8 @@ CREATE TABLE IF NOT EXISTS users (
   -- `city` varchar(255) DEFAULT NULL,
   profile_picture_id int,
   -- `pop_score` int(11) NOT NULL DEFAULT '0',
-  -- `geo_lat` float DEFAULT NULL,
-  -- `geo_long` float DEFAULT NULL,
+  geo_lat float DEFAULT NULL,
+  geo_long float DEFAULT NULL,
   -- `age_min` int(11) NOT NULL DEFAULT '18',
   -- `age_max` int(11) NOT NULL DEFAULT '99',
   -- `distance_max` int(11) NOT NULL DEFAULT '5',

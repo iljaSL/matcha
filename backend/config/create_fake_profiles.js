@@ -19,7 +19,7 @@ const initFakeUsers = async () => {
     console.log('inserting fake users...')
 
     for (let i = 0; i < 500; i++) {
-        statement = `INSERT INTO users (lastname, firstname, username, gender, sexual_orientation, mail, bio, status, password)
+        statement = `INSERT INTO users (lastname, firstname, username, gender, sexual_orientation, mail, bio, geo_lat, geo_long, status, password)
             VALUES (
             '${faker.name.lastName().replace('\'', '')}',
             '${faker.name.firstName().replace('\'', '')}',
@@ -27,7 +27,10 @@ const initFakeUsers = async () => {
             '${gender[Math.floor(Math.random() * 2)]}',
             '${sexualOrientation[Math.floor(Math.random() * 2)]}',
             '${faker.internet.email()}',
-            '${faker.lorem.sentence()}', 2, 'fake'
+            '${faker.lorem.sentence()}',
+            '${faker.address.latitude()}',
+            '${faker.address.longitude()}',
+             2, 'fake'
             ) RETURNING *; `;
         const {id} = (await pool.query(statement)).rows[0]
         ids = [...ids, id];
@@ -48,6 +51,8 @@ const initFakeUsers = async () => {
 }
 
 await initFakeUsers()
+
+
 
 
 
