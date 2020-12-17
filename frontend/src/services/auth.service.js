@@ -34,9 +34,18 @@ const forgotPassword = async (username) => {
   return result.data;
 };
 
+const resetPassword = async (password, confirmPassword) => {
+  const result = await axios.post(`${baseUrl}/users/reset-password/`, {
+    new_password: password,
+    repeat_password: confirmPassword
+  });
+  return result.data;
+}
+
 export default {
   register,
   login,
   logout,
   forgotPassword,
+  resetPassword
 };
