@@ -6,6 +6,7 @@ import userRoute from './routes/userRoute.js';
 import loginRoute from './routes/loginRoute.js';
 import tagRoute from './routes/tagRoute.js';
 import imageRoute from './routes/imageRoute.js';
+import matchRoute from './routes/matchRoute.js';
 
 import middleware from './utils/middleware.js';
 
@@ -21,6 +22,7 @@ app.use('/api/users', userRoute);
 app.use('/api/login', loginRoute);
 app.use('/api/tags', tagRoute);
 app.use('/api/images', imageRoute);
+app.use('/api/matches', matchRoute);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);

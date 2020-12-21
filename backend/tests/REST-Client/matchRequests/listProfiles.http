@@ -1,0 +1,3 @@
+GET http://localhost:3001/api/matches
+content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE1MDEiLCJ1c2VybmFtZSI6IkVTQUVTQUVTQSIsImlhdCI6MTYwODU3ODUyNSwiZXhwIjoxNjA4NjY0OTI1fQ.dUZGki19yrs7OCCl0VB2MFKdwvDBosH7bgVpSHURa8M
