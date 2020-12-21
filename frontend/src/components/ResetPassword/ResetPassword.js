@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {useDispatch, useSelector, useStore} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import {
     Avatar,
@@ -67,7 +67,6 @@ const ResetPassword = (props) => {
 
         dispatch(authAction.resetPassword(password, confirmPassword)).then(() => {
             setSuccessful(true);
-            props.history.push("/");
         }).catch(() => {
             setSuccessful(false);
         })
@@ -88,6 +87,7 @@ const ResetPassword = (props) => {
                     Reset Password
                 </Typography>
                 <Form onSubmit={handleResetPassword} ref={form} className={classes.form} >
+                    {!successful && (
                         <TextField
                             variant="outlined"
                             margin="normal"
@@ -102,6 +102,7 @@ const ResetPassword = (props) => {
                             value={password}
                             onChange={onChangePassword}
                         />
+                    )}
                         <TextField
                             variant="outlined"
                             margin="normal"

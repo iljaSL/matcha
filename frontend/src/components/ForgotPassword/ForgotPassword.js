@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {useDispatch, useSelector, useStore} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import {
     Avatar,
@@ -14,7 +14,7 @@ import {
 import ReportProblemSharpIcon from '@material-ui/icons/ReportProblemSharp';
 import { makeStyles } from '@material-ui/core/styles';
 import Form from "react-validation/build/form";
-import authService from '../../actions/auth';
+import authAction from '../../actions/auth';
 import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
@@ -59,7 +59,7 @@ const ForgotPassword = (props) => {
 
     form.current.validateAll();
 
-    dispatch(authService.forgotPassword(username)).then(() => {
+    dispatch(authAction.forgotPassword(username)).then(() => {
       setSuccessful(true);
       props.history.push("/");
     }).catch(() => {
