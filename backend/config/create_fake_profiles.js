@@ -7,12 +7,11 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-let statement;
-
-let ids = [];
 
 const initFakeUsers = async () => {
 
+    let statement;
+    let ids = [];
     const gender = ['woman', 'man', 'other'];
     const sexualOrientation = ['heterosexual', 'bisexual', 'homosexual'];
     await new Promise(r => setTimeout(r, 1000)); // sleep to connect to db.. lol
@@ -51,6 +50,8 @@ const initFakeUsers = async () => {
 }
 
 await initFakeUsers()
+
+export default initFakeUsers();
 
 
 
