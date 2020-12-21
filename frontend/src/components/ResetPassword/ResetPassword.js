@@ -14,7 +14,7 @@ import {
 import ReportProblemSharpIcon from '@material-ui/icons/ReportProblemSharp';
 import { makeStyles } from '@material-ui/core/styles';
 import Form from "react-validation/build/form";
-import authService from '../../actions/auth';
+import authAction from '../../actions/resetPassword';
 import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
@@ -65,7 +65,7 @@ const ResetPassword = (props) => {
 
         form.current.validateAll();
 
-        dispatch(authService.forgotPassword(username)).then(() => {
+        dispatch(authAction.resetPassword(password, confirmPassword)).then(() => {
             setSuccessful(true);
             props.history.push("/");
         }).catch(() => {
@@ -109,7 +109,7 @@ const ResetPassword = (props) => {
                             fullWidth
                             name="confirm-password"
                             label="Confirm Password"
-                            type="confirm-password"
+                            type="password"
                             id="confirm-password"
                             autoComplete="current-password"
                             color="secondary"

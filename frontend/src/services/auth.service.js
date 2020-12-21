@@ -35,7 +35,10 @@ const forgotPassword = async (username) => {
 };
 
 const resetPassword = async (password, confirmPassword) => {
-  const result = await axios.post(`${baseUrl}/users/reset-password/`, {
+  let key = document.location.href;
+  key = key.split('/');
+
+  const result = await axios.post(`${baseUrl}/users/reset-password/${key[key.length - 1]}`, {
     new_password: password,
     repeat_password: confirmPassword
   });
