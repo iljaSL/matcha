@@ -121,6 +121,15 @@ const addUserTag = async (uid, tagId) => pool.query('INSERT INTO usertags (uid, 
 
 const removeUserTag = async (userTagId) => pool.query('DELETE FROM usertags WHERE id = ($1)', [userTagId]);
 
+const changeUserLocation = async (uid, long, lat) => {
+  if (!(long <= 180 && long >= -180 && lat >= -90 && lat <= 90)) throw (new Error('False coordinates'));
+  return pool.query(
+    `UPDATE users 
+          SET geo_long = $1, geo_lat = $2 
+          WHERE id = $3`, [long, lat, uid],
+  );
+};
+
 export default {
   isDuplicateUser,
   registerUser,
@@ -140,4 +149,5 @@ export default {
   checkIfUserIsBlocked,
   checkIfUserIsReported,
   findUserKey,
+  changeUserLocation,
 };

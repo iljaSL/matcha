@@ -1,6 +1,6 @@
 import pool from '../config/database.js';
 
-const getProfiles = async (uid, distance) => { // should DISTANCE be a column on user table
+const getProfiles = async (uid, distance) => { // should DISTANCE be a column on user table?
   const res = await pool.query(
     `WITH master_user AS (
       SELECT *

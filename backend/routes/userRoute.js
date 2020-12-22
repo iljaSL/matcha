@@ -51,8 +51,6 @@ userRouter.post('/', async (request, response, err) => {
   await userController.createUser(request, response, err);
 });
 
-
-
 userRouter
   .route('/verify/password/:id')
   .post(userController.auth);
@@ -72,5 +70,9 @@ userRouter.post('/tags/:id', async (request, response, err) => {
 userRouter.delete('/tags/:id', async (request, response, err) => {
   await userController.removeTagById(request, response, err);
 });
+
+userRouter.post('/location'), async (request, response, next) => {
+  await userController.changeUserLocation(request, response, next);
+};
 
 export default userRouter;
