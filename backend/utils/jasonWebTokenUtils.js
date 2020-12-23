@@ -20,9 +20,9 @@ const tokenGenerator = (userData) => jsonWebTokenUtil.sign(
 const getUserId = (authorization) => {
   let userId = 0;
   const token = parseAuthorization(authorization);
-  if (token != null) {
+  if (token) {
     const jwtToken = jsonWebTokenUtil.verify(token, PRIVATE_KEY);
-    if (jwtToken != null) userId = jwtToken.id;
+    if (jwtToken) userId = jwtToken.id;
   }
   return userId;
 };
