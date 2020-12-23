@@ -11,6 +11,8 @@ let login1; let token1;
 let login2; let token2;
 let login3; let token3;
 
+let profileCount;
+
 beforeAll(async () => {
   await truncateAllTables();
 
@@ -24,7 +26,7 @@ beforeAll(async () => {
   key2 = body2.data.key;
   await request.get(`/api/users/register/${key2}`);
 
-  key3 = body2.data.key;
+  key3 = body3.data.key;
   await request.get(`/api/users/register/${key3}`);
 
   login1 = (await request.post('/api/login').send({
@@ -37,38 +39,49 @@ beforeAll(async () => {
     username: userTestUtils.validUsers[1].username,
     password: userTestUtils.validUsers[1].password,
   })).body;
-  token2 = `Bearer ${login1.token}`;
+  token2 = `Bearer ${login2.token}`;
 
   login3 = (await request.post('/api/login').send({
     username: userTestUtils.validUsers[2].username,
     password: userTestUtils.validUsers[2].password,
   })).body;
-  token3 = `Bearer ${login1.token}`;
+  token3 = `Bearer ${login3.token}`;
 
-  request
+  await request
     .post('/api/users/location')
-    .send({ long: 69, lat: 69 })
     .set('Authorization', `${token1}`)
+    .send({ long: 69, lat: 69 })
     .expect(200);
 
-  request
+  await request
     .post('/api/users/location')
-    .send({ long: 69, lat: 69 })
     .set('Authorization', `${token2}`)
+    .send({ long: 69, lat: 69 })
     .expect(200);
 
-  request
+  await request
     .post('/api/users/location')
-    .send({ long: 69, lat: 69 })
     .set('Authorization', `${token3}`)
+    .send({ long: 69, lat: 69 })
     .expect(200);
 });
 
 describe('tests for user profile display and matching', () => {
   test('lists some profiles with GET /api/matches/', async () => {
-    const response = await request
+    profileCount = (await request
       .get('/api/matches')
       .set('Authorization', `${token1}`)
+      .expect(200)).body.length;
+  });
+  test('blocking a user results to one profile less on GET /api/matches', async () => {
+    await request
+      .post(`/api/users/block/${login1.id}/${login2.id}`)
+      .set('Authorization', `${token1}`)
       .expect(200);
+    const newProfileCount = (await request
+      .get('/api/matches')
+      .set('Authorization', `${token1}`)
+      .expect(200)).body.length;
+    expect(newProfileCount).toEqual(profileCount - 1);
   });
 });
