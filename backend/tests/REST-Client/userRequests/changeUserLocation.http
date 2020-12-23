@@ -1,0 +1,8 @@
+POST http://localhost:3001/api/users/location
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE1MDIiLCJ1c2VybmFtZSI6Im5sdXN0aWciLCJpYXQiOjE2MDg3MjA1MjgsImV4cCI6MTYwODgwNjkyOH0.c5O9D_sxY0EOZsb_b-xcWilFk8WlOcrOVi9EOVCABZc
+content-Type: application/json
+
+{
+  "lat": 69,
+  "long": 69
+}
