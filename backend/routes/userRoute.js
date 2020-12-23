@@ -71,8 +71,8 @@ userRouter.delete('/tags/:id', async (request, response, err) => {
   await userController.removeTagById(request, response, err);
 });
 
-userRouter.post('/location'), async (request, response, next) => {
+userRouter.post('/location', async (request, response, next) => {
   await userController.changeUserLocation(request, response, next);
-};
+});
 
 export default userRouter;

@@ -5,7 +5,6 @@ import UserUtil from '../utils/userUtil.js';
 import input from '../utils/inputUtil.js';
 import jsonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
 import sendmail from '../utils/emailUtil.js';
-import matchModel from '../models/matchModel';
 
 const selfBlockError = new Error('You can not block/unblock yourself!');
 selfBlockError.code = '666';
@@ -228,7 +227,7 @@ const changeUserLocation = async (request, response, next) => {
   const { long, lat } = request.body;
   if (!tokenUserId || !long || !lat) next(new Error('Incomplete request'));
   try {
-    await matchModel.changeUserLocation(tokenUserId, long, lat);
+    await userModel.changeUserLocation(tokenUserId, long, lat);
     return response.status(200).json({ message: 'Location changed' });
   } catch (err) { next(err); }
   return response.status(500).end();
