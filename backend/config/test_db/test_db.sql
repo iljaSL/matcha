@@ -69,6 +69,20 @@ id  bigserial NOT NULL PRIMARY KEY,
 user_id  bigint NULL REFERENCES users (id) ON DELETE CASCADE,
 blocked_user_id bigint NULL REFERENCES users (id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS conversations (
+id bigserial NOT NULL PRIMARY KEY,
+user1 bigint NULL REFERENCES users (id) ON DELETE CASCADE,
+user2 bigint NULL REFERENCES users (id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS messages (
+id bigserial NOT NULL PRIMARY KEY,
+conversation_id bigserial NOT NULL references conversations (id) ON DELETE CASCADE,
+sender bigint NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+receiver bigint NULL REFERENCES users (id) ON DELETE CASCADE
+);
+
 ALTER TABLE users ADD FOREIGN KEY (profile_picture_id) REFERENCES user_photo (id);
 ALTER TABLE usertags ADD UNIQUE (uid , tagId); -- TO ENSURE UNIQUENESS OF ALL TAGS PER USER, NO DUPLICATES
 ALTER TABLE report ADD UNIQUE (user_id, reported_user_id);
