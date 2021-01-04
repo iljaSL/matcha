@@ -39,6 +39,20 @@ const addMessage = async (senderUid, receiverUid, message) => {
   [id, senderUid, message]);
 };
 
-const getConversations = async () => {};
+const getConversations = async (uid) => {
+  const result = await pool.query(`
+        SELECT *
+        FROM conversations
+        WHERE user1 = $1 OR user2 = $1
+    `, [uid]);
+  return result.rows;
+};
 
-const getMessages = async () => {};
+const getMessages = async (id) => {
+  const result = await pool.query(`
+    SELECT *
+    FROM messages
+    WHERE conversation_id = $1
+    `, [id]);
+  return result.rows;
+};
