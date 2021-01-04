@@ -79,13 +79,14 @@ user2 bigint NULL REFERENCES users (id) ON DELETE CASCADE
 
 CREATE TABLE IF NOT EXISTS messages (
 id bigserial NOT NULL PRIMARY KEY,
-time_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 conversation_id bigserial NOT NULL references conversations (id) ON DELETE CASCADE,
+time_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 sender bigint NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-receiver bigint NULL REFERENCES users (id) ON DELETE CASCADE
+message text NOT NULL
 );
 
 ALTER TABLE users ADD FOREIGN KEY (profile_picture_id) REFERENCES user_photo (id);
 ALTER TABLE usertags ADD UNIQUE (uid , tagId); -- TO ENSURE UNIQUENESS OF ALL TAGS PER USER, NO DUPLICATES
 ALTER TABLE report ADD UNIQUE (user_id, reported_user_id);
 ALTER TABLE block ADD UNIQUE (user_id , blocked_user_id);
+ALTER TABLE conversations ADD UNIQUE (user1, user2);
