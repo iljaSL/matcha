@@ -1,21 +1,28 @@
 import React, { useState, useEffect } from 'react';
 
 const Chat = ({socket}) => {
-    const [response, setResponse] = useState('')
-
+    const userData = JSON.parse(localStorage.getItem('user'));
+    const [conversations, setConversations] = useState('')
+    const [time, setTime] = useState('')
 
 
     const handleStart = () => isActive ? setIsActive(false) : setIsActive(true);
 
     useEffect(() => {
-        socket.on("FromAPI", data => {
-            setResponse(data);
-        }, [])
-    })
+        socket.emit("setUserData", userData);
+        socket.on("getTime", data => {
+            setTime(data);
+        })
+        socket.on('conversationList', conversations => setConversations(conversations))
+    }, [])
 
     return (
         <p>
-            Now it is <time dateTime={response}>{response}</time>
+            {conversations && conversations.map(conversation => {
+                return <b key={conversation.id}>CONVERSATION BETWEEN {conversation.user1} AND {conversation.user2}<br /> </b>
+            })}
+            <br />
+            {userData.id} at {time}
         </p>
     )
 }

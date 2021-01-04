@@ -56,3 +56,10 @@ const getMessages = async (id) => {
     `, [id]);
   return result.rows;
 };
+
+export default {
+  getConversationID,
+  getConversations,
+  getMessages,
+  addMessage,
+};
