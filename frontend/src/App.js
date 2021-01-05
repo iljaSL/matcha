@@ -13,6 +13,7 @@ import ForgotPassword from './components/ForgotPassword/ForgotPassword'
 import LandingPage from './components/LandingPage/LandingPage'
 import CreateProfileForm from "./components/ProfileCreation/CreateProfileForm";
 import ResetPassword from './components/ResetPassword/ResetPassword';
+import MainPage from './components/MainPage/MainPage';
 import {useSelector, useDispatch} from "react-redux";
 import {LOGIN_SUCCESS} from "./actions/types";
 
@@ -34,6 +35,9 @@ const App = () => {
     const {isLoggedIn, user} = useSelector(state => state.auth);
     return (
         <Switch>
+            <Route path="/mainpage">
+                <MainPage/>
+            </Route>
             <Route path="/signup">
                 <SignUpForm/>
             </Route>
