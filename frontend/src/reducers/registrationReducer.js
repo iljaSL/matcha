@@ -1,6 +1,5 @@
 import {initialSteps} from "../components/ProfileCreation/ProfileFormUtils";
 import axios from 'axios';
-import {Redirect} from "react-router-dom";
 import React from "react";
 
 const initialState = {
