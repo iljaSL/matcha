@@ -5,6 +5,7 @@ import {
     LOGIN_FAIL,
     LOGOUT,
     PROFILE_CREATION_SUCCESS,
+    GPS_SUCCESS
 } from '../actions/types';
 
 
@@ -26,7 +27,6 @@ const authReducer = (state = initialState, action) => {
                 isLoggedIn: false,
             };
         case LOGIN_SUCCESS:
-            console.log(payload);
             return {
                 ...state,
                 isLoggedIn: true,
@@ -45,11 +45,17 @@ const authReducer = (state = initialState, action) => {
                 user: null,
             };
         case PROFILE_CREATION_SUCCESS:
-            let { auth } = state;
+            let { auth } = state
             auth.user.status = 2;
             return {
                 ...state,
                 auth
+            }
+        case GPS_SUCCESS:
+            let { user } = state;
+            user.coordinates = payload
+            return {
+                ...state, user
             }
         default:
             return state;

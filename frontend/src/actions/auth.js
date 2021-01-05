@@ -7,7 +7,7 @@ import {
   SET_MESSAGE,
   FORGOT_PASSWORD,
   FORGOT_PASSWORD_FAIL,
-  PROFILE_CREATION_SUCCESS,
+  PROFILE_CREATION_SUCCESS, GPS_SUCCESS,
 } from './types';
 
 import AuthService from '../services/auth.service';
@@ -106,10 +106,18 @@ const profileCreated = () => (dispatch) => {
   dispatch({type: PROFILE_CREATION_SUCCESS })
 }
 
+
+const getPosition = () => async (dispatch) => {
+      navigator.geolocation.getCurrentPosition((coordinates) => {
+          dispatch({type: GPS_SUCCESS, payload: {lat: coordinates.coords.latitude, long: coordinates.coords.longitude}})
+      }, () => dispatch({type: 'GPS_ERROR'}));
+}
+
 export default {
   register,
   login,
   logout,
   forgotPassword,
   profileCreated,
+  getPosition
 };

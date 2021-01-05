@@ -14,8 +14,10 @@ import LandingPage from './components/LandingPage/LandingPage'
 import CreateProfileForm from "./components/ProfileCreation/CreateProfileForm";
 import Chat from "./components/Chat/Chat"
 import {useSelector, useDispatch} from "react-redux";
-import {LOGIN_SUCCESS} from "./actions/types";
+import {GPS_SUCCESS, LOGIN_SUCCESS} from "./actions/types";
 import RegisterConfirmed from './components/RegisterConfirmed/RegisterConfirmed';
+
+import authActions from './actions/auth'
 
 import socketIOClient from 'socket.io-client'
 
@@ -27,6 +29,8 @@ const App = () => {
     const Gallery = () => <p>gallery</p>
     const dispatch = useDispatch();
 
+
+
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("user"));
         if (user) {
@@ -35,7 +39,9 @@ const App = () => {
                 payload: {user}
             })
         }
+        dispatch(authActions.getPosition())
     }, [dispatch])
+
 
     const {isLoggedIn, user} = useSelector(state => state.auth);
     return (
@@ -64,7 +70,7 @@ const App = () => {
             <Route path="/">
                 {isLoggedIn
                     ? user.status === 2
-                        ? <Gallery/> : <Redirect to="/profilecreation"/>
+                        ?  <Redirect to="/" /> : <Redirect to="/profilecreation"/>
                     : <LandingPage/>}
             </Route>
         </Switch>
