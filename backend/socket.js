@@ -1,12 +1,6 @@
 import { Server } from 'socket.io';
 import chatModel from './models/chatModel.js';
 
-const getApiAndEmit = (socket) => {
-  const response = new Date();
-  // Emitting a new message. Will be consumed by the client
-  socket.emit('FromAPI', response);
-};
-
 export const webSocketServer = (server) => {
   const io = new Server(server, {
     cors: {
@@ -14,20 +8,50 @@ export const webSocketServer = (server) => {
     },
   });
 
+  let interval;
+
   io.on('connection', (socket) => {
+    if (interval) {
+      clearInterval(interval);
+    }
+
     console.log('client connected');
     const time = new Date();
     socket.emit('getTime', time);
 
     socket.on('setUserData', async (userData) => {
       const { id, username } = userData;
-      console.log('getting conversations');
       const conversationList = await chatModel.getConversations(id);
-      socket.emit('conversationList', conversationList);
+      interval = setInterval(() => {
+        socket.emit('conversationList', conversationList);
+      }, 2000);
+    });
+
+    socket.on('newMessage', async (messageData) => {
+      if (interval) {
+        clearInterval(interval);
+      }
+      const { conversationId, senderId, message } = messageData;
+      try {
+        await chatModel.addMessage(conversationId, senderId, message);
+      } catch (err) { socket.emit('my error', 'could not add message'); }
+    });
+
+    socket.on('getConversation', async (conversationId) => {
+      if (interval) {
+        clearInterval(interval);
+      }
+      try {
+        const conversation = await chatModel.getMessages(conversationId);
+        interval = setInterval(() => {
+          socket.emit('conversation', conversation);
+        }, 2000);
+      } catch (err) { socket.emit('my error', 'could not get conversation'); }
     });
 
     socket.on('disconnect', () => {
       console.log('client disconnected');
+      clearInterval(interval);
     });
   });
 

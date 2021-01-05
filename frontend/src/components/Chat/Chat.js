@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import Conversation from './Conversation'
 
 const Chat = ({socket}) => {
     const userData = JSON.parse(localStorage.getItem('user'));
     const [conversations, setConversations] = useState('')
+    const [currentConversation, setCurrentConversation] = useState('')
     const [time, setTime] = useState('')
-
-
-    const handleStart = () => isActive ? setIsActive(false) : setIsActive(true);
 
     useEffect(() => {
         socket.emit("setUserData", userData);
@@ -17,13 +16,17 @@ const Chat = ({socket}) => {
     }, [])
 
     return (
-        <p>
-            {conversations && conversations.map(conversation => {
-                return <b key={conversation.id}>CONVERSATION BETWEEN {conversation.user1} AND {conversation.user2}<br /> </b>
-            })}
-            <br />
+        <>
+            {conversations && conversations.map(conversation =>
+                <div key={conversation.id}>CONVERSATION BETWEEN {conversation.user1} AND {conversation.user2}
+                    <button onClick={() => setCurrentConversation(conversation)}>open</button>
+                </div>
+            )}
+            <br/>
+            {currentConversation &&
+            <Conversation socket={socket} id={currentConversation.id} />}
             {userData.id} at {time}
-        </p>
+        </>
     )
 }
 

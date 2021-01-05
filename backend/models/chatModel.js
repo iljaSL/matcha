@@ -1,6 +1,7 @@
 import pool from '../config/database.js';
 
 const getConversationID = async (senderUid, receiverUid) => {
+  if (senderUid === receiverUid) throw new Error('Cant have a conversation with yourself');
   const result = await pool.query(`
     SELECT id
     FROM conversations
@@ -11,6 +12,7 @@ const getConversationID = async (senderUid, receiverUid) => {
 };
 
 const createConversation = async (senderUid, receiverUid) => {
+  if (senderUid === receiverUid) throw new Error('Cant message yourself');
   const result = await pool.query(`
     INSERT INTO conversations (user1, user2)
     SELECT $1, $2
@@ -29,14 +31,10 @@ const createConversation = async (senderUid, receiverUid) => {
   return result.rows[0];
 };
 
-const addMessage = async (senderUid, receiverUid, message) => {
-  if (senderUid === receiverUid) throw new Error('Cant message yourself');
-  const { id } = await getConversationID(senderUid, receiverUid)
-  || await createConversation(senderUid, receiverUid) || {};
-  if (id === undefined) throw new Error("Can't message blocked user");
+const addMessage = async (conversationId, senderUid, message) => {
   await pool.query(`INSERT INTO messages (conversation_id, sender, message)
                         VALUES ($1, $2, $3)`,
-  [id, senderUid, message]);
+  [conversationId, senderUid, message]);
 };
 
 const getConversations = async (uid) => {
