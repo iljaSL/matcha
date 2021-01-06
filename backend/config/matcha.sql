@@ -98,3 +98,19 @@ ALTER TABLE report ADD UNIQUE (user_id, reported_user_id);
 ALTER TABLE block ADD UNIQUE (user_id , blocked_user_id);
 ALTER TABLE conversations ADD UNIQUE (user1, user2);
 ALTER TABLE likes ADD UNIQUE (user1, user2);
+
+CREATE OR REPLACE FUNCTION public.notify_like() -- FUNCTION TO NOTIFY LISTENING BACKEND ABOUT A LIKE
+    RETURNS trigger
+    LANGUAGE plpgsql
+AS $function$
+BEGIN
+    PERFORM pg_notify('new_like', row_to_json(NEW)::text);
+    RETURN NULL;
+END;
+$function$;
+
+CREATE TRIGGER new_like_trigger AFTER INSERT ON likes -- TRIGGERS AFTER EACH LIKE
+    FOR EACH ROW EXECUTE PROCEDURE notify_like();
+
+
+
