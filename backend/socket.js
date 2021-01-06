@@ -1,7 +1,10 @@
 import { Server } from 'socket.io';
 import chatModel from './models/chatModel.js';
+import { initDbListener } from './utils/dbListener.js';
 
 export const webSocketServer = (server) => {
+  const dbListener = initDbListener();
+
   const io = new Server(server, {
     cors: {
       origin: '*',
@@ -18,6 +21,11 @@ export const webSocketServer = (server) => {
     console.log('client connected');
     const time = new Date();
     socket.emit('getTime', time);
+
+    dbListener.on('notification', (msg) => {
+      console.log('socket event', msg);
+      socket.emit('notification', msg.channel);
+    });
 
     socket.on('setUserData', async (userData) => {
       const { id, username } = userData;
