@@ -228,7 +228,6 @@ const changeUserLocation = async (request, response, next) => {
     if (!tokenUserId) { throw new Error('Invalid token'); }
     const { long, lat } = request.body;
     if (!tokenUserId || !long || !lat) next(new Error('Incomplete request'));
-
     await userModel.changeUserLocation(tokenUserId, long, lat);
     return response.status(200).json({ message: 'Location changed' });
   } catch (err) { next(err); }

@@ -112,7 +112,7 @@ const getPosition = () => (dispatch) => {
         const position = {lat: coordinates.coords.latitude, long: coordinates.coords.longitude}
           dispatch({type: GPS_SUCCESS, payload: position})
         await AuthService.updatePosition(position);
-      }, () => dispatch({type: 'GPS_ERROR'}));
+      }, () => dispatch({type: 'GPS_ERROR'})); //TODO: add error handling action
 }
 
 export default {

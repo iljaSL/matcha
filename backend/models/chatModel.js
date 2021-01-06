@@ -55,9 +55,34 @@ const getMessages = async (id) => {
   return result.rows;
 };
 
+const addLike = async (likerId, likedId) => {
+  if (likerId === likedId) throw new Error('Cant like yourself');
+  const result = await pool.query(`   
+    INSERT INTO likes (user1, user2)
+    SELECT $1, $2
+    WHERE NOT EXISTS (
+      SELECT 1
+      FROM block
+      WHERE (user_id = $1 AND blocked_user_id = $2)
+      OR (user_id = $2 AND blocked_user_id = $1)
+    )
+    RETURNING id
+  `, [likerId, likedId]);
+
+  return result.rows[0];
+};
+
+const removeLike = async (likeId) => {
+  const result = await pool.query(`
+    DELETE FROM likes
+        WHERE id = $1;`, [likeId]);
+  return result.rows[0];
+};
+
 export default {
   getConversationID,
   getConversations,
   getMessages,
   addMessage,
+  addLike,
 };

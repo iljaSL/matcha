@@ -85,8 +85,16 @@ sender bigint NOT NULL REFERENCES users (id) ON DELETE CASCADE,
 message text NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS likes (
+id bigserial NOT NULL PRIMARY KEY,
+time_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+user1 bigint NULL REFERENCES users (id) ON DELETE CASCADE,
+user2 bigint NULL REFERENCES users (id) ON DELETE CASCADE
+);
+
 ALTER TABLE users ADD FOREIGN KEY (profile_picture_id) REFERENCES user_photo (id);
 ALTER TABLE usertags ADD UNIQUE (uid , tagId); -- TO ENSURE UNIQUENESS OF ALL TAGS PER USER, NO DUPLICATES
 ALTER TABLE report ADD UNIQUE (user_id, reported_user_id);
 ALTER TABLE block ADD UNIQUE (user_id , blocked_user_id);
 ALTER TABLE conversations ADD UNIQUE (user1, user2);
+ALTER TABLE likes ADD UNIQUE (user1, user2);
