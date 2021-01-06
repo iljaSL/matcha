@@ -18,11 +18,11 @@ const tokenGenerator = (userData) => jsonWebTokenUtil.sign(
 );
 
 const getUserId = (authorization) => {
-  let userId = 0;
+  let userId = false;
   const token = parseAuthorization(authorization);
   if (token) {
     const jwtToken = jsonWebTokenUtil.verify(token, PRIVATE_KEY);
-    if (jwtToken) userId = jwtToken.id;
+    if (jwtToken) { userId = jwtToken.id; }
   }
   return userId;
 };
