@@ -1,9 +1,17 @@
 import React from 'react'
 import Particles from "react-particles-js";
+import { makeStyles } from '@material-ui/core/styles';
 import './LandingPage.css'
 import LandingPagePrompt from "./LandingPagePrompt";
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        marginTop: '120px',
+    },
+  }));
+
 const LandingPage = () => {
+    const classes = useStyles();
     const particlesOptions = {
         "particles": {
             "number": {
@@ -129,7 +137,7 @@ const LandingPage = () => {
     }
 
     return (
-        <div>
+        <div className={classes.root}>
             <LandingPagePrompt />
             <Particles className="particles" params={particlesOptions} />
         </div>

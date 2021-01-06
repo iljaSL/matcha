@@ -4,22 +4,18 @@ import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    paddingTop: '-150px',
     maxWidth: 400,
-    maxHeight: 410,
-    height: 410,
+    maxHeight: 420,
+    height: 420,
     width: 400,
   },
   media: {
@@ -39,6 +35,9 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: red[500],
   },
+  iconcolor: {
+    color: "#f50057",
+  },
 }));
 
 const UserCard = () => {
@@ -48,11 +47,7 @@ const UserCard = () => {
   return (
     <Card className={classes.root}>
       <CardHeader
-        avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
-            R
-          </Avatar>
-        }
+        className={classes.iconcolor}
         title="Jeff Cox"
         subheader="HotOmeter: 101%"
       />
@@ -66,7 +61,7 @@ const UserCard = () => {
           <FavoriteIcon />
         </IconButton>
         <IconButton aria-label="thumb-down">
-          <ThumbDownIcon />
+          <ThumbDownIcon className />
         </IconButton>
       </CardActions>
     </Card>
