@@ -21,10 +21,12 @@ export const webSocketServer = (server) => {
 
     socket.on('setUserData', async (userData) => {
       const { id, username } = userData;
-      const conversationList = await chatModel.getConversations(id);
-      interval = setInterval(() => {
-        socket.emit('conversationList', conversationList);
-      }, 2000);
+      try {
+        const conversationList = await chatModel.getConversations(id);
+        interval = setInterval(() => {
+          socket.emit('conversationList', conversationList);
+        }, 2000);
+      } catch (err) { socket.emit('my error', 'could not get conversations'); }
     });
 
     socket.on('newMessage', async (messageData) => {
