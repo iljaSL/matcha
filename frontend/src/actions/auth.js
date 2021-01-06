@@ -107,9 +107,11 @@ const profileCreated = () => (dispatch) => {
 }
 
 
-const getPosition = () => async (dispatch) => {
-      navigator.geolocation.getCurrentPosition((coordinates) => {
-          dispatch({type: GPS_SUCCESS, payload: {lat: coordinates.coords.latitude, long: coordinates.coords.longitude}})
+const getPosition = () => (dispatch) => {
+      navigator.geolocation.getCurrentPosition(async (coordinates) => {
+        const position = {lat: coordinates.coords.latitude, long: coordinates.coords.longitude}
+          dispatch({type: GPS_SUCCESS, payload: position})
+        await AuthService.updatePosition(position);
       }, () => dispatch({type: 'GPS_ERROR'}));
 }
 

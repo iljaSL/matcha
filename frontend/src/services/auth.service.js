@@ -34,9 +34,16 @@ const forgotPassword = async (username) => {
   return result.data;
 };
 
+const updatePosition = async (coords) => {
+  const {token} = JSON.parse(localStorage.getItem('user'));
+  axios.defaults.headers.common['Authorization'] = `Bearer ${ token }`; // TODO: unify
+  await axios.post(`${baseUrl}/users/location`, coords);
+}
+
 export default {
   register,
   login,
   logout,
   forgotPassword,
+  updatePosition,
 };
