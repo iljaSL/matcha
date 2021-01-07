@@ -47,7 +47,15 @@ const initFakeUsers = async () => {
     console.log('done')
     console.log('inserted', ids.length, 'entries')
 
-
+    console.log('adding likes')
+    ids.map(async id => {
+        let randomId = ids[Math.floor(Math.random() * ids.length)];
+        let randomId2 = ids[Math.floor(Math.random() * ids.length)];
+        if (randomId === randomId2) randomId = ids[Math.floor(Math.random() * ids.length)];
+        statement = statement + `INSERT INTO likes (user1, user2) VALUES (${id}, ${randomId});`
+        statement = statement + `INSERT INTO likes (user1, user2) VALUES (${id}, ${randomId2});`
+    })
+    await pool.query(statement);
 }
 
 initFakeUsers()
