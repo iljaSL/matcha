@@ -1,38 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-const Conversation = ({socket, id}) => {
-    const userData = JSON.parse(localStorage.getItem('user'))
-    const [conversation, setConversation] = useState('')
-    const [message, setMessage] = useState('')
-
-    useEffect(() => {
-        socket.emit('getConversation', id)
-        socket.on('conversation', messages => setConversation(messages))
-    })
-
-    const handleSubmit = (ev) => {
-        ev.preventDefault();
-        socket.emit('newMessage', { message, conversationId: id, senderId: userData.id});
-        socket.emit('getConversation', id)
-        socket.on('conversation', messages => setConversation(messages))
-        setMessage('')
-    }
-
+const Conversation = ({conversation, userId}) => {
     return <div>
         {conversation &&
-        conversation.map(message => {
-                return <div key={message.id}><b>{message.message} by {message.sender}</b></div>
-        })
+        conversation.map(message =>
+            message.sender === userId
+                ? <div key={message.id}><b>{message.message} by {message.sender}</b></div>
+                : <div key={message.id}>{message.message} by {message.sender}</div>
+        )
         }
-        {!conversation &&
-        <div>no conversation yet, why don't you start one?</div>}
-
-        <form onSubmit={handleSubmit}>
-        <input type="text" value={message} onChange={event => setMessage(event.target.value)}/>
-        <input type="submit" value="send" />
-        </form>
     </div>
-
 }
 
 export default Conversation
