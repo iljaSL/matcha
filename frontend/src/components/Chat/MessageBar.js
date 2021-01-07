@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 
-const MessageBar = ({conversationId, senderId, socket}) => {
+const MessageBar = ({conversationId, senderId, receiverId, socket}) => {
 
     const [message, setMessage] = useState('');
 
     const handleSubmit = (ev) => {
         ev.preventDefault();
-        socket.emit('newMessage', {message, conversationId, senderId});
+        socket.emit('newMessage', {message, conversationId, senderId, receiverId});
         setMessage('')
     }
 
