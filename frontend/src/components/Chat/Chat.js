@@ -9,6 +9,9 @@ const Chat = ({socket}) => {
 
     useEffect(() => {
         socket.emit("setUserData", userData);
+    }, [])
+
+    useEffect(() => {
         socket.on("getTime", data => {
             setTime(data);
         })
