@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import Conversation from './Conversation'
 import MessageBar from './MessageBar'
-import {login} from "../../reducers/userReducer";
 
 const Chat = ({socket}) => {
     const userData = JSON.parse(localStorage.getItem('user'));
@@ -24,9 +23,13 @@ const Chat = ({socket}) => {
             }
         )
         socket.on('conversation', messages => {
-            if (messages[0].conversation_id === currentConversationId)
-                setMessages(messages)}
-            )
+                if (messages[0].conversation_id === currentConversationId)
+                    setMessages(messages)
+                else
+                    ; // TODO: notify user
+            }
+        )
+
 
         if (currentConversationId)
             socket.emit('getConversation', currentConversationId)
@@ -42,21 +45,25 @@ const Chat = ({socket}) => {
     return (
         <>
             {conversations && conversations.map(conversation => {
-                return (
-                <div key={conversation.id}>CONVERSATION BETWEEN {conversation.user1} AND {conversation.user2}
-                    <button onClick={() => {getMessages(conversation)}}>open</button>
-                </div>
-                )}
+                    return (
+                        <div key={conversation.id}>CONVERSATION BETWEEN {conversation.user1} AND {conversation.user2}
+                            <button onClick={() => {
+                                getMessages(conversation)
+                            }}>open
+                            </button>
+                        </div>
+                    )
+                }
             )}
             <br/>
             {messages &&
-                <>
-                    <Conversation conversation={messages} userId={userData.id} />
-                    <MessageBar socket={socket}
-                                conversationId={currentConversationId}
-                                senderId={userData.id}
-                                receiverId={receiver} />
-                </>
+            <>
+                <Conversation conversation={messages} userId={userData.id}/>
+                <MessageBar socket={socket}
+                            conversationId={currentConversationId}
+                            senderId={userData.id}
+                            receiverId={receiver}/>
+            </>
             }
             {userData.id} at {time}
         </>
