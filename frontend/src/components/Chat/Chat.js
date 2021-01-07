@@ -18,15 +18,14 @@ const Chat = ({socket}) => {
             setTime(data);
         })
         socket.on('conversationList', conversations => setConversations(conversations))
+        socket.on('conversation', messages => setMessages(messages))
 
-        if (currentConversationId) {
-            socket.on('conversation', messages => setMessages(messages))
-        }
+        if (currentConversationId)
+            socket.emit('getConversation', currentConversationId)
     })
 
     const getMessages = (id) => {
         setCurrentConversationId(id);
-        socket.emit('getConversation', id)
     }
 
     return (
