@@ -35,7 +35,7 @@ const forgotPassword = async (username) => {
 };
 
 const updatePosition = async (coords) => {
-  const {token} = JSON.parse(localStorage.getItem('user'));
+  const {token} = JSON.parse(localStorage.getItem('user')) || null;
   axios.defaults.headers.common['Authorization'] = `Bearer ${ token }`; // TODO: unify
   await axios.post(`${baseUrl}/users/location`, coords);
 }
