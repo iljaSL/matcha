@@ -44,6 +44,7 @@ export const webSocketServer = (server) => {
       const { conversationId, senderId, message } = messageData;
       try {
         await chatModel.addMessage(conversationId, senderId, message);
+        socket.emit('conversation', await chatModel.getMessages(conversationId));
       } catch (err) { socket.emit('my error', 'could not add message'); }
     });
 
