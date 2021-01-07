@@ -10,7 +10,7 @@ dotenv.config()
 
 const initFakeUsers = async () => {
 
-    let statement;
+    let statement = 'INSERT INTO users (lastname, firstname, username, gender, sexual_orientation, mail, bio, geo_lat, geo_long, status, password) VALUES';
     let ids = [];
     const gender = ['woman', 'man', 'other'];
     const sexualOrientation = ['heterosexual', 'bisexual', 'homosexual'];
@@ -18,8 +18,7 @@ const initFakeUsers = async () => {
     console.log('inserting fake users...')
 
     for (let i = 0; i < 500; i++) {
-        statement = `INSERT INTO users (lastname, firstname, username, gender, sexual_orientation, mail, bio, geo_lat, geo_long, status, password)
-            VALUES (
+        statement = statement + `(
             '${faker.name.lastName().replace('\'', '')}',
             '${faker.name.firstName().replace('\'', '')}',
             '${faker.internet.userName()}',
@@ -30,25 +29,28 @@ const initFakeUsers = async () => {
             '${faker.address.latitude()}',
             '${faker.address.longitude()}',
              2, 'fake'
-            ) RETURNING *; `;
-        const {id} = (await pool.query(statement)).rows[0]
-        ids = [...ids, id];
+            )`
+        if (i < 499) statement += ','
     }
-    console.log('done')
-    console.log('inserting fake profile pictures...')
+    statement = statement + ' RETURNING id;'
+    ids = ((await pool.query(statement)).rows)
+        .map(entry => parseInt(entry.id));
+    console.log('done!')
 
+    console.log('inserting fake profile pictures...')
    await Promise.all(ids.map(async id => {
         const image = await axios.get(faker.image.cats(300, 300), {responseType: 'arraybuffer'});
         const base64Image = `data:image/jpeg;base64,${Buffer.from(image.data, 'binary').toString('base64')}`
         let link = `${await imageModel.saveImageBlob(id, base64Image)}`;
         const imageId = await imageModel.addImageLink(id, link);
-        await pool.query(`UPDATE users SET profile_picture_id = ${imageId} WHERE id = ${id}`)
+        statement = statement + `UPDATE users SET profile_picture_id = ${imageId} WHERE id = ${id};`
     }))
-    console.log('done')
+    await pool.query(statement);
+    console.log('done!')
     console.log('inserted', ids.length, 'entries')
 
-    console.log('adding likes')
-    ids.map(async id => {
+    console.log('adding likes...')
+    ids.map(id => {
         let randomId = ids[Math.floor(Math.random() * ids.length)];
         let randomId2 = ids[Math.floor(Math.random() * ids.length)];
         if (randomId === randomId2) randomId = ids[Math.floor(Math.random() * ids.length)];
@@ -56,12 +58,32 @@ const initFakeUsers = async () => {
         statement = statement + `INSERT INTO likes (user1, user2) VALUES (${id}, ${randomId2});`
     })
     await pool.query(statement);
+    console.log('done!')
+
+    console.log('adding tags...');
+    statement = `INSERT INTO tags (tag) 
+        VALUES ('vegan'), ('bodybuilding'), ('yoga'), ('design'), ('coffee'), ('programming'), ('cybersecurity') 
+        RETURNING id;`
+    const tagIds = (await pool.query(statement)).rows;
+    if (tagIds.length !== 7) console.log(tagIds.length)
+
+    statement = '';
+
+    ids.map(id => {
+        let randomTag = tagIds[Math.floor(Math.random() * tagIds.length)];
+        let randomTag2 = tagIds[Math.floor(Math.random() * tagIds.length)];
+        statement = statement + `INSERT INTO usertags (uid, tagid) VALUES (${id}, ${randomTag.id});`
+        if (randomTag.id !== randomTag2.id)
+            statement = statement + `INSERT INTO usertags (uid, tagid) VALUES (${id}, ${randomTag2.id});`
+    })
+    await pool.query(statement);
+    console.log('done!')
+
 }
 
 initFakeUsers()
     .then(() => {console.log('initialization done!'); return 0})
 
-//export default initFakeUsers();
 
 
 
