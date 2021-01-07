@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS users (
   password varchar(255) NOT NULL,
   -- `city` varchar(255) DEFAULT NULL,
   profile_picture_id int,
-  -- `pop_score` int(11) NOT NULL DEFAULT '0',
+  popularity_score int NOT NULL DEFAULT '0',
   geo_lat float DEFAULT NULL,
   geo_long float DEFAULT NULL,
   -- `age_min` int(11) NOT NULL DEFAULT '18',
@@ -105,6 +105,9 @@ CREATE OR REPLACE FUNCTION public.notify_like() -- FUNCTION TO NOTIFY LISTENING 
 AS $function$
 BEGIN
     PERFORM pg_notify('new_like', row_to_json(NEW)::text);
+    UPDATE users
+        SET popularity_score = popularity_score + 1
+        WHERE id = NEW.user2;
     RETURN NULL;
 END;
 $function$;

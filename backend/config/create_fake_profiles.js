@@ -47,11 +47,13 @@ const initFakeUsers = async () => {
     console.log('done')
     console.log('inserted', ids.length, 'entries')
 
+
 }
 
-await initFakeUsers()
+initFakeUsers()
+    .then(() => {console.log('initialization done!'); return 0})
 
-export default initFakeUsers();
+//export default initFakeUsers();
 
 
 
