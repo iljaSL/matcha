@@ -31,10 +31,10 @@ const createConversation = async (senderUid, receiverUid) => {
   return result.rows[0];
 };
 
-const addMessage = async (conversationId, senderUid, message) => {
-  await pool.query(`INSERT INTO messages (conversation_id, sender, message)
-                        VALUES ($1, $2, $3)`,
-  [conversationId, senderUid, message]);
+const addMessage = async (conversationId, senderUid, receiverId, message) => {
+  await pool.query(`INSERT INTO messages (conversation_id, sender, receiver, message)
+                        VALUES ($1, $2, $3, $4)`,
+  [conversationId, senderUid, receiverId, message]);
 };
 
 const getConversations = async (uid) => {

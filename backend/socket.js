@@ -49,7 +49,7 @@ export const webSocketServer = (server) => {
         conversationId, senderId, receiverId, message,
       } = messageData;
       try {
-        await chatModel.addMessage(conversationId, senderId, message);
+        await chatModel.addMessage(conversationId, senderId, receiverId, message);
         const conversation = await chatModel.getMessages(conversationId);
         const receiverOnline = connections.find((connection) => connection.userId === receiverId);
         interval = setInterval(async () => {

@@ -6,6 +6,7 @@ create extension if not exists earthdistance;
 
 CREATE TYPE gender AS ENUM ('man','woman','other');
 CREATE TYPE sexual_orientation AS ENUM ('bisexual', 'homosexual', 'heterosexual');
+CREATE TYPE notification_type AS ENUM ('like', 'visit', 'message', 'match', 'unlike');
 
 CREATE TABLE IF NOT EXISTS users (
   id bigserial PRIMARY KEY NOT NULL,
@@ -82,6 +83,7 @@ id bigserial NOT NULL PRIMARY KEY,
 conversation_id bigserial NOT NULL references conversations (id) ON DELETE CASCADE,
 time_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 sender bigint NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+receiver bigint NOT NULL REFERENCES users (id) ON DELETE CASCADE,
 message text NOT NULL
 );
 
@@ -92,8 +94,17 @@ user1 bigint NULL REFERENCES users (id) ON DELETE CASCADE,
 user2 bigint NULL REFERENCES users (id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS notifications (
+id bigserial NOT NULL PRIMARY KEY,
+uid bigint NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+time_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+event notification_type NOT NULL,
+added_by bigint NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+notification_read boolean NOT NULL DEFAULT false
+);
+
 ALTER TABLE users ADD FOREIGN KEY (profile_picture_id) REFERENCES user_photo (id);
-ALTER TABLE usertags ADD UNIQUE (uid , tagId); -- TO ENSURE UNIQUENESS OF ALL TAGS PER USER, NO DUPLICATES
+ALTER TABLE usertags ADD UNIQUE (uid, tagId); -- TO ENSURE UNIQUENESS OF ALL TAGS PER USER, NO DUPLICATES
 ALTER TABLE report ADD UNIQUE (user_id, reported_user_id);
 ALTER TABLE block ADD UNIQUE (user_id , blocked_user_id);
 ALTER TABLE conversations ADD UNIQUE (user1, user2);
@@ -101,21 +112,70 @@ ALTER TABLE likes ADD UNIQUE (user1, user2);
 
 
 CREATE OR REPLACE FUNCTION public.notify_like()
--- FUNCTION TO NOTIFY LISTENING BACKEND ABOUT A LIKE AND ADD POPULARITY TO LIKED USER
     RETURNS trigger
     LANGUAGE plpgsql
 AS $function$
 BEGIN
-    PERFORM pg_notify('new_like', row_to_json(NEW)::text);
     UPDATE users
-        SET popularity_score = popularity_score + 1
+        SET popularity_score = popularity_score + 5
         WHERE id = NEW.user2;
+    INSERT INTO notifications (uid, event, added_by)
+        VALUES (NEW.user2, 'like', NEW.user1);
+
+    INSERT INTO notifications (uid, event, added_by)
+        SELECT NEW.user2, 'match', NEW.user1
+            WHERE EXISTS (
+                SELECT 1 FROM likes WHERE user2 = NEW.user1 AND user1 = NEW.user2
+                       );
+
+    INSERT INTO notifications (uid, event, added_by)
+        SELECT NEW.user1, 'match', NEW.user2
+        WHERE EXISTS (
+                      SELECT 1 FROM likes WHERE user2 = NEW.user1 AND user1 = NEW.user2
+                  );
     RETURN NULL;
 END;
 $function$;
 
+CREATE OR REPLACE FUNCTION public.notify_message()
+    RETURNS trigger
+    LANGUAGE plpgsql
+AS $function$
+BEGIN
+    INSERT INTO notifications (uid, event, added_by) VALUES (NEW.receiver, 'message', NEW.sender);
+    RETURN NULL;
+END;
+$function$;
+
+CREATE OR REPLACE FUNCTION public.notify_unlike()
+    RETURNS trigger
+    LANGUAGE plpgsql
+AS $function$
+BEGIN
+    INSERT INTO notifications (uid, event, added_by) VALUES (NEW.user1, 'unlike', NEW.user2);
+    RETURN NULL;
+END;
+$function$;
+
+CREATE OR REPLACE FUNCTION public.notify_notification()
+    RETURNS trigger
+    LANGUAGE plpgsql
+AS $function$
+BEGIN
+    PERFORM pg_notify('notification', row_to_json(NEW)::text); -- ONLY LISTEN TO NOTIFICATIONS
+    RETURN NULL;
+END;
+$function$;
+
+
 CREATE TRIGGER new_like_trigger AFTER INSERT ON likes -- TRIGGERS AFTER EACH LIKE
     FOR EACH ROW EXECUTE PROCEDURE notify_like();
 
+CREATE TRIGGER new_message_trigger AFTER INSERT ON messages
+    FOR EACH ROW EXECUTE PROCEDURE notify_message();
 
+CREATE TRIGGER deleted_like_trigger AFTER DELETE ON likes
+    FOR EACH ROW EXECUTE PROCEDURE notify_unlike();
 
+CREATE TRIGGER new_notification_trigger AFTER INSERT ON notifications
+    FOR EACH ROW EXECUTE PROCEDURE notify_notification(); -- such a good name...
