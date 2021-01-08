@@ -22,8 +22,11 @@ export const webSocketServer = (server) => {
     }
 
     dbListener.on('notification', (msg) => {
-      console.log('socket event', msg);
-      socket.emit('notification', msg.channel);
+      const payload = JSON.parse(msg.payload);
+      const currentConnection = connections.find((connection) => connection.userId === payload.uid);
+      if (currentConnection) {
+        io.to(currentConnection.socketId).emit('notification', payload);
+      }
     });
 
     socket.on('setUserData', (userData) => {
@@ -31,8 +34,7 @@ export const webSocketServer = (server) => {
         clearInterval(interval);
       }
       const { id, username } = userData;
-      connections.push({ socketId: socket.id, userId: id });
-      console.log(connections);
+      connections.push({ socketId: socket.id, userId: parseInt(id, 10) });
       try {
         interval = setInterval(async () => {
           const conversationList = await chatModel.getConversations(id);
@@ -41,7 +43,7 @@ export const webSocketServer = (server) => {
       } catch (err) { socket.emit('my error', 'could not get conversations'); clearInterval(interval); }
     });
 
-    socket.on('newMessage', async (messageData) => {
+    socket.on('newMessage', async (messageData) => { // TODO: rethink intervals on each listener...
       if (interval) {
         clearInterval(interval);
       }
@@ -76,9 +78,5 @@ export const webSocketServer = (server) => {
       connections = connections.filter((connection) => connection.socketId !== socket.id);
       clearInterval(interval);
     });
-  });
-
-  io.on('sendMessage', (socket) => {
-    console.log('trying to send message...');
   });
 };

@@ -37,15 +37,11 @@ export const initDbListener = () => {
     console.log('New stuff!', msg);
   });
 
-  client.on('notification', (msg) => {
-    console.log(msg);
-  });
-
   client.on('end', () => {
     console.log('moro moro');
   });
 
-  client.query('LISTEN new_like');
+  client.query('LISTEN notification');
 
   return client;
 };
