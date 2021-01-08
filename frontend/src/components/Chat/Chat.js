@@ -10,13 +10,7 @@ const Chat = ({socket}) => {
     const [currentConversationId, setCurrentConversationId] = useState('')
     const [receiver, setReceiver] = useState('')
 
-
     useEffect(() => {
-        socket.emit("setUserData", userData);
-    }, [])
-
-    useEffect(() => {
-
         socket.on('conversationList',
             (conversations) => {
                 setConversations(conversations)
@@ -29,8 +23,6 @@ const Chat = ({socket}) => {
                     ; // TODO: notify user
             }
         )
-
-
         if (currentConversationId)
             socket.emit('getConversation', currentConversationId)
 

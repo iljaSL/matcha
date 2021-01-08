@@ -14,7 +14,7 @@ import LandingPage from './components/LandingPage/LandingPage'
 import CreateProfileForm from "./components/ProfileCreation/CreateProfileForm";
 import Chat from "./components/Chat/Chat"
 import {useSelector, useDispatch} from "react-redux";
-import {GPS_SUCCESS, LOGIN_SUCCESS} from "./actions/types";
+import {LOGIN_SUCCESS} from "./actions/types";
 import RegisterConfirmed from './components/RegisterConfirmed/RegisterConfirmed';
 
 import authActions from './actions/auth'
@@ -29,18 +29,22 @@ const App = () => {
     const Gallery = () => <p>gallery</p>
     const dispatch = useDispatch();
 
-
-
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem("user"));
         if (user) {
+            const user = JSON.parse(localStorage.getItem("user"));
             dispatch({
                 type: LOGIN_SUCCESS,
                 payload: {user}
             })
+            dispatch(authActions.getPosition())
+            socket.emit("setUserData", user);
         }
-        dispatch(authActions.getPosition())
+
     }, [dispatch])
+
+    useEffect(() => {
+        socket.on('notification', (msg) => console.log(msg))
+    }, [])
 
 
     const {isLoggedIn, user} = useSelector(state => state.auth);
