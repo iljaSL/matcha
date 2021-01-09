@@ -8,6 +8,9 @@ import {
 import './App.css';
 
 import LoginForm from "./components/LoginForm/LoginForm";
+import UserProfile from './components/MainPage/UserProfile/UserProfile';
+import Navbar from './components/MainPage/Navbar/Navbar';
+import Footer from './components/MainPage/Footer/Footer';
 import SignUpForm from './components/SignUp/SignUp'
 import ForgotPassword from './components/ForgotPassword/ForgotPassword'
 import LandingPage from './components/LandingPage/LandingPage'
@@ -34,9 +37,13 @@ const App = () => {
 
     const {isLoggedIn, user} = useSelector(state => state.auth);
     return (
+        <>
         <Switch>
             <Route path="/mainpage">
                 <MainPage/>
+            </Route>
+            <Route path="/user-profile">
+                <UserProfile/>
             </Route>
             <Route path="/signup">
                 <SignUpForm/>
@@ -63,6 +70,7 @@ const App = () => {
                     : <LandingPage/>}
             </Route>
         </Switch>
+        </>
     )
 }
 

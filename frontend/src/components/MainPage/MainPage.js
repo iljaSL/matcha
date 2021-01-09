@@ -1,9 +1,16 @@
 import React from 'react';
+import {
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import UserCard from './UserCard/UserCard';
 import Navbar from './Navbar/Navbar';
+import Filter from './Filter/Filter';
 import Footer from './Footer/Footer';
+import UserProfile from './UserProfile/UserProfile';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,7 +32,8 @@ const MainPage = () => {
   return (
     <>
     <Navbar />
-    <Grid container className={classes.root} spacing={2}>
+    <Filter />
+      <Grid container className={classes.root} spacing={2}>
       <Grid item xs>
         <Grid container justify="center" spacing={spacing}>
           {[0, 1, 2, 3, 4, 5, 6 ,7 ,8 ,9, 10, 11, 12].map((value) => (

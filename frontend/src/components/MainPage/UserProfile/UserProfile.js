@@ -5,25 +5,22 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 
+
+
 const useStyles = makeStyles((theme) => ({
     footer: {
         padding: theme.spacing(6),
       },
   }));
 
-const Footer = () => {
+const UserProfile = () => {
     const classes = useStyles();
     return(
-      <footer className={classes.footer}>
-        <Typography color="secondary" variant="h6" align="center" gutterBottom>
-          Matcha Copyright © {''}
-          <Link color="inherit" href="https://www.hive.fi/en/">
-          your favorite Matcha team!
-        </Link>{' '}
-        </Typography>
-      </footer>
+        <>
+            <h1>Hello</h1>
+        </>
     )
 }
 
-export default Footer;
+export default UserProfile;
 
