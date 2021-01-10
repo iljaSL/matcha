@@ -33,7 +33,7 @@ export const webSocketServer = (server) => {
       if (interval) {
         clearInterval(interval);
       }
-      const { id, username } = userData;
+      const { id, username } = userData || {};
       connections.push({ socketId: socket.id, userId: parseInt(id, 10) });
       try {
         interval = setInterval(async () => {

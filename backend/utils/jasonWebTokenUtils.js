@@ -6,25 +6,25 @@ dotenv.config();
 const PRIVATE_KEY = process.env.SECRET_KEY;
 const parseAuthorization = (authorization) => (authorization != null ? authorization.replace('Bearer ', '') : null);
 
-const tokenGenerator = (userData) => jsonWebTokenUtil.sign(
-  {
-    id: userData[0],
-    username: userData[1],
-  },
-  PRIVATE_KEY,
-  {
-    expiresIn: '24h',
-  },
-);
+const tokenGenerator = (userData) => {
+  const token = jsonWebTokenUtil.sign(
+    {
+      id: userData[0],
+      username: userData[1],
+    },
+    PRIVATE_KEY,
+    {
+      expiresIn: '24h',
+    },
+  );
+  const expiration = Math.floor(parseInt(Date.now().toString(), 10) / 1000) + 86400;
 
+  return { token, expiration };
+};
 const getUserId = (authorization) => {
-  let userId = false;
   const token = parseAuthorization(authorization);
-  if (token) {
-    const jwtToken = jsonWebTokenUtil.verify(token, PRIVATE_KEY);
-    if (jwtToken) { userId = jwtToken.id; }
-  }
-  return userId;
+  const jwtToken = jsonWebTokenUtil.verify(token, PRIVATE_KEY);
+  return jwtToken.id;
 };
 
 export default { tokenGenerator, getUserId, PRIVATE_KEY };

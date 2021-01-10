@@ -154,12 +154,14 @@ const login = async (request, response, next) => {
   if (user.status === 0) return response.status(401).json({ message: 'user account has not been activated' });
   const match = await bcrypt.compare(password, user.password);
   if (!match) return response.status(401).json({ message: 'invalid username/password' });
+  const tokenObject = jsonWebTokenUtils.tokenGenerator([user.id, user.username]);
   return response.status(200).json({
     id: user.id,
     status: user.status,
     message: 'Login successful!',
     username,
-    token: jsonWebTokenUtils.tokenGenerator([user.id, user.username]),
+    token: tokenObject.token,
+    tokenExpiration: tokenObject.expiration,
   });
 };
 
@@ -230,8 +232,7 @@ const changeUserLocation = async (request, response, next) => {
     if (!tokenUserId || !long || !lat) next(new Error('Incomplete request'));
     await userModel.changeUserLocation(tokenUserId, long, lat);
     return response.status(200).json({ message: 'Location changed' });
-  } catch (err) { next(err); }
-  return response.status(500).end();
+  } catch (err) { return next(err); }
 };
 
 export default {

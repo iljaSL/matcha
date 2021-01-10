@@ -1,7 +1,7 @@
 // eslint-disable-next-line consistent-return
 // TODO: add custom error class to make this prettier..
 const errorHandler = (error, request, response, next) => {
-  // console.log('Errorhandler:', error);
+   //console.log('Errorhandler:', error.name);
   if (error.code === '666') return response.status(400).end();
   if (error.code === '665') return response.status(401).end();
   if (error.code === '22P02') return response.status(500).end();
@@ -12,7 +12,7 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === 'Error') return response.status(401).json({ error: 'token missing or invalid' });
   if (error.name === 'CastError' && error.kind === 'ObjectId') return response.status(400).send({ error: 'malformatted id' });
   if (error.name === 'ValidationError') return response.status(400).json({ error: error.message });
-  if (error.name === 'JsonWebTokenError') return response.status(401).json({ error: 'invalid token' });
+  if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') return response.status(401).json({ error: 'invalid token' });
   return next(error);
 };
 
