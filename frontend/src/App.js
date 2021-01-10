@@ -30,8 +30,10 @@ const App = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        let user = JSON.parse(localStorage.getItem("user")) || null;
+        if (user && (Math.floor(Date.now() / 1000)) >= user.tokenExpiration)
+            user = null;
         if (user) {
-            const user = JSON.parse(localStorage.getItem("user"));
             dispatch({
                 type: LOGIN_SUCCESS,
                 payload: {user}
@@ -43,7 +45,8 @@ const App = () => {
     }, [dispatch])
 
     useEffect(() => {
-        socket.on('notification', (msg) => console.log(msg))
+        if (user)
+            socket.on('notification', (msg) => console.log(msg))
     }, [])
 
 

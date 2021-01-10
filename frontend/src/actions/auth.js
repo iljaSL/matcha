@@ -111,8 +111,15 @@ const getPosition = () => (dispatch) => {
       navigator.geolocation.getCurrentPosition(async (coordinates) => {
         const position = {lat: coordinates.coords.latitude, long: coordinates.coords.longitude}
           dispatch({type: GPS_SUCCESS, payload: position})
-        await AuthService.updatePosition(position);
-      }, () => dispatch({type: 'GPS_ERROR'})); //TODO: add error handling action
+        try {
+          await AuthService.updatePosition(position);
+        } catch (err) {
+          dispatch({type: 'TOKEN_ERROR'})
+        }
+      }, (err) => {
+        dispatch({type: 'GPS_ERROR'})
+      }
+      );
 }
 
 export default {
