@@ -56,6 +56,6 @@ export default {
   login,
   logout,
   forgotPassword,
-  resetPassword
+  resetPassword,
   updatePosition,
 };
