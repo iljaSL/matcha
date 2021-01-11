@@ -8,14 +8,18 @@ import {
 import './App.css';
 
 import LoginForm from "./components/LoginForm/LoginForm";
+import UserProfile from './components/MainPage/UserProfile/UserProfile';
+import Navbar from './components/MainPage/Navbar/Navbar';
+import Footer from './components/MainPage/Footer/Footer';
 import SignUpForm from './components/SignUp/SignUp'
 import ForgotPassword from './components/ForgotPassword/ForgotPassword'
 import LandingPage from './components/LandingPage/LandingPage'
 import CreateProfileForm from "./components/ProfileCreation/CreateProfileForm";
 import Chat from "./components/Chat/Chat"
+import ResetPassword from './components/ResetPassword/ResetPassword';
+import MainPage from './components/MainPage/MainPage';
 import {useSelector, useDispatch} from "react-redux";
 import {LOGIN_SUCCESS} from "./actions/types";
-import RegisterConfirmed from './components/RegisterConfirmed/RegisterConfirmed';
 
 import authActions from './actions/auth'
 
@@ -41,7 +45,6 @@ const App = () => {
             dispatch(authActions.getPosition())
             socket.emit("setUserData", user);
         }
-
     }, [dispatch])
 
     useEffect(() => {
@@ -52,7 +55,14 @@ const App = () => {
 
     const {isLoggedIn, user} = useSelector(state => state.auth);
     return (
+        <>
         <Switch>
+            <Route path="/mainpage">
+                <MainPage/>
+            </Route>
+            <Route path="/user-profile">
+                <UserProfile/>
+            </Route>
             <Route path="/signup">
                 <SignUpForm/>
             </Route>
@@ -62,8 +72,8 @@ const App = () => {
             <Route path="/forgot-password">
                 <ForgotPassword/>
             </Route>
-            <Route path="/confirmed">
-                <RegisterConfirmed/>
+            <Route path='/reset-password/:resetId'>
+                <ResetPassword/>
             </Route>
             <Route path="/profilecreation">
                 <CreateProfileForm/>
@@ -81,6 +91,7 @@ const App = () => {
                     : <LandingPage/>}
             </Route>
         </Switch>
+        </>
     )
 }
 

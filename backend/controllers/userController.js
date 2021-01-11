@@ -81,13 +81,13 @@ const updatePasswordWithResetKey = async (request, response) => {
   const repeatPassword = request.body.repeat_password;
   const { key } = request.params;
 
-  if (input.password(newPassword).error) return response.status(400).json({ error: 'new password does not work' });
-  if (input.password(repeatPassword).error) return response.status(400).json({ error: 'password 2 does not work' });
-  if (newPassword !== repeatPassword) return response.status(400).json({ error: 'passwords do not match!' });
+  if (input.password(newPassword).error) return response.status(400).json({ message: 'new password does not work' });
+  if (input.password(repeatPassword).error) return response.status(400).json({ message: 'confirm password does not work' });
+  if (newPassword !== repeatPassword) return response.status(400).json({ message: 'password and confirm password does not match!' });
 
   const result = await UserUtil.updatePasswordWithResetKey(newPassword, key);
   if (result.status === 'success') return response.status(201).json({ status: 'password has been updated' });
-  return response.status(400).json({ error: 'something went wrong' });
+  return response.status(400).json({ message: 'something went wrong!' });
 };
 
 const checkPasswordResetKey = async (request, response, next) => {
