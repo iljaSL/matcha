@@ -13,17 +13,18 @@ import Navbar from './components/MainPage/Navbar/Navbar';
 import Footer from './components/MainPage/Footer/Footer';
 import SignUpForm from './components/SignUp/SignUp'
 import ForgotPassword from './components/ForgotPassword/ForgotPassword'
-import LandingPage from './components/LandingPage/LandingPage'
 import CreateProfileForm from "./components/ProfileCreation/CreateProfileForm";
 import Chat from "./components/Chat/Chat"
 import ResetPassword from './components/ResetPassword/ResetPassword';
 import MainPage from './components/MainPage/MainPage';
+import ValidateProfile from './components/ProfileCreation/ValidateProfile'
 import {useSelector, useDispatch} from "react-redux";
 import {LOGIN_SUCCESS} from "./actions/types";
 
 import authActions from './actions/auth'
 
 import socketIOClient from 'socket.io-client'
+import LandingPage from "./components/LandingPage/LandingPage";
 
 const ENDPOINT = 'http://localhost:3001' // TODO: is this the right way to do it?
 const socket = socketIOClient(ENDPOINT)
@@ -75,6 +76,9 @@ const App = () => {
             <Route path='/reset-password/:resetId'>
                 <ResetPassword/>
             </Route>
+            <Route path='/validateprofile/:validationId'>
+                   <ValidateProfile/>
+            </Route>
             <Route path="/profilecreation">
                 <CreateProfileForm/>
             </Route>
@@ -88,7 +92,7 @@ const App = () => {
                 {isLoggedIn
                     ? user.status === 2
                         ?  <Redirect to="/" /> : <Redirect to="/profilecreation"/>
-                    : <LandingPage/>}
+                    : <LandingPage />}
             </Route>
         </Switch>
         </>

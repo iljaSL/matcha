@@ -5,7 +5,7 @@ import {
     LOGIN_FAIL,
     LOGOUT,
     PROFILE_CREATION_SUCCESS,
-    GPS_SUCCESS
+    GPS_SUCCESS, PROFILE_VALIDATION_SUCCESS
 } from '../actions/types';
 
 
@@ -14,6 +14,7 @@ const initialState = {isLoggedIn: false, user: []}
 
 const authReducer = (state = initialState, action) => {
     const {type, payload} = action;
+
 
     switch (type) {
         case REGISTER_SUCCESS:

@@ -1,7 +1,7 @@
 import {
     RESET_PASSWORD,
     RESET_PASSWORD_FAIL,
-    SET_MESSAGE
+    SET_MESSAGE,
 } from './types';
 
 import AuthService from '../services/auth.service';
@@ -30,6 +30,13 @@ const resetPassword = (password, confirmPassword) => (dispatch) => AuthService.r
     },
 );
 
+const validateProfile = (uid) => async (dispatch) => {
+    const result = await AuthService.validateProfile(uid)
+    if (result.status === 200) dispatch({type: SET_MESSAGE, payload: 'Profile validated!' })
+    else dispatch({type: SET_MESSAGE, payload: 'Could not validate profile'})
+}
+
 export default {
     resetPassword,
+    validateProfile,
 }

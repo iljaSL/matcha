@@ -174,7 +174,7 @@ const createUser = async (request, response, next) => {
   body.uuid = (new Date().getTime() + Math.floor(Math.random() * 10000 + 1)).toString(16);
   const created = await userModel.registerUser(body, next);
   if (created) {
-    const link = `http://localhost:3001/api/users/register/${body.uuid}`;
+    const link = `http://localhost:3000/validateprofile/${body.uuid}`;
     await sendmail.confirmRegistrationWithEmail(body.mail, body.username, link);
     return response.status(201).json({ message: 'User created with success, please check your email and activated your account before you login!', data: created });
   }

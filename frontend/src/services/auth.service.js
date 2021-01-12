@@ -51,6 +51,10 @@ const resetPassword = async (password, confirmPassword) => {
   return result.data;
 }
 
+const validateProfile = async (uid) => {
+  return await axios.get(`${baseUrl}/users/register/${uid}`);
+}
+
 export default {
   register,
   login,
@@ -58,4 +62,5 @@ export default {
   forgotPassword,
   resetPassword,
   updatePosition,
+  validateProfile,
 };

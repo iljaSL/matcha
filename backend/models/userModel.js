@@ -39,9 +39,9 @@ const reportUser = async (data) => {
   return result.rows[0];
 };
 
-const validateUser = async (data) => {
+const validateUser = async (key) => { // TODO: error handling for bogus key
   const result = await pool.query(
-    'UPDATE users SET key = 0, status = 1 WHERE key = $1', [data],
+    'UPDATE users SET key = 0, status = 1 WHERE key = $1', [key],
   );
   return result;
 };
