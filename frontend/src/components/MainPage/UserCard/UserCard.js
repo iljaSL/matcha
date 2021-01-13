@@ -61,7 +61,7 @@ const UserCard = () => {
           <FavoriteIcon />
         </IconButton>
         <IconButton aria-label="thumb-down">
-          <ThumbDownIcon className />
+          <ThumbDownIcon />
         </IconButton>
       </CardActions>
     </Card>

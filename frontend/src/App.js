@@ -7,6 +7,7 @@ import {
 
 import './App.css';
 
+import MyAccount from "./components/MainPage/MyAccount/MyAccount";
 import LoginForm from "./components/LoginForm/LoginForm";
 import UserProfile from './components/MainPage/UserProfile/UserProfile';
 import Navbar from './components/MainPage/Navbar/Navbar';
@@ -44,6 +45,9 @@ const App = () => {
             </Route>
             <Route path="/user-profile">
                 <UserProfile/>
+            </Route>
+            <Route path="/my-account">
+                <MyAccount />
             </Route>
             <Route path="/signup">
                 <SignUpForm/>
