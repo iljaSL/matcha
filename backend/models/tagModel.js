@@ -1,6 +1,6 @@
 import pool from '../config/database.js';
 
-const getTags = async () => (pool.query({ sql: 'SELECT * FROM tags' })).rows;
+const getTags = async () => (await pool.query('SELECT * FROM tags')).rows;
 
 const getTagById = async (id) => {
   const tag = await pool.query('SELECT * FROM tags WHERE id = ( $1 )', [id]);

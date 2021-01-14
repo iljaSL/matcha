@@ -7,5 +7,5 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMiLCJ1c2Vyb
   "gender": "woman",
   "preferences": ["male", "other"],
   "bio": "life is pain",
-  "tagList": ["krautrock"]
+  "tagList": [1, 6, 2]
 }

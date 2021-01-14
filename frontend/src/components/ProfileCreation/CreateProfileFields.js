@@ -5,7 +5,7 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import FormGroup from "@material-ui/core/FormGroup";
-import {genderList, initialTags} from "./ProfileFormUtils";
+import {genderList, getTags} from "./ProfileFormUtils";
 import Switch from "@material-ui/core/Switch";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
@@ -59,16 +59,16 @@ export const Bio = ({bio, handleChange}) =>
         <Typography variant="subtitle2"> / 140</Typography>
     </div>
 
-export const ChooseTags = ({handleListItem, tagList}) =>
-    <List>
+export const ChooseTags = ({handleListItem, tagList, initialTags}) => {
+    return <List>
         {initialTags.map((tag, index) =>
-            <ListItem key={index} onClick={() => handleListItem(tag)}>
-                <Checkbox edge="start" checked={tagList.indexOf(tag) !== -1}/>
-                {tag}
+            <ListItem key={index} onClick={() => handleListItem(tag.id)}>
+                <Checkbox edge="start" checked={tagList.indexOf(tag.id) !== -1}/>
+                {tag.tag}
             </ListItem>
         )}
     </List>
-
+}
 export const PictureDropZone = ({handleUpload, initialFile, handleDelete}) => {
     if (!initialFile)
         initialFile = '';
@@ -91,7 +91,7 @@ export const FinalPage = ({formData}) => { // why don't we sketch a 'tinder card
     return <Card style={{height: '80vh', width: 'auto'}}>
         {profileBlob ?
             <CardMedia image={profileBlob} style={{height: '80%', width: '80%'}}/>
-            : <div>need to add a skeleton here</div> }
+            : <div>need to add a skeleton here</div>}
         <CardContent>
             <Typography>
                 So you're a {gender} looking for company from {preferences.map(pref => `${pref}s `)}

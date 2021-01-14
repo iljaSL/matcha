@@ -6,3 +6,9 @@ const baseUrl = 'http://localhost:3001/api';
 const getUserBoard = () => {
     return axios.get
 }
+
+const getTags = async () => await axios.get(`${baseUrl}/api/tags`)
+
+export default {
+    getTags,
+}

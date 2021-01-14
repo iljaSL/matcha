@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const initialSteps = [
     {
         name: 'Select your gender',
@@ -24,11 +26,3 @@ export const initialSteps = [
 
 export const genderList = ['male', 'female', 'other']
 
-export const initialTags = [
-    'psychedelic rock',
-    'krautrock',
-    'progressive rock',
-    'stoner rock',
-    'harsh noise',
-    'doom metal',
-]

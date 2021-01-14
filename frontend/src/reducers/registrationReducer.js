@@ -8,6 +8,7 @@ const initialState = {
     preferences: ['female', 'male', 'other'],
     bio: '',
     tagList: [],
+    initialTags: [],
     profilePic: '',
     profileBlob: '',
     signupSuccess: false,
@@ -54,6 +55,8 @@ const registrationReducer = (state = initialState, action) => {
             return {...state, currentStep: action.data}
         case 'FORM_SUCCESS':
             return {...state, signupSuccess: action.data}
+        case 'GET_TAGS':
+            return {...state, initialTags: action.data}
         case 'VALIDATE_STEPS':
                 return state;
         default:
@@ -123,7 +126,18 @@ export const submitProfileForm = (formData, userData) => {
         user.status = 2;
         localStorage.setItem("user", JSON.stringify(user))
         dispatch({type: 'FORM_SUCCESS', data: success});
+    }
+}
 
+export const getInitialTags = () => {
+    return async dispatch => {
+        try {
+            //axios.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`;
+            const response = await axios.get('http://localhost:3001/api/tags')
+            dispatch({type: 'GET_TAGS', data: response.data})
+        } catch (err) {
+            dispatch({type: 'GET_TAGS', data: null})
+        }
     }
 }
 

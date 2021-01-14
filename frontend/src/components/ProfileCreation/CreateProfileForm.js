@@ -13,8 +13,10 @@ import {
     updateField,
     submitProfileForm,
     checkFormValidity,
-    addProfilePicture
+    addProfilePicture,
+    getInitialTags
 } from '../../reducers/registrationReducer'
+
 
 import {Bio, ChooseGender, ChoosePreferredGender, ChooseTags, FinalPage, PictureDropZone} from './CreateProfileFields'
 
@@ -30,6 +32,10 @@ const CreateProfileForm = () => {
     useEffect(() => {
         dispatch(checkFormValidity(registrationData))
     }, [dispatch, registrationData])
+
+    useEffect(() => {
+        dispatch(getInitialTags())
+    }, [])
 
     const next = () => {
         dispatch(changePage(registrationData.currentStep + 1))
@@ -73,7 +79,7 @@ const CreateProfileForm = () => {
     const handleListItem = (item) => {
         const newList = (tagList.indexOf(item) === -1)
             ? tagList.concat(item)
-            : tagList.filter(tag => tag !== item)
+            : tagList.filter(tag => tag.id !== item.id)
         dispatch(updateField(Object.keys({tagList})[0], newList))
     }
 
@@ -93,7 +99,7 @@ const CreateProfileForm = () => {
             case 2:
                 return <Bio bio={bio} handleChange={handleChange}/>
             case 3:
-                return <ChooseTags handleListItem={handleListItem} tagList={tagList}/>
+                return <ChooseTags handleListItem={handleListItem} tagList={tagList} initialTags={registrationData.initialTags}/>
             case 4:
                 return <PictureDropZone handleUpload={handleUpload} initialFile={profilePic}
                                         handleDelete={handleDelete}/>

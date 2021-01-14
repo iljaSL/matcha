@@ -1,4 +1,4 @@
-GET http://localhost:3001/api/tags/2 HTTP/1.1
+GET http://localhost:3001/api/tags/ HTTP/1.1
 
 ###
 
