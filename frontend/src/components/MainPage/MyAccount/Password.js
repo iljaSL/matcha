@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 },
 }));
 
-export default function FirstLastName() {
+export default function Password() {
   const classes = useStyles();
 
   return (
@@ -41,19 +41,31 @@ export default function FirstLastName() {
       <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h6">
-        Update your Email
+        Update your password
         </Typography>
         <Form className={classes.form} noValidate>
+        <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="password"
+                label="New Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+              />
+            </Grid>
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                color="secondary"
+                name="confirm-password"
+                label="Confirm Password"
+                type="password"
+                id="confirm-password"
+                autoComplete="current-password"
               />
             </Grid>
           <Button
