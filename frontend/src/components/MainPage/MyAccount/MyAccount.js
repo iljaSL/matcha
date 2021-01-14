@@ -6,8 +6,16 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
+import Bio from './Bio';
+import Navbar from '../Navbar/Navbar';
+import Footer from '../Footer/Footer';
 import FirstLastName from './FirstLastName';
 import Email from './Email';
+import Password from './Password';
+import Gender from './Gender';
+import Preference from './Preference';
+import Tags from './Tags';
+import Delete from './Delete';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -25,7 +33,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
   divider: {
-      marginBottom: "2rem",
+      marginBottom: '2rem',
+      width: '100%'
   },
 }));
 
@@ -33,6 +42,8 @@ export default function MyAccount() {
   const classes = useStyles();
 
   return (
+    <>
+    <Navbar />
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -45,8 +56,30 @@ export default function MyAccount() {
         <div className={classes.divider}>
         <FirstLastName />
         </div>
+        <div className={classes.divider}>
+        <Bio />
+        </div>
+        <div className={classes.divider}>
+        <Gender />
+        </div>
+        <div className={classes.divider}>
+        <Preference />
+        </div>
+        <div className={classes.divider}>
+        <Tags />
+        </div>
+        <div className={classes.divider}>
         <Email />
+        </div>
+        <div className={classes.divider}>
+        <Password />
+        </div>
+        <div className={classes.divider}>
+        <Delete />
+        </div>
       </div>
     </Container>
+    <Footer />
+    </>
   );
 }

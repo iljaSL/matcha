@@ -1,12 +1,11 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Form from "react-validation/build/form";
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -33,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 },
 }));
 
-export default function FirstLastName() {
+export default function Bio() {
   const classes = useStyles();
 
   return (
@@ -41,21 +40,10 @@ export default function FirstLastName() {
       <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h6">
-        Update your Email
+        Update your Bio
         </Typography>
         <Form className={classes.form} noValidate>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                color="secondary"
-              />
-            </Grid>
+        <TextareaAutosize aria-label="minimum height" rowsMin={10} placeholder="You can resize me" />
           <Button
             type="submit"
             fullWidth
