@@ -36,8 +36,10 @@ const App = () => {
 
     useEffect(() => {
         let user = JSON.parse(localStorage.getItem("user")) || null;
-        if (user && (Math.floor(Date.now() / 1000)) >= user.tokenExpiration)
+        if (user && (Math.floor(Date.now() / 1000)) >= user.tokenExpiration) {
             user = null;
+            localStorage.removeItem("user")
+        }
         if (user) {
             dispatch({
                 type: LOGIN_SUCCESS,

@@ -90,7 +90,7 @@ const readFile = async (file) => {
         reader.onload = () => {
             resolve(reader.result)
         };
-        reader.readAsDataURL(file);
+        if (file) reader.readAsDataURL(file);
     });
 }
 export const addProfilePicture =  (file) => {
