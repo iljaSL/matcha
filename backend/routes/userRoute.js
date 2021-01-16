@@ -55,6 +55,8 @@ userRouter
   .route('/verify/password/:id')
   .post(userController.auth);
 
+userRouter.get('/:id/images', async (request, response, next) => userController.getUserImages(request, response, next));
+
 userRouter
   .route('/update/password/:id')
   .post(userController.updatePasswordWithUserId);

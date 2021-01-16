@@ -196,6 +196,17 @@ const initProfile = async (request, response, next) => { // todo: replace w/ pro
   return response.status(201).end();
 };
 
+// IMAGES
+
+const getUserImages = async (request, response, next) => {
+  const uid = request.params.id;
+  let imageArray;
+  try {
+    imageArray = await imageModel.getUserImages(uid);
+  } catch (err) { next(err); }
+  return response.status(200).json(imageArray);
+};
+
 // USER TAGS
 
 const getTagsById = async (request, response, next) => {
@@ -239,6 +250,7 @@ const changeUserLocation = async (request, response, next) => {
 export default {
   createUser,
   initProfile,
+  getUserImages,
   auth,
   login,
   updatePasswordWithUserId,
