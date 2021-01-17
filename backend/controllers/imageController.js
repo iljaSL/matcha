@@ -34,6 +34,16 @@ const addImage = async (request, response, next) => { // TODO: refactor
   return response.status(500);
 };
 
+const getImageBlob = async (request, response, next) => {
+  try {
+    const { imageId } = request.params;
+    const imageLink = (await imageModel.getImageInfo(imageId)).link;
+    const blob = await imageModel.getImageBlob(imageLink);
+    return response.status(200).json({ imageId, imageBlob: blob });
+  } catch (err) { next(err); }
+};
+
 export default {
   addImage,
+  getImageBlob,
 };

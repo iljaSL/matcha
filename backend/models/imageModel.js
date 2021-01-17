@@ -13,6 +13,13 @@ const getUserImages = async (uid) => {
   return result.rows;
 };
 
+const getImageBlob = async (imageLocation) => { // not the optimal way to do it, should be /${uid}/${imageId}.jpg
+  const contents = await fs.promises.readFile(`${imageLocation}`, { encoding: 'base64' });
+  return contents;
+};
+
+const getImageInfo = async (imageId) => (await pool.query('SELECT * FROM user_photo WHERE id = $1', [imageId])).rows[0];
+
 const saveImageBlob = async (uid, base64String) => { // TODO: refactor
   const imagePath = process.env.IMAGE_PATH;
   const hash = crypto.randomBytes(16).toString('hex');
@@ -49,4 +56,6 @@ export default {
   addImageLink,
   saveImageBlob,
   getUserImages,
+  getImageBlob,
+  getImageInfo,
 };
