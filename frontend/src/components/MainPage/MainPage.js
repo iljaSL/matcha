@@ -10,7 +10,7 @@ import UserCard from './UserCard/UserCard';
 import Navbar from './Navbar/Navbar';
 import Filter from './Filter/Filter';
 import Footer from './Footer/Footer';
-import UserProfile from './UserProfile/UserProfile';
+import Profile from './Profile/Profile';
 
 const useStyles = makeStyles((theme) => ({
   root: {
