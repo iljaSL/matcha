@@ -3,7 +3,7 @@ import Conversation from './Conversation'
 import MessageBar from './MessageBar'
 
 const Chat = ({socket}) => {
-    const userData = JSON.parse(localStorage.getItem('user'));
+    const userData = JSON.parse(localStorage.getItem('user')); // TODO: replace with state
     const [conversations, setConversations] = useState('')
     const [messages, setMessages] = useState([])
     const [time, setTime] = useState('')
