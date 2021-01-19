@@ -12,25 +12,14 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
 
+import History from './History/History';
 import Pictures from './Pictures/Pictures';
 import Navbar from '../Navbar/Navbar';
 import Footer from '../Footer/Footer';
 import Blocked from './Blocked/Blocked'
 import Matches from './Matches/Matches';
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,6 +52,9 @@ const useStyles = makeStyles((theme) => ({
   },
   divider: {
     marginTop: '2rem',
+  },
+  cmp: {
+    margin: '5rem',
   }
 }));
 
@@ -72,10 +64,16 @@ export default function SignInSide() {
   return (
     <>
     <Navbar />
+    <Typography className={classes.divider} color="secondary" variant="h3">
+           Your Profile
+    </Typography>
+    <Typography className={classes.divider} color="secondary" variant="h4">
+          HotOmeter: 99 🔥
+    </Typography>
     <Grid container component="main" className={classes.root} className={classes.divider}>
       <CssBaseline />
       <Grid item xs={false} sm={6} md={6}><Pictures /></Grid>
-      <Grid item xs={12} sm={6} md={5} elevation={6} square>
+      <Grid item xs={12} sm={6} md={5} elevation={6}>
         <div >
           <Typography component="h1" variant="h5">
             BIO
@@ -90,9 +88,17 @@ export default function SignInSide() {
           </Typography>
         </div>
       </Grid>
-      <Grid item xs={false} sm={6} md={6}><Blocked /></Grid>
-      <Grid item xs={12} sm={6} md={6}><Matches /></Grid>
     </Grid>
+    <Container component="main" maxWidth="xs">
+    <Matches />
+    </Container>
+    <Container component="main" maxWidth="xs">
+    <History />
+    </Container>
+    <Container component="main" maxWidth="xs">
+    <Blocked />
+    </Container>
+
     <Footer />
     </>
   );

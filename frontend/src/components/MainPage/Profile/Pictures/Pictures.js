@@ -38,32 +38,32 @@ const useStyles = makeStyles((theme) => ({
       featured: true,
     },
     {
-        img: 'https://images.unsplash.com/photo-1610976792422-36d647abf7ac?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+        img: 'https://images.unsplash.com/photo-1610948409536-4aa96bc76988?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw2Mnx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
         title: 'Image2',
         author: 'author2',
         featured: true,
       },
       {
-        img: 'https://images.unsplash.com/photo-1610976792422-36d647abf7ac?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+        img: 'https://images.unsplash.com/photo-1610984404810-f917a18c9d36?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw2M3x8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
         title: 'Image3',
         author: 'author3',
         featured: true,
       },
       {
-        img: 'https://images.unsplash.com/photo-1610976792422-36d647abf7ac?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+        img: 'https://images.unsplash.com/photo-1611020915878-7ffbba3a5f62?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw3NHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
         title: 'Image4',
         author: 'author4',
         featured: true,
       },
       {
-        img: 'https://images.unsplash.com/photo-1610976792422-36d647abf7ac?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+        img: 'https://images.unsplash.com/photo-1610983881213-db786dba17c5?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxMDN8fHxlbnwwfHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
         title: 'Image5',
         author: 'author5',
         featured: true,
       },
   ];
 
-export default function AdvancedGridList() {
+export default function Pictures() {
   const classes = useStyles();
 
   return (
@@ -71,15 +71,9 @@ export default function AdvancedGridList() {
       <GridList cellHeight={200} spacing={1} className={classes.gridList}>
         {tileData.map((tile) => (
           <GridListTile key={tile.img} cols={tile.featured ? 2 : 1} rows={tile.featured ? 2 : 1}>
-            <img src={tile.img} alt={tile.title} />
+            <img src={tile.img} />
             <GridListTileBar
-              title={tile.title}
               titlePosition="top"
-              actionIcon={
-                <IconButton aria-label={`star ${tile.title}`} className={classes.icon}>
-                  <StarBorderIcon />
-                </IconButton>
-              }
               actionPosition="left"
               className={classes.titleBar}
             />
