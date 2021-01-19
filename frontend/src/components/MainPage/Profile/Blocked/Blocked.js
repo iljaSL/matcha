@@ -17,9 +17,6 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     maxWidth: 752,
   },
-  demo: {
-    backgroundColor: theme.palette.background.paper,
-  },
   title: {
     margin: theme.spacing(4, 0, 2),
   },
@@ -41,7 +38,7 @@ export default function InteractiveList() {
   return (
     <div className={classes.root}>
         <Grid item xs={12} md={12}>
-          <Typography variant="h6" className={classes.title}>
+          <Typography color="secondary" variant="h6" className={classes.title}>
            Blocked Users
           </Typography>
           <div className={classes.demo}>

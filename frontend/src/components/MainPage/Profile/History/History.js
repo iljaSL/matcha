@@ -19,13 +19,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AlignItemsList() {
+export default function History() {
   const classes = useStyles();
 
   return (
     <List className={classes.root}>
     <Typography color="secondary" variant="h6" className={classes.title}>
-           Your Matches
+           Your Visitor History
     </Typography>
       <ListItem alignItems="flex-start">
         <ListItemAvatar>
