@@ -10,6 +10,7 @@ import './App.css';
 import MyAccount from "./components/MainPage/MyAccount/MyAccount";
 import LoginForm from "./components/LoginForm/LoginForm";
 import Profile from './components/MainPage/Profile/Profile';
+import UserProfile from './components/MainPage/UserProfile/UserProfile';
 import Navbar from './components/MainPage/Navbar/Navbar';
 import Footer from './components/MainPage/Footer/Footer';
 import SignUpForm from './components/SignUp/SignUp'
@@ -45,6 +46,9 @@ const App = () => {
             </Route>
             <Route path="/profile">
                 <Profile />
+            </Route>
+            <Route path="/user-profile">
+                <UserProfile />
             </Route>
             <Route path="/my-account">
                 <MyAccount />
