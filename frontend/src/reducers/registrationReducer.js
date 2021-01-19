@@ -9,7 +9,8 @@ const initialState = {
     bio: '',
     tagList: [],
     initialTags: [],
-    profilePic: '',
+    profilePic: [],
+    picCount: 0,
     profileBlob: '',
     signupSuccess: false,
     steps: initialSteps
@@ -30,7 +31,7 @@ const checkFieldValidity = (formData) => {
             formData.steps[3].success = formData.tagList.length > 0;
             return;
         case 4:
-            formData.steps[4].success = !!formData.profilePic;
+            formData.steps[4].success = formData.profilePic.length > 0 && formData.profilePic.length < 6
             return;
         case 5:
             formData.steps[5].success = !(formData.steps.map(step => step.success !== true));
@@ -53,6 +54,9 @@ const registrationReducer = (state = initialState, action) => {
             return {...state, [field]: value}
         case 'CHANGE_PAGE':
             return {...state, currentStep: action.data}
+        case 'ADD_IMAGE':
+            console.log(action.data)
+            return {...state, profilePic:  action.data}
         case 'FORM_SUCCESS':
             return {...state, signupSuccess: action.data}
         case 'GET_TAGS':
@@ -93,12 +97,14 @@ const readFile = async (file) => {
         if (file) reader.readAsDataURL(file);
     });
 }
-export const addProfilePicture =  (file) => {
-
+export const addProfilePicture =  (fileArray) => {
     return async dispatch => {
-        const base64Picture = await readFile(file);
-        dispatch({type: 'UPDATE_FIELD', data: {field: 'profileBlob', value: base64Picture}})
-        dispatch({type: 'UPDATE_FIELD', data: {field: 'profilePic', value: file}})
+        let base64Array = [];
+        for (const file of fileArray) {
+            const base64Picture = await readFile(file);
+            base64Array.push(base64Picture);
+        }
+        dispatch({type: 'ADD_IMAGE', data: base64Array})
     }
 }
 
@@ -115,15 +121,14 @@ export const submitProfileForm = (formData, userData) => {
             return;
         }
         try {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`;
             response = await axios
                 .post(`http://localhost:3001/api/users/profile/${userData.id}`, formData)
-            success = true;
+            if (response.status === 201) success = true;
         } catch (error) {
             console.log(error)
         }
         const user = JSON.parse(localStorage.getItem("user"));
-        user.status = 2;
+        if (success) user.status = 2;
         localStorage.setItem("user", JSON.stringify(user))
         dispatch({type: 'FORM_SUCCESS', data: success});
     }

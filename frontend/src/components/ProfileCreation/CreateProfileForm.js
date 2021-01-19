@@ -27,7 +27,7 @@ const CreateProfileForm = () => {
 
     const registrationData = useSelector(state => state.registration)
     const userData = JSON.parse(localStorage.getItem('user'));
-    const {currentStep, preferences, bio, tagList, gender, profilePic, steps} = registrationData
+    const {currentStep, preferences, bio, tagList, gender, profilePic, steps, picCount} = registrationData
 
     useEffect(() => {
         dispatch(checkFormValidity(registrationData))
@@ -56,8 +56,9 @@ const CreateProfileForm = () => {
         dispatch(updateField(input, e.target.value))
     }
 
-    const handleUpload = base64String => {
-        dispatch(addProfilePicture(base64String))
+    const handleUpload = fileArray => {
+        console.log('handling upload...')
+            dispatch(addProfilePicture(fileArray))
     }
 
     const handleSubmit = () => {
@@ -101,7 +102,7 @@ const CreateProfileForm = () => {
             case 3:
                 return <ChooseTags handleListItem={handleListItem} tagList={tagList} initialTags={registrationData.initialTags}/>
             case 4:
-                return <PictureDropZone handleUpload={handleUpload} initialFile={profilePic}
+                return <PictureDropZone handleUpload={handleUpload} initialFiles={profilePic}
                                         handleDelete={handleDelete}/>
             case 5:
                 return <FinalPage formData={registrationData}/>

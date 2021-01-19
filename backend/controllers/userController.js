@@ -182,13 +182,19 @@ const createUser = async (request, response, next) => {
 
 // USER PROFILE CREATION
 const initProfile = async (request, response, next) => { // todo: replace w/ proper put request
-  const { profileBlob, tagList, ...rest } = request.body;
+  const { profilePic, tagList, ...rest } = request.body;
   const uid = request.params.id;
   try {
-    tagList.forEach((tagId) => userModel.addUserTag(uid, tagId));
+    let path = `${await imageModel.saveImageBlob(uid, profilePic.shift())}`;
+    const profilePicID = await imageModel.addImageLink(uid, path);
+    profilePic.map(async (image) => {
+      path = `${await imageModel.saveImageBlob(uid, image)}`;
+      await imageModel.addImageLink(uid, path);
+    });
+    tagList.map(async (tagId) => {
+      await userModel.addUserTag(uid, tagId);
+    });
     const sexualOrientation = UserUtil.getOrientation(rest.gender, rest.preferences);
-    const imagePath = await imageModel.saveImageBlob(uid, profileBlob);
-    const profilePicID = await imageModel.addImageLink(uid, imagePath);
     await userModel.addUserProfile(uid, {
       profilePicID, sexualOrientation, ...rest,
     });

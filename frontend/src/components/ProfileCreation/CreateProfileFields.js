@@ -5,7 +5,7 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import FormGroup from "@material-ui/core/FormGroup";
-import {genderList, getTags} from "./ProfileFormUtils";
+import {genderList} from "./ProfileFormUtils";
 import Switch from "@material-ui/core/Switch";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
@@ -69,17 +69,17 @@ export const ChooseTags = ({handleListItem, tagList, initialTags}) => {
         )}
     </List>
 }
-export const PictureDropZone = ({handleUpload, initialFile, handleDelete}) => {
-    if (!initialFile)
-        initialFile = '';
+export const PictureDropZone = ({handleUpload, initialFiles, handleDelete}) => {
+    if (!initialFiles)
+        initialFiles = [];
     return (
         <DropzoneArea
             acceptedFiles={['image/png', 'image/jpg', 'image/jpeg']}
             maxFileSize={5000000}
-            filesLimit={1}
-            initialFiles={[initialFile]}
-            clearOnUnmount={false}
-            onChange={async (files) => handleUpload(files[0])}
+            filesLimit={5}
+            initialFiles={initialFiles}
+            clearOnUnmount={true}
+            onChange={async (files) => handleUpload(files)}
             onDelete={() => handleDelete('profilePic')}
         />
     )
@@ -87,10 +87,10 @@ export const PictureDropZone = ({handleUpload, initialFile, handleDelete}) => {
 
 
 export const FinalPage = ({formData}) => { // why don't we sketch a 'tinder card' here?
-    const {profileBlob, preferences, bio, tagList, gender} = formData
+    const {profilePic, preferences, bio, tagList, gender} = formData
     return <Card style={{height: '80vh', width: 'auto'}}>
-        {profileBlob ?
-            <CardMedia image={profileBlob} style={{height: '80%', width: '80%'}}/>
+        {profilePic[0]?
+            <CardMedia image={profilePic[0]} style={{height: '80%', width: '80%'}}/>
             : <div>need to add a skeleton here</div>}
         <CardContent>
             <Typography>

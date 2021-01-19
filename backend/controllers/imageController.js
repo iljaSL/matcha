@@ -25,8 +25,8 @@ const addImage = async (request, response, next) => { // TODO: refactor
   } else if (link) {
     try {
       if (!(await checkUrlValidity(link))) { next(new Error('link invalid')); }
-      await imageModel.addImageLink(id, link);
-      return response.status(200).json(link);
+      const imageId = await imageModel.addImageLink(id, link);
+      return response.status(200).json(imageId);
     } catch (err) {
       next(err);
     }
