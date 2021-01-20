@@ -59,14 +59,9 @@ const tags = [
 export default function SimpleSelect() {
     const theme = useTheme();
   const classes = useStyles();
-  const [age, setAge] = React.useState('');
   const [distance, setDistance] = React.useState('');
   const [fame, setFame] = React.useState('');
   const [tagName, setTagName] = React.useState([]);
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
 
   const handleChangeOnDistance = (event) => {
       setDistance(event.target.value);
@@ -82,25 +77,7 @@ export default function SimpleSelect() {
 
   return (
     <div>
-      <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel id="demo-simple-select-outlined-label">Age</InputLabel>
-        <Select
-          labelId="demo-simple-select-outlined-label"
-          id="demo-simple-select-outlined"
-          value={age}
-          onChange={handleChange}
-          label="Age"
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>18-30</MenuItem>
-          <MenuItem value={20}>30-40</MenuItem>
-          <MenuItem value={30}>40-50</MenuItem>
-          <MenuItem value={30}>50-99</MenuItem>
-        </Select>
-      </FormControl>
-      <FormControl variant="outlined" className={classes.formControl}>
+      <FormControl color='secondary' variant="outlined" className={classes.formControl}>
         <InputLabel id="demo-simple-select-outlined-label">Distance</InputLabel>
         <Select
           labelId="demo-simple-select-outlined-label"
@@ -117,7 +94,7 @@ export default function SimpleSelect() {
           <MenuItem value={30}>more than 200km</MenuItem>
         </Select>
       </FormControl>
-      <FormControl variant="outlined" className={classes.formControl}>
+      <FormControl color='secondary' variant="outlined" className={classes.formControl}>
         <InputLabel id="demo-simple-select-outlined-label">Fame</InputLabel>
         <Select
           labelId="demo-simple-select-outlined-label"
@@ -135,8 +112,8 @@ export default function SimpleSelect() {
           <MenuItem value={40}>Jocke❤️❤️❤️</MenuItem>
         </Select>
       </FormControl>
-      <FormControl className={classes.formControl}>
-        <InputLabel id="demo-mutiple-chip-label">Chip</InputLabel>
+      <FormControl color='secondary' className={classes.formControl}>
+        <InputLabel id="demo-mutiple-chip-label">Tags</InputLabel>
         <Select
           labelId="demo-mutiple-chip-label"
           id="demo-mutiple-chip"

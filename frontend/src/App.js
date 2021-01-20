@@ -7,7 +7,9 @@ import {
 
 import './App.css';
 
+import MyAccount from "./components/MainPage/MyAccount/MyAccount";
 import LoginForm from "./components/LoginForm/LoginForm";
+import Profile from './components/MainPage/Profile/Profile';
 import UserProfile from './components/MainPage/UserProfile/UserProfile';
 import Navbar from './components/MainPage/Navbar/Navbar';
 import Footer from './components/MainPage/Footer/Footer';
@@ -63,8 +65,14 @@ const App = () => {
             <Route path="/mainpage">
                 <MainPage/>
             </Route>
+            <Route path="/profile">
+                <Profile />
+            </Route>
             <Route path="/user-profile">
-                <UserProfile/>
+                <UserProfile />
+            </Route>
+            <Route path="/my-account">
+                <MyAccount />
             </Route>
             <Route path="/signup">
                 <SignUpForm/>
