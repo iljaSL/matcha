@@ -1,4 +1,5 @@
 import tagModel from '../models/tagModel.js';
+import userModel from '../models/userModel.js';
 
 const getTags = async (request, response, next) => {
   try {
@@ -31,6 +32,13 @@ const getTagUsers = async (request, response, next) => {
   return response.status(500);
 };
 
+const getTagsByUid = async (request, response, next) => {
+  try {
+    const { uid } = request.params;
+    return response.status(200).json(await userModel.getTagsByUid(uid));
+  } catch (err) { next(err); }
+};
+
 export default {
-  getTags, addTag, getTagById, getTagUsers,
+  getTags, addTag, getTagById, getTagUsers, getTagsByUid,
 };

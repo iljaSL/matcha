@@ -15,7 +15,7 @@ tagRouter.post('/', async (request, response, next) => {
   await tagController.addTag(request, response, next);
 });
 
-tagRouter.get('/users/:id', async (request, response, next) => {
+tagRouter.get('/:id/users', async (request, response, next) => {
   await tagController.getTagUsers(request, response, next);
 });
 

@@ -215,9 +215,9 @@ const getUserImages = async (request, response, next) => {
 
 // USER TAGS
 
-const getTagsById = async (request, response, next) => {
+const getTagsByUid = async (request, response, next) => {
   try {
-    return response.status(200).json(await userModel.getTagsById(request.params.id));
+    return response.status(200).json(await userModel.getTagsByUid(request.params.id));
   } catch (err) { next(err); }
   return response.status(500).end();
 };
@@ -253,6 +253,15 @@ const changeUserLocation = async (request, response, next) => {
   } catch (err) { return next(err); }
 };
 
+// Gets all notifications and marks them as read
+const getUserNotifications = async (request, response, next) => {
+  try {
+    const { id } = request.params;
+    const notifications = await userModel.getUserNotifications(id);
+    return response.status(200).json(notifications.rows);
+  } catch (err) { next(err); }
+};
+
 export default {
   createUser,
   initProfile,
@@ -261,7 +270,7 @@ export default {
   login,
   updatePasswordWithUserId,
   deleteUser,
-  getTagsById,
+  getTagsByUid,
   addTagById,
   removeTagById,
   forgotPassword,
@@ -274,4 +283,5 @@ export default {
   checkIfUserIsBlocked,
   checkIfUserIsReported,
   changeUserLocation,
+  getUserNotifications,
 };

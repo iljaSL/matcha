@@ -62,7 +62,7 @@ userRouter
   .post(userController.updatePasswordWithUserId);
 
 userRouter.get('/tags/:id', async (request, response, err) => {
-  await userController.getTagsById(request, response, err);
+  await userController.getTagsByUid(request, response, err);
 });
 
 userRouter.post('/tags/:id', async (request, response, err) => {
@@ -75,6 +75,10 @@ userRouter.delete('/tags/:id', async (request, response, err) => {
 
 userRouter.post('/location', async (request, response, next) => {
   await userController.changeUserLocation(request, response, next);
+});
+
+userRouter.get('/:id/notifications', async (request, response, next) => {
+  await userController.getUserNotifications(request, response, next);
 });
 
 export default userRouter;

@@ -115,7 +115,12 @@ const registerUser = async (user, next) => {
   return result.rows[0];
 };
 
-const getTagsById = async (id) => pool.query('SELECT tags.id as tagId, tags.tag, users.username FROM tags, usertags, users WHERE usertags.tagid = tags.id AND uid = ($1)', [id]);
+const getTagsByUid = async (uid) => pool.query(`
+    SELECT  usertags.uid, tags.id, tags.tag  
+    FROM usertags 
+        INNER JOIN tags
+        ON usertags.tagid = tags.id 
+    WHERE uid = $1`, [uid]);
 
 const addUserTag = async (uid, tagId) => pool.query('INSERT INTO usertags (uid, tagId) VALUES ($1, $2)', [uid, tagId]);
 
@@ -130,13 +135,19 @@ const changeUserLocation = async (uid, long, lat) => {
   );
 };
 
+const getUserNotifications = async (uid) => (pool.query(`
+    UPDATE notifications
+    SET notification_read = true 
+    WHERE uid = $1 
+    RETURNING *`, [uid]));
+
 export default {
   isDuplicateUser,
   registerUser,
   findUser,
   updatePasswordWithUserId,
   deleteUser,
-  getTagsById,
+  getTagsByUid,
   addUserTag,
   removeUserTag,
   setResetKeyForPassword,
@@ -150,4 +161,5 @@ export default {
   checkIfUserIsReported,
   findUserKey,
   changeUserLocation,
+  getUserNotifications,
 };
