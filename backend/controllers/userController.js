@@ -253,6 +253,15 @@ const changeUserLocation = async (request, response, next) => {
   } catch (err) { return next(err); }
 };
 
+// Gets all notifications and marks them as read
+const getUserNotifications = async (request, response, next) => {
+  try {
+    const { id } = request.params;
+    const notifications = await userModel.getUserNotifications(id);
+    return response.status(200).json(notifications.rows);
+  } catch (err) { next(err); }
+};
+
 export default {
   createUser,
   initProfile,
@@ -274,4 +283,5 @@ export default {
   checkIfUserIsBlocked,
   checkIfUserIsReported,
   changeUserLocation,
+  getUserNotifications,
 };

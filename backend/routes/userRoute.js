@@ -77,4 +77,8 @@ userRouter.post('/location', async (request, response, next) => {
   await userController.changeUserLocation(request, response, next);
 });
 
+userRouter.get('/:id/notifications', async (request, response, next) => {
+  await userController.getUserNotifications(request, response, next);
+});
+
 export default userRouter;

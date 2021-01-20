@@ -135,6 +135,12 @@ const changeUserLocation = async (uid, long, lat) => {
   );
 };
 
+const getUserNotifications = async (uid) => (pool.query(`
+    UPDATE notifications
+    SET notification_read = true 
+    WHERE uid = $1 
+    RETURNING *`, [uid]));
+
 export default {
   isDuplicateUser,
   registerUser,
@@ -155,4 +161,5 @@ export default {
   checkIfUserIsReported,
   findUserKey,
   changeUserLocation,
+  getUserNotifications,
 };
