@@ -40,6 +40,13 @@ const updatePosition = async (coords) => {
   await axios.post(`${baseUrl}/users/location`, coords);
 }
 
+const getPositionByIp = async () => {
+  const ip = (await axios.get('https://api.ipify.org/')).data;
+  const data = (await axios.get(`http://extreme-ip-lookup.com/json/${ip}`)).data
+  if (!data) throw new Error('Could not get location!')
+  return {long: data.lon, lat: data.lat}
+}
+
 const resetPassword = async (password, confirmPassword) => {
   let key = document.location.href;
   key = key.split('/');
@@ -63,4 +70,5 @@ export default {
   resetPassword,
   updatePosition,
   validateProfile,
+  getPositionByIp
 };

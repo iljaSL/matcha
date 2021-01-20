@@ -107,6 +107,7 @@ const profileCreated = () => (dispatch) => {
 }
 
 
+
 const getPosition = () => (dispatch) => {
       navigator.geolocation.getCurrentPosition(async (coordinates) => {
         const position = {lat: coordinates.coords.latitude, long: coordinates.coords.longitude}
@@ -116,8 +117,14 @@ const getPosition = () => (dispatch) => {
         } catch (err) {
           dispatch({type: 'TOKEN_ERROR'})
         }
-      }, (err) => {
-        dispatch({type: 'GPS_ERROR'})
+      }, async (err) => {
+        try {
+          const position = await AuthService.getPositionByIp();
+          await AuthService.updatePosition(position);
+        } catch (err) {
+          dispatch({type: 'GPS_ERROR'})
+        }
+
       }
       );
 }
