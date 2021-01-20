@@ -1,5 +1,5 @@
 import tagModel from '../models/tagModel.js';
-import userModel from '../models/userModel';
+import userModel from '../models/userModel.js';
 
 const getTags = async (request, response, next) => {
   try {
