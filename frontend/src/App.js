@@ -7,6 +7,7 @@ import {
 
 import './App.css';
 
+import Messenger from './components/MainPage/Messenger/Messenger';
 import MyAccount from "./components/MainPage/MyAccount/MyAccount";
 import LoginForm from "./components/LoginForm/LoginForm";
 import Profile from './components/MainPage/Profile/Profile';
@@ -43,6 +44,9 @@ const App = () => {
         <Switch>
             <Route path="/mainpage">
                 <MainPage/>
+            </Route>
+            <Route path="/messenger">
+                <Messenger />
             </Route>
             <Route path="/profile">
                 <Profile />

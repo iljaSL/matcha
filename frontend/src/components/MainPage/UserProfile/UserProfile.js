@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
+import MenuButton from './MenuButton/MenuButton';
 import MatchButton from './MatchButton/MatchButton';
 import Pictures from './Pictures/Pictures';
 import Navbar from '../Navbar/Navbar';
@@ -64,6 +65,7 @@ export default function SignInSide() {
     <Navbar />
     <Typography className={classes.divider} color="secondary" variant="h3">
            Lena Wolfgang Strauss (F)
+           <MenuButton />
     </Typography>
     <Typography className={classes.divider} color="secondary" variant="h4">
           HotOmeter: 95 🔥
