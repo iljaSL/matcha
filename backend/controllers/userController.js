@@ -215,9 +215,9 @@ const getUserImages = async (request, response, next) => {
 
 // USER TAGS
 
-const getTagsById = async (request, response, next) => {
+const getTagsByUid = async (request, response, next) => {
   try {
-    return response.status(200).json(await userModel.getTagsById(request.params.id));
+    return response.status(200).json(await userModel.getTagsByUid(request.params.id));
   } catch (err) { next(err); }
   return response.status(500).end();
 };
@@ -261,7 +261,7 @@ export default {
   login,
   updatePasswordWithUserId,
   deleteUser,
-  getTagsById,
+  getTagsByUid,
   addTagById,
   removeTagById,
   forgotPassword,

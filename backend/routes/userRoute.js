@@ -62,7 +62,7 @@ userRouter
   .post(userController.updatePasswordWithUserId);
 
 userRouter.get('/tags/:id', async (request, response, err) => {
-  await userController.getTagsById(request, response, err);
+  await userController.getTagsByUid(request, response, err);
 });
 
 userRouter.post('/tags/:id', async (request, response, err) => {
