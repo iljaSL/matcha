@@ -7,9 +7,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      marginLeft: '2rem',
+    marginLeft: '2rem',
     },
-  }));
+}));
 
 export default function MenuButton() {
     const classes = useStyles();
