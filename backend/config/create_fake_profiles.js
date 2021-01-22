@@ -13,7 +13,7 @@ const initFakeUsers = async () => {
     let statement = 'INSERT INTO users (lastname, firstname, username, gender, sexual_orientation, mail, bio, geo_lat, geo_long, status, password) VALUES';
     let ids = [];
     const gender = ['woman', 'man', 'other'];
-    const sexualOrientation = ['heterosexual', 'bisexual', 'homosexual'];
+    const sexualOrientation = ['androsexual', 'gynesexual', 'pansexual'];
     await new Promise(r => setTimeout(r, 1000)); // sleep to connect to db.. lol
     console.log('inserting fake users...')
 
@@ -22,8 +22,8 @@ const initFakeUsers = async () => {
             '${faker.name.lastName().replace('\'', '')}',
             '${faker.name.firstName().replace('\'', '')}',
             '${faker.internet.userName()}',
-            '${gender[Math.floor(Math.random() * 2)]}',
-            '${sexualOrientation[Math.floor(Math.random() * 2)]}',
+            '${gender[Math.floor(Math.random() * 3)]}',
+            '${sexualOrientation[Math.floor(Math.random() * 3)]}',
             '${faker.internet.email()}',
             '${faker.lorem.sentence()}',
             '${faker.address.latitude()}',

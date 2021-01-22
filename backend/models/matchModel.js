@@ -16,7 +16,9 @@ const getProfiles = async (uid, distance) => { // should DISTANCE be a column on
            SELECT blocked_user_id 
            FROM block 
            WHERE user_id = (SELECT id FROM master_user)
-           )`, [uid, distance],
+           )
+        
+        `, [uid, distance],
   );
   return res.rows;
 };
