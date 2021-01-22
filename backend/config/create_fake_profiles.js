@@ -37,6 +37,7 @@ const initFakeUsers = async () => {
         .map(entry => parseInt(entry.id));
     console.log('done!')
 
+    statement = ''
     console.log('inserting fake profile pictures...')
    await Promise.all(ids.map(async id => {
         const image = await axios.get(faker.image.cats(300, 300), {responseType: 'arraybuffer'});
@@ -48,6 +49,7 @@ const initFakeUsers = async () => {
     await pool.query(statement);
     console.log('done!')
     console.log('inserted', ids.length, 'entries')
+    statement = ''
 
     console.log('adding likes...')
     ids.map(id => {
