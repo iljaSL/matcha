@@ -17,12 +17,26 @@ const getProfiles = async (uid, distance) => { // should DISTANCE be a column on
            FROM block 
            WHERE user_id = (SELECT id FROM master_user)
            )
-        
         `, [uid, distance],
   );
   return res.rows;
 };
 
+const getCommonTagCountByUid = async (uid) => {
+  const res = await pool.query(`WITH master_user_tags AS (
+        SELECT tagid
+    FROM usertags
+    WHERE uid = $1
+)
+
+    SELECT COUNT(uid), uid
+    FROM usertags
+    WHERE tagid IN (SELECT tagid FROM master_user_tags)
+    GROUP BY uid`, [uid]);
+  return res.rows;
+};
+
 export default {
   getProfiles,
+  getCommonTagCountByUid,
 };
