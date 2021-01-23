@@ -93,6 +93,12 @@ const findUser = async (data, next) => {
   if (result) return result.rows[0];
 };
 
+const findUserById = async (id) => {
+  const result = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+  if (result) return result.rows[0];
+  return null;
+};
+
 const findUserKey = async (data, next) => {
   const result = await pool.query('SELECT * FROM users WHERE reset_password_key = ($1)', [data]);
   if (result) return result.rows[0];
@@ -162,4 +168,5 @@ export default {
   findUserKey,
   changeUserLocation,
   getUserNotifications,
+  findUserById,
 };
