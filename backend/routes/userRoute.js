@@ -1,7 +1,12 @@
 import express from 'express';
 import userController from '../controllers/userController.js';
+import updateController from '../controllers/updateController.js';
 
 const userRouter = express.Router();
+
+userRouter.post('/updateUser', async (request, response, next) => {
+  await updateController.updateUser(request, response, next);
+});
 
 userRouter.get('/blocked/:userId/:blockedUserId', async (request, response, next) => {
   await userController.checkIfUserIsBlocked(request, response, next);
