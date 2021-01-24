@@ -1,0 +1,7 @@
+POST http://localhost:3001/api/users/updateUser HTTP/1.1
+content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQiLCJ1c2VybmFtZSI6Imxlb24iLCJpYXQiOjE2MTE1MTM4NzMsImV4cCI6MTYxMTYwMDI3M30.OUpbfSgG3N3Xqait4PA0UjEznrDq3myMHIQi0QJ3UgI
+{
+    "key": "mail",
+    "mail": "johnny@dd.com"
+}
