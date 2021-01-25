@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -7,6 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Form from "react-validation/build/form";
+import updateUserAction from '../../../actions/updateUserAction';
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -29,8 +32,40 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function FirstLastName() {
+const FirstLastName = (props) => {
   const classes = useStyles();
+  const form = useRef();
+  
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('')
+  const { message } = useSelector(state => state.message);
+  const [successful, setSuccessful] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const onChangeFirstName = (e) => {
+    const firstName = e.target.value;
+    setFirstName(firstName);
+  }
+
+  const onChangeLastName = (e) => {
+    const lastName = e.target.value;
+    setLastName(lastName);
+  }
+
+  const handleNameChange = (e) => {
+    e.preventDefault();
+
+    setSuccessful(false);
+
+    form.current.validateAll();
+
+    dispatch(updateUserAction.updateFirstLastName(firstName, lastName)).then(() => {
+      setSuccessful(true);
+    }).catch(() => {
+      setSuccessful(false);
+    })
+  }
 
   return (
     <Container className={classes.outlined} component="main" maxWidth="xs">
@@ -39,7 +74,8 @@ export default function FirstLastName() {
         <Typography component="h1" variant="h6">
         Update your First and Last Name
         </Typography>
-        <Form className={classes.form} noValidate>
+        <Form onSubmit={handleNameChange} ref={form} className={classes.form} noValidate>
+        {!successful && (
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -52,6 +88,8 @@ export default function FirstLastName() {
                 label="First Name"
                 autoFocus
                 color="secondary"
+                value={firstName}
+                onChange={onChangeFirstName}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -64,9 +102,12 @@ export default function FirstLastName() {
                 name="lastName"
                 autoComplete="lname"
                 color="secondary"
+                value={lastName}
+                onChange={onChangeLastName}
               />
             </Grid>
           </Grid>
+          )}
           <Button
             type="submit"
             fullWidth
@@ -76,8 +117,15 @@ export default function FirstLastName() {
           >
             Update
           </Button>
+          {message && (
+            <Alert severity="error" role="alert">
+            {message}
+            </Alert>
+          )}
         </Form>
       </div>
     </Container>
   );
 }
+
+export default FirstLastName;
