@@ -1,6 +1,16 @@
 import bcrypt from 'bcrypt';
 import pool from '../config/database.js';
 
+const findUserInfo = async (key, value, ...args) => {
+  const info = args.length === 0 ? '*' : args.join(', ');
+  const res = await pool.query(`SELECT ${info} FROM users WHERE ${key} = $1`, [value]);
+  return res.rows[0];
+};
+
+const updateProfile = async (id, column, value) => pool.query(
+  `UPDATE users SET ${column} = $1 WHERE id = $2`, [value, id],
+);
+
 const checkIfUserIsBlocked = async (userId, blockedUserId) => {
   const result = await pool.query(
     'SELECT * FROM block WHERE user_id = $1 AND blocked_user_id = $2',
@@ -168,5 +178,7 @@ export default {
   findUserKey,
   changeUserLocation,
   getUserNotifications,
+  updateProfile,
+  findUserInfo,
   findUserById,
 };

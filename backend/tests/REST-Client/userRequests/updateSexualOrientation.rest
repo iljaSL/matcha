@@ -1,0 +1,8 @@
+POST http://localhost:3001/api/users/updateUser HTTP/1.1
+content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQiLCJ1c2VybmFtZSI6Imxlb24iLCJpYXQiOjE2MTE1MDAxMjUsImV4cCI6MTYxMTU4NjUyNX0.0gE1FEPpEHmRCAswyiRvaiaHGrisw87hhkXNiW0jEj8
+
+{
+    "key": "sexual_orientation",
+    "sexual_orientation": "heterosexual"
+}
