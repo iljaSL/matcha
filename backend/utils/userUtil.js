@@ -47,8 +47,8 @@ const validateOrientation = (orientation) => {
 
   if (!orientation) {
     errors.orientationError = 'No input provided';
-  } else if (!['bisexual', 'homosexual', 'heterosexual'].includes(orientation)) {
-    errors.orientationError = 'Orientations available: bisexual, homosexual, heterosexual';
+  } else if (!['gynesexual', 'pansexual', 'androsexual'].includes(orientation)) {
+    errors.orientationError = 'Orientations available: gynesexual, pansexual, androsexual';
   }
   return errors;
 };
