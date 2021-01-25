@@ -17,7 +17,6 @@ import Footer from './components/MainPage/Footer/Footer';
 import SignUpForm from './components/SignUp/SignUp'
 import ForgotPassword from './components/ForgotPassword/ForgotPassword'
 import CreateProfileForm from "./components/ProfileCreation/CreateProfileForm";
-import Chat from "./components/Chat/Chat"
 import ResetPassword from './components/ResetPassword/ResetPassword';
 import MainPage from './components/MainPage/MainPage';
 import ValidateProfile from './components/ProfileCreation/ValidateProfile'
@@ -67,7 +66,7 @@ const App = () => {
                 <MainPage/>
             </Route>
             <Route path="/messenger">
-                <Messenger />
+                <Messenger socket={socket}/>
             </Route>
             <Route path="/profile">
                 <Profile />
@@ -98,9 +97,6 @@ const App = () => {
             </Route>
             <Route path="/gallery">
                 <Gallery/>
-            </Route>
-            <Route path="/chat">
-                <Chat socket={socket}/>
             </Route>
             <Route path="/">
                 {isLoggedIn
