@@ -23,9 +23,6 @@ const updateUser = async (request, response, next) => {
     const { authorization } = request.headers;
     console.log('AUTH', authorization);
     const userId = jsonWebTokenUtils.getUserId(authorization);
-    console.log('KEY', key);
-    console.log('NAME', firstname);
-    console.log('LAST', lastname);
 
     let password;
     let error = {};
@@ -37,7 +34,7 @@ const updateUser = async (request, response, next) => {
         error = { ...error, ...UserUtil.validateName(lastname, 'lastname') };
         break;
       case 'bio':
-        error = UserUtil.validateBio(bio);
+        error = UserUtil.validateBio(bio, response);
         break;
       case 'gender':
         error = UserUtil.validateGender(gender);
@@ -64,7 +61,8 @@ const updateUser = async (request, response, next) => {
     }
 
     if (Object.keys(error).length !== 0) {
-      return response.json({ message: error });
+      console.log('Err', error);
+      return response.status(402).json({ message: 'Invalid Input!' });
     }
 
     if (key === 'name') {

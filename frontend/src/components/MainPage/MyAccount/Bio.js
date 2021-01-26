@@ -1,11 +1,14 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Form from "react-validation/build/form";
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import TextField from '@material-ui/core/TextareaAutosize';
+import updateUserAction from '../../../actions/updateUserAction';
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -32,8 +35,34 @@ const useStyles = makeStyles((theme) => ({
 },
 }));
 
-export default function Bio() {
+const Bio = () => {
   const classes = useStyles();
+  const form = useRef();
+
+  const [bio, setBio] = useState('')
+  const { message } = useSelector(state => state.message);
+  const [successful, setSuccessful] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const onChangeBio = (e) => {
+    const bio = e.target.value;
+    setBio(bio);
+  }
+
+  const handleBioChange = (e) => {
+    e.preventDefault();
+
+    setSuccessful(false);
+
+    form.current.validateAll();
+
+    dispatch(updateUserAction.updateBio(bio)).then(() => {
+      setSuccessful(true);
+    }).catch(() => {
+      setSuccessful(false);
+    })
+  }
 
   return (
     <Container component="main" maxWidth="xs" className={classes.outlined}>
@@ -42,8 +71,18 @@ export default function Bio() {
         <Typography component="h1" variant="h6">
         Update your Bio
         </Typography>
-        <Form className={classes.form} noValidate>
-        <TextareaAutosize aria-label="minimum height" rowsMin={10} placeholder="You can resize me" />
+        <Form onSubmit={handleBioChange} ref={form} className={classes.form} noValidate>
+        {!successful && (
+        <TextField aria-label="minimum height" rowsMin={10} 
+          placeholder="You can resize me" 
+          required
+          id="bio"
+          name="bio"
+          autoComplete="lname"
+          value={bio}
+          onChange={onChangeBio}
+        />
+        )}
           <Button
             type="submit"
             fullWidth
@@ -53,8 +92,15 @@ export default function Bio() {
           >
             Update
           </Button>
+          {message && (
+            <Alert severity="error" role="alert">
+            {message}
+            </Alert>
+          )}
         </Form>
       </div>
     </Container>
   );
 }
+
+export default Bio;

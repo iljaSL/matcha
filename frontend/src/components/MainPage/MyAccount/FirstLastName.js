@@ -32,12 +32,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const FirstLastName = (props) => {
+const FirstLastName = () => {
   const classes = useStyles();
   const form = useRef();
   
   const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('')
+  const [lastName, setLastName] = useState('');
   const { message } = useSelector(state => state.message);
   const [successful, setSuccessful] = useState(false);
 
