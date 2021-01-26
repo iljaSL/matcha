@@ -1,7 +1,7 @@
 import { Server } from 'socket.io';
 import chatModel from './models/chatModel.js';
 import { initDbListener } from './utils/dbListener.js';
-import imageModel from "./models/imageModel.js";
+import imageModel from './models/imageModel.js';
 
 const getTime = () => new Date();
 
@@ -56,8 +56,8 @@ export const webSocketServer = (server) => {
         const conversation = await chatModel.getMessages(conversationId);
         const receiverOnline = connections.find((connection) => connection.userId === receiverId);
         interval = setInterval(async () => {
-          socket.emit('conversation', conversation);
-          if (receiverOnline) io.to(receiverOnline.socketId).emit('conversation', conversation);
+          socket.emit('conversation', { conversationId, conversation });
+          if (receiverOnline) io.to(receiverOnline.socketId).emit('conversation', { conversationId, conversation });
         }, 1000);
       } catch (err) { socket.emit('my error', 'could not add message'); clearInterval(interval); }
     });
@@ -69,7 +69,7 @@ export const webSocketServer = (server) => {
       try {
         interval = setInterval(async () => {
           const conversation = await chatModel.getMessages(conversationId);
-          socket.emit('conversation', conversation);
+          socket.emit('conversation', { conversationId, conversation });
         }, 1000);
       } catch (err) { socket.emit('my error', 'could not get conversation'); clearInterval(interval); }
     });

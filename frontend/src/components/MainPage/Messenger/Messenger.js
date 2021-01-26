@@ -129,7 +129,7 @@ const MessageHistory = ({messages, userId, socket, currentConversationId, receiv
     const classes = useStyles();
     return <Grid item xs={9}>
         <List className={classes.messageArea}>
-            {messages.map(message => {
+            {messages && messages.map(message => {
                 const align = message.sender == userId ? 'right' : 'left'
                 return <ListItem key={message.id}>
                     <Grid container>
@@ -141,6 +141,7 @@ const MessageHistory = ({messages, userId, socket, currentConversationId, receiv
             })
             }
         </List>
+
         {currentConversationId && <TextBar socket={socket}
                  conversationId={currentConversationId}
                  senderId={userId}
@@ -161,9 +162,9 @@ const Messenger = ({socket}) => {
                 setConversations(conversations)
             }
         )
-        socket.on('conversation', messages => {
-                if (messages[0] && messages[0].conversation_id === currentConversationId) {
-                    setMessages(messages)
+        socket.on('conversation', conversation => {
+                if (conversation.id = currentConversationId) {
+                    setMessages(conversation.conversation)
                 } else
                     ; // TODO: notify user about new message in another chat
             }
