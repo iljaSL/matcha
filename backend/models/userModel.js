@@ -152,10 +152,15 @@ const changeUserLocation = async (uid, long, lat) => {
 };
 
 const getUserNotifications = async (uid) => (pool.query(`
-    UPDATE notifications
-    SET notification_read = true 
-    WHERE uid = $1 
-    RETURNING *`, [uid]));
+  WITH updated as (UPDATE notifications
+  SET notification_read = true
+  FROM users
+  WHERE uid = $1 AND notifications.added_by = users.id
+  RETURNING notifications.id, notifications.uid, notifications.time_added, event, added_by, username, gender, sexuaL_orientation, profile_picture_id
+) SELECT * FROM updated
+ORDER BY time_added DESC
+LIMIT 25;
+`, [uid]));
 
 export default {
   isDuplicateUser,
