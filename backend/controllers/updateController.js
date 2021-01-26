@@ -21,7 +21,11 @@ const updateUser = async (request, response, next) => {
     } = request.body;
     console.log('REQUEST', request.body);
     const { authorization } = request.headers;
+    console.log('AUTH', authorization);
     const userId = jsonWebTokenUtils.getUserId(authorization);
+    console.log('KEY', key);
+    console.log('NAME', firstname);
+    console.log('LAST', lastname);
 
     let password;
     let error = {};
@@ -56,11 +60,11 @@ const updateUser = async (request, response, next) => {
         }
         break;
       default:
-        return response.json({ error: 'Invalid input' });
+        return response.json({ message: 'Invalid input' });
     }
 
     if (Object.keys(error).length !== 0) {
-      return response.json({ error });
+      return response.json({ message: error });
     }
 
     if (key === 'name') {
@@ -80,7 +84,6 @@ const updateUser = async (request, response, next) => {
       await userModel.updateProfile(userId, key, mail);
     }
     if (key === 'password') {
-      console.log('GOT IN CHANIGN PASSWORD MODEL');
       await userModel.updateProfile(userId, key, password);
     }
   } catch (err) { next(err); }

@@ -15,6 +15,7 @@ import UserProfile from './components/MainPage/UserProfile/UserProfile';
 import Navbar from './components/MainPage/Navbar/Navbar';
 import Footer from './components/MainPage/Footer/Footer';
 import SignUpForm from './components/SignUp/SignUp'
+import Notification from './components/MainPage/Notification/Notification';
 import ForgotPassword from './components/ForgotPassword/ForgotPassword'
 import CreateProfileForm from "./components/ProfileCreation/CreateProfileForm";
 import ResetPassword from './components/ResetPassword/ResetPassword';
@@ -64,6 +65,9 @@ const App = () => {
         <Switch>
             <Route path="/mainpage">
                 <MainPage/>
+            </Route>
+            <Route path="/notification">
+                <Notification/>
             </Route>
             <Route path="/messenger">
                 <Messenger socket={socket}/>
