@@ -80,9 +80,9 @@ const validateName = (name) => {
   let errors = {};
 
   if (!name) {
-    errors.nameError = 'Required field';
+    errors.message = 'Required field';
   } else if (!inputChecker.realName(name)) {
-    errors.nameError = 'Name is not valid';
+    errors.message = 'Name is not valid';
   }
   return errors;
 };

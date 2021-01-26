@@ -11,6 +11,24 @@ const updateFirstLastName = async (firstName, lastName) => {
     return result.data;
 };
 
+const updateBio = async (bio) => {
+    const result = await axios.post(`${baseUrl}/users/updateUser`, {
+        key: "bio",
+        bio: bio
+    })
+    return result.data;
+};
+
+const updateGender = async (gender) => {
+    const result = await axios.post(`${baseUrl}/users/updateUser`, {
+        key: "gender",
+        gender: gender
+    })
+    return result.data;
+}
+
 export default {
     updateFirstLastName,
+    updateBio,
+    updateGender,
 }
