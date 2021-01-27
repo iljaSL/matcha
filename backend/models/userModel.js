@@ -103,6 +103,12 @@ const findUser = async (data, next) => {
   if (result) return result.rows[0];
 };
 
+const findUserById = async (id) => {
+  const result = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+  if (result) return result.rows[0];
+  return null;
+};
+
 const findUserKey = async (data, next) => {
   const result = await pool.query('SELECT * FROM users WHERE reset_password_key = ($1)', [data]);
   if (result) return result.rows[0];
@@ -146,10 +152,15 @@ const changeUserLocation = async (uid, long, lat) => {
 };
 
 const getUserNotifications = async (uid) => (pool.query(`
-    UPDATE notifications
-    SET notification_read = true 
-    WHERE uid = $1 
-    RETURNING *`, [uid]));
+  WITH updated as (UPDATE notifications
+  SET notification_read = true
+  FROM users
+  WHERE uid = $1 AND notifications.added_by = users.id
+  RETURNING notifications.id, notifications.uid, notifications.time_added, event, added_by, username, gender, sexuaL_orientation, profile_picture_id
+) SELECT * FROM updated
+ORDER BY time_added DESC
+LIMIT 25;
+`, [uid]));
 
 export default {
   isDuplicateUser,
@@ -174,4 +185,5 @@ export default {
   getUserNotifications,
   updateProfile,
   findUserInfo,
+  findUserById,
 };

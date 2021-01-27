@@ -86,4 +86,8 @@ userRouter.get('/:id/notifications', async (request, response, next) => {
   await userController.getUserNotifications(request, response, next);
 });
 
+userRouter.put('/:id/images', async (request, response, next) => {
+  await userController.updateProfilePictures(request, response, next);
+});
+
 export default userRouter;
