@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import axios from 'axios';
 import {PictureDropZone} from '../ProfileCreation/CreateProfileFields'
 import Button from '@material-ui/core/Button';
-import {Redirect} from 'react-router-dom'
+import {Redirect, useHistory} from 'react-router-dom'
 import {useSelector} from "react-redux";
 
 
@@ -21,6 +21,7 @@ const ProfilePictures = () => {
     const [pictureBlobs, setPictureBlobs] = useState([])
     const [fileArray, setFileArray] = useState([])
     const {user} = useSelector(state => state.auth)
+    const history = useHistory();
     useEffect(() => {
         const fetchImageData = async () => {
             setProfilePictures((await axios.get(`http://localhost:3001/api/users/${user.id}/images`)).data)
@@ -60,8 +61,7 @@ const ProfilePictures = () => {
             base64Array.push(base64Picture);
         }
         const response = await axios.put(`http://localhost:3001/api/users/${user.id}/images`, {profilePic: base64Array})
-        console.log(response)
-        if (response.status === 201) return <Redirect to='/'/>
+        if (response.status === 201) return history.push('/')
         else reset();
 
     }
