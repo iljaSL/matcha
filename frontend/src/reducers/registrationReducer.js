@@ -97,7 +97,7 @@ const readFile = async (file) => {
         if (file) reader.readAsDataURL(file);
     });
 }
-export const addProfilePicture =  (fileArray) => {
+export const addProfilePicture = (fileArray) => {
     return async dispatch => {
         let base64Array = [];
         for (const file of fileArray) {

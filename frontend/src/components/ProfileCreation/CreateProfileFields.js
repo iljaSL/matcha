@@ -75,7 +75,7 @@ export const PictureDropZone = ({handleUpload, initialFiles, handleDelete}) => {
     return (
         <DropzoneArea
             acceptedFiles={['image/png', 'image/jpg', 'image/jpeg']}
-            maxFileSize={5000000}
+            maxFileSize={47000000}
             filesLimit={5}
             initialFiles={initialFiles}
             clearOnUnmount={true}
