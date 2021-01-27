@@ -209,8 +209,26 @@ const getUserImages = async (request, response, next) => {
   let imageArray;
   try {
     imageArray = await imageModel.getUserImages(uid);
+    return response.status(200).json(imageArray);
   } catch (err) { next(err); }
-  return response.status(200).json(imageArray);
+};
+
+const updateProfilePictures = async (request, response, next) => {
+  try {
+    const uid = request.params.id;
+    const { profilePic } = request.body;
+    if (!profilePic) throw new Error('No picture');
+    await userModel.updateProfile(uid, 'profile_picture_id', null);
+    await imageModel.deleteUserImagesByUid(uid);
+    let path = `${await imageModel.saveImageBlob(uid, profilePic.shift())}`;
+    const profilePicID = await imageModel.addImageLink(uid, path);
+    await userModel.updateProfile(uid, 'profile_picture_id', profilePicID);
+    profilePic.map(async (image) => {
+      path = `${await imageModel.saveImageBlob(uid, image)}`;
+      await imageModel.addImageLink(uid, path);
+    });
+    return response.status(201).end();
+  } catch (err) { next(err); }
 };
 
 // USER TAGS
@@ -284,4 +302,5 @@ export default {
   checkIfUserIsReported,
   changeUserLocation,
   getUserNotifications,
+  updateProfilePictures,
 };

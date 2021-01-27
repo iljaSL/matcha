@@ -59,7 +59,7 @@ tagId bigint NOT NULL REFERENCES tags ( id ) ON DELETE CASCADE
 
 CREATE TABLE IF NOT EXISTS user_photo (
 id bigserial NOT NULL PRIMARY KEY,
-uid bigint NULL REFERENCES users ( id ) ON DELETE CASCADE,
+uid bigint NULL REFERENCES users ( id ) ON DELETE SET NULL,
 link text,
 details text,
 time_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
