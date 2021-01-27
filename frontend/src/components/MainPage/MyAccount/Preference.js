@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
+import { useDispatch } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -10,6 +11,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
+import updateUserAction from '../../../actions/updateUserAction';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,19 +41,33 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Preference() {
-    const classes = useStyles();
-    const [state, setState] = React.useState({
-        checkedA: true,
-        checkedB: true,
-        checkedF: true,
-        checkedG: true,
-    });
-    
-    const handleChange = (event) => {
-        setState({ ...state, [event.target.name]: event.target.checked });
-    };
+const Preference = () => {
+  const classes = useStyles();
+  const form = useRef();
 
+  const [preference, setPreference] = useState('');
+  const [successful, setSuccessful] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const onChangePreference = (e) => {
+    const preference = e.target.value;
+    setGender(preference);
+  }
+
+  const handlePreferenceChange = (e) => {
+    e.preventDefault();
+
+    setSuccessful(false);
+
+    form.current.validateAll();
+
+    dispatch(updateUserAction.updatePreference(preference)).then(() => {
+      setSuccessful(true);
+    }).catch(() => {
+      setSuccessful(false);
+    })
+  }
 
   return (
     <Container component="main" maxWidth="xs" className={classes.outlined}>
@@ -89,3 +105,5 @@ export default function Preference() {
     </Container>
   );
 }
+
+export default Preference;

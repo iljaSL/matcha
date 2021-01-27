@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -8,7 +8,6 @@ import Container from '@material-ui/core/Container';
 import Form from "react-validation/build/form";
 import TextField from '@material-ui/core/TextareaAutosize';
 import updateUserAction from '../../../actions/updateUserAction';
-import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -40,7 +39,6 @@ const Bio = () => {
   const form = useRef();
 
   const [bio, setBio] = useState('')
-  const { message } = useSelector(state => state.message);
   const [successful, setSuccessful] = useState(false);
 
   const dispatch = useDispatch();
@@ -92,11 +90,6 @@ const Bio = () => {
           >
             Update
           </Button>
-          {message && (
-            <Alert severity="error" role="alert">
-            {message}
-            </Alert>
-          )}
         </Form>
       </div>
     </Container>

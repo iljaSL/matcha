@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -12,7 +12,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import clsx from 'clsx';
 import updateUserAction from '../../../actions/updateUserAction';
-import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -96,29 +95,10 @@ const Gender = () => {
   const classes = useStyles();
   const form = useRef();
 
-  const [female, setFemale] = useState('');
   const [gender, setGender] = useState('');
-  const [male, setMale] = useState('');
-  const [other, setOther] = useState('');
-  const { message } = useSelector(state => state.message);
   const [successful, setSuccessful] = useState(false);
 
   const dispatch = useDispatch();
-
-  const onChangeFemale = (e) => {
-    const female = e.target.value;
-    setFirstName(female);
-  }
-
-  const onChangeMale = (e) => {
-    const male = e.target.value;
-    setFirstName(male);
-  }
-
-  const onChangeOther = (e) => {
-    const other = e.target.value;
-    setFirstName(other);
-  }
 
   const onChangeGender = (e) => {
     const gender = e.target.value;

@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -9,7 +9,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Form from "react-validation/build/form";
 import updateUserAction from '../../../actions/updateUserAction';
-import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -38,7 +37,6 @@ const FirstLastName = () => {
   
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const { message } = useSelector(state => state.message);
   const [successful, setSuccessful] = useState(false);
 
   const dispatch = useDispatch();
@@ -117,11 +115,6 @@ const FirstLastName = () => {
           >
             Update
           </Button>
-          {message && (
-            <Alert severity="error" role="alert">
-            {message}
-            </Alert>
-          )}
         </Form>
       </div>
     </Container>
