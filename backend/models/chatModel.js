@@ -39,9 +39,24 @@ const addMessage = async (conversationId, senderUid, receiverId, message) => {
 
 const getConversations = async (uid) => {
   const result = await pool.query(`
-        SELECT *
-        FROM conversations
-        WHERE user1 = $1 OR user2 = $1
+    SELECT 
+           conversations.id,
+           user1,
+           user2,
+           conversations.time_added,
+           t1.firstname AS user1_firstname,
+           t1.lastname  AS user1_lastname,
+           t1.username  AS user1_username,
+           t1.profile_picture_id     AS user1_profilepic,
+           t2.firstname AS user2_firstname,
+           t2.lastname  AS user2_lastname,
+           t2.username  AS user2_username,
+           t2.profile_picture_id      AS user2_profilepic
+    FROM conversations
+           JOIN users t1 ON user1 = t1.id
+           JOIN users t2 ON user2 = t2.id
+    WHERE user1 = $1
+       OR user2 = $1
     `, [uid]);
   return result.rows;
 };

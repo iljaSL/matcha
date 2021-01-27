@@ -5,7 +5,7 @@ create extension if not exists cube;
 create extension if not exists earthdistance;
 
 CREATE TYPE gender AS ENUM ('man','woman','other');
-CREATE TYPE sexual_orientation AS ENUM ('bisexual', 'homosexual', 'heterosexual');
+CREATE TYPE sexual_orientation AS ENUM ('androsexual', 'gynesexual', 'pansexual');
 CREATE TYPE notification_type AS ENUM ('like', 'visit', 'message', 'match', 'unlike');
 
 CREATE TABLE IF NOT EXISTS users (
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
   firstname varchar(32) NOT NULL,
   username varchar(32) NOT NULL,
   gender gender DEFAULT NULL,
-  sexual_orientation sexual_orientation NOT NULL DEFAULT 'bisexual',
+  sexual_orientation sexual_orientation NOT NULL DEFAULT 'pansexual',
   mail varchar(255) NOT NULL,
   bio varchar(255) DEFAULT NULL,
   -- `birthdate` date DEFAULT NULL,
@@ -59,7 +59,7 @@ tagId bigint NOT NULL REFERENCES tags ( id ) ON DELETE CASCADE
 
 CREATE TABLE IF NOT EXISTS user_photo (
 id bigserial NOT NULL PRIMARY KEY,
-uid bigint NULL REFERENCES users ( id ) ON DELETE CASCADE,
+uid bigint NULL REFERENCES users ( id ) ON DELETE SET NULL,
 link text,
 details text,
 time_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP

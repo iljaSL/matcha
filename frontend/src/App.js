@@ -18,12 +18,12 @@ import SignUpForm from './components/SignUp/SignUp'
 import Notification from './components/MainPage/Notification/Notification';
 import ForgotPassword from './components/ForgotPassword/ForgotPassword'
 import CreateProfileForm from "./components/ProfileCreation/CreateProfileForm";
-import Chat from "./components/Chat/Chat"
 import ResetPassword from './components/ResetPassword/ResetPassword';
 import MainPage from './components/MainPage/MainPage';
 import ValidateProfile from './components/ProfileCreation/ValidateProfile'
 import {useSelector, useDispatch} from "react-redux";
 import {LOGIN_SUCCESS} from "./actions/types";
+
 
 import authActions from './actions/auth'
 
@@ -71,7 +71,7 @@ const App = () => {
                 <Notification/>
             </Route>
             <Route path="/messenger">
-                <Messenger />
+                <Messenger socket={socket}/>
             </Route>
             <Route path="/profile">
                 <Profile />
@@ -102,9 +102,6 @@ const App = () => {
             </Route>
             <Route path="/gallery">
                 <Gallery/>
-            </Route>
-            <Route path="/chat">
-                <Chat socket={socket}/>
             </Route>
             <Route path="/">
                 {isLoggedIn

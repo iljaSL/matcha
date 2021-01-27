@@ -47,8 +47,8 @@ const validateOrientation = (orientation) => {
 
   if (!orientation) {
     errors.orientationError = 'No input provided';
-  } else if (!['bisexual', 'homosexual', 'heterosexual'].includes(orientation)) {
-    errors.orientationError = 'Orientations available: bisexual, homosexual, heterosexual';
+  } else if (!['gynesexual', 'pansexual', 'androsexual'].includes(orientation)) {
+    errors.orientationError = 'Orientations available: gynesexual, pansexual, androsexual';
   }
   return errors;
 };
@@ -132,9 +132,11 @@ const checkUserValidity = (body) => {
 };
 
 // eslint-disable-next-line no-nested-ternary
-const getOrientation = (gender, preferences) => (preferences.includes(gender)
-  ? (preferences.length === 1 ? 'homosexual' : 'bisexual')
-  : 'heterosexual');
+const getOrientation = (gender, preferences) => {
+  if (preferences.includes('other') || (preferences.includes('man') && preferences.includes('woman'))) return 'pansexual';
+  if (gender === 'man') return 'androsexual';
+  return 'gynesexual';
+};
 
 export default {
   checkUserValidity,
