@@ -1,16 +1,13 @@
 import { Server } from 'socket.io';
 import chatModel from './models/chatModel.js';
 import { initDbListener } from './utils/dbListener.js';
-import imageModel from './models/imageModel.js';
-
-const getTime = () => new Date();
 
 export const webSocketServer = (server) => {
   const dbListener = initDbListener();
 
   const io = new Server(server, {
     cors: {
-      origin: '*',
+      origin: 'http://localhost:3000',
     },
   });
 
