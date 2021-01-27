@@ -62,7 +62,7 @@ const updateUser = async (request, response, next) => {
 
     if (Object.keys(error).length !== 0) {
       console.log('Err', error);
-      return response.status(402).json({ message: 'Invalid Input!' });
+      return response.status(400).json({ message: 'Invalid Input!' });
     }
 
     if (key === 'name') {
