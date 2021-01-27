@@ -54,7 +54,7 @@ export const webSocketServer = (server) => {
       try {
         await chatModel.addMessage(conversationId, senderId, receiverId, message);
         const conversation = await chatModel.getMessages(conversationId);
-        const receiverOnline = connections.find((connection) => connection.userId === receiverId);
+        const receiverOnline = connections.find((connection) => connection.userId === parseInt(receiverId, 10));
         interval = setInterval(async () => {
           socket.emit('conversation', { conversationId, conversation });
           if (receiverOnline) io.to(receiverOnline.socketId).emit('conversation', { conversationId, conversation });
