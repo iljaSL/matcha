@@ -17,7 +17,6 @@ import Container from '@material-ui/core/Container';
 import MenuButton from './MenuButton/MenuButton';
 import MatchButton from './MatchButton/MatchButton';
 import Pictures from './Pictures/Pictures';
-import Navbar from '../Navbar/Navbar';
 import Footer from '../Footer/Footer';
 
 const useStyles = makeStyles((theme) => ({
@@ -62,7 +61,6 @@ export default function SignInSide() {
 
   return (
     <>
-    <Navbar />
     <Typography className={classes.divider} color="secondary" variant="h3">
            Lena Wolfgang Strauss (F)
            <MenuButton />

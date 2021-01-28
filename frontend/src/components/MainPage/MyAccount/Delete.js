@@ -1,6 +1,6 @@
-import React, {useRef, useState} from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -42,7 +42,6 @@ export default function Delete() {
 
   const handleDelete = () => {
     dispatch(updateUserAction.deleteUser());
-    return <Redirect to="/" />;
   }
 
   return (
@@ -60,7 +59,9 @@ export default function Delete() {
         className={classes.submit}
         startIcon={<DeleteIcon />}
         >
-        Delete
+        <Link  href="/" color="inherit">
+         Delete
+        </Link>
         </Button>
         </Form>
       </div>
