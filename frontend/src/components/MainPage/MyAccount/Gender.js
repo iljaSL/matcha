@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
+import { useDispatch } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -10,6 +11,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import clsx from 'clsx';
+import updateUserAction from '../../../actions/updateUserAction';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -89,8 +91,33 @@ function StyledRadio(props) {
     );
   }
 
-export default function Gender() {
+const Gender = () => {
   const classes = useStyles();
+  const form = useRef();
+
+  const [gender, setGender] = useState('');
+  const [successful, setSuccessful] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const onChangeGender = (e) => {
+    const gender = e.target.value;
+    setGender(gender);
+  }
+
+  const handleGenderChange = (e) => {
+    e.preventDefault();
+
+    setSuccessful(false);
+
+    form.current.validateAll();
+
+    dispatch(updateUserAction.updateGender(gender)).then(() => {
+      setSuccessful(true);
+    }).catch(() => {
+      setSuccessful(false);
+    })
+  }
 
   return (
     <Container component="main" maxWidth="xs" className={classes.outlined}>
@@ -99,14 +126,20 @@ export default function Gender() {
         <Typography component="h1" variant="h6">
         Change Gender
         </Typography>
-        <Form className={classes.form} noValidate>
+        <Form onSubmit={handleGenderChange} ref={form} className={classes.form} noValidate>
+        {!successful && (
             <FormControl component="fieldset">
-                <RadioGroup defaultValue="female" aria-label="gender" name="customized-radios">
-                    <FormControlLabel value="female" control={<StyledRadio />} label="Female" />
-                    <FormControlLabel value="male" control={<StyledRadio />} label="Male" />
+                <RadioGroup 
+                aria-label="gender" 
+                value={gender}
+                onChange={onChangeGender}
+                >
+                    <FormControlLabel value="woman" control={<StyledRadio />} label="Female" />
+                    <FormControlLabel value="man" control={<StyledRadio />} label="Male" />
                     <FormControlLabel value="other" control={<StyledRadio />} label="Other" />
                 </RadioGroup>
             </FormControl>
+          )}
           <Button
             type="submit"
             fullWidth
@@ -121,3 +154,5 @@ export default function Gender() {
     </Container>
   );
 }
+
+export default Gender;

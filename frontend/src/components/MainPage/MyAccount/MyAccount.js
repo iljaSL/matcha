@@ -1,4 +1,5 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
@@ -16,6 +17,7 @@ import Gender from './Gender';
 import Preference from './Preference';
 import Tags from './Tags';
 import Delete from './Delete';
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -40,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MyAccount() {
   const classes = useStyles();
+  const { message } = useSelector(state => state.message);
 
   return (
     <>
@@ -53,6 +56,11 @@ export default function MyAccount() {
         <Typography component="h1" variant="h5" className={classes.divider}>
          My Account Settings
         </Typography>
+        {message && (
+            <Alert severity="error" role="alert">
+            {message}
+            </Alert>
+          )}
         <div className={classes.divider}>
         <FirstLastName />
         </div>
