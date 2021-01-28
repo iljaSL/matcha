@@ -27,8 +27,43 @@ const updateGender = async (gender) => {
     return result.data;
 }
 
+const updatePreference = async (preference) => {
+    const result = await axios.post(`${baseUrl}/users/updateUser`, {
+        key: "sexual_orientation",
+        sexual_orientation: preference
+    })
+    return result.data;
+}
+
+const updateMail = async (mail) => {
+    const result = await axios.post(`${baseUrl}/users/updateUser`, {
+        key: "mail",
+        mail: mail
+    })
+    return result.data;
+}
+
+const updatePassword = async (oldPassword, newPassword) => {
+    const result = await axios.post(`${baseUrl}/users/updateUser`, {
+        key: "password",
+        oldPassword: oldPassword,
+        newPassword: newPassword
+    })
+    return result.data;
+}
+
+const deleteUser = async () => {
+    let id = window.localStorage.getItem('user');
+    localStorage.removeItem('user');
+    await axios.delete(`${baseUrl}/users/${id.id}`)
+}
+
 export default {
     updateFirstLastName,
     updateBio,
     updateGender,
+    updatePreference,
+    updateMail,
+    updatePassword,
+    deleteUser,
 }
