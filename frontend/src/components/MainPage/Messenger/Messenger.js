@@ -183,7 +183,6 @@ const Messenger = ({socket}) => {
 
     return (
         <div>
-            <Navbar/>
             <Grid container className={classes.divider}>
                 <Grid item xs={12}>
                     <Typography color="secondary" variant="h5" className="header-message">Messenger</Typography>
