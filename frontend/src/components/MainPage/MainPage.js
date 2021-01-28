@@ -30,7 +30,6 @@ const MainPage = () => {
 
   return (
     <>
-    <Navbar />
     <Filter />
       <Grid container className={classes.root} spacing={2}>
       <Grid item xs>
