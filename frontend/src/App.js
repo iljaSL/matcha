@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Switch,
     Route,
@@ -35,8 +35,9 @@ const socket = socketIOClient(ENDPOINT)
 
 
 const App = () => {
-    const Gallery = () => <p>gallery</p>
     const dispatch = useDispatch();
+    const [newNotifications, setNewNotifications] = useState({});
+    const [newMessages, setNewMessages] = useState({});
 
     useEffect(() => {
         let user = JSON.parse(localStorage.getItem("user")) || null;
@@ -54,60 +55,48 @@ const App = () => {
         }
     }, [dispatch])
 
-    useEffect(() => {
-        if (user)
-            socket.on('notification', (msg) => console.log(msg))
-    }, [])
+
+    socket.once('notification', notification => {
+        if (!newNotifications.includes(notification) && notification.event !== 'message')
+            setNewNotifications([...newNotifications, notification])
+        else if (notification.event === 'message' && !newMessages.includes(notification))
+            setNewMessages([...newMessages, notification])
+    })
+
+    const NavRoute = ({exact, path, component: Component}) => (
+        <Route exact={exact} path={path} render={(props) => (
+            <div>
+                <Navbar newNotifications={newNotifications} newMessages={newMessages} />
+                <Component {...props}/>
+            </div>
+        )}/>
+    )
 
 
     const {isLoggedIn, user} = useSelector(state => state.auth);
+
+    if (!isLoggedIn)
+    return  <Switch>
+              <Route exactly component={SignUpForm} path="/signup" />
+              <Route exactly component={LoginForm} path="/login" />
+              <Route exactly path='/reset-password/:resetId' component={ResetPassword} />
+              <Route exactly path='/validateprofile/:validationId' component={ValidateProfile} />
+              <Route path="/" component={LandingPage} />
+            </Switch>
     return (
         <>
         <Switch>
-            <Route path="/mainpage">
-                <MainPage/>
-            </Route>
-            <Route path="/notification">
-                <Notification/>
-            </Route>
-            <Route path="/messenger">
-                <Messenger socket={socket}/>
-            </Route>
-            <Route path="/profile">
-                <Profile />
-            </Route>
-            <Route path="/user-profile">
-                <UserProfile />
-            </Route>
-            <Route path="/my-account">
-                <MyAccount />
-            </Route>
-            <Route path="/signup">
-                <SignUpForm/>
-            </Route>
-            <Route path="/login">
-                <LoginForm/>
-            </Route>
-            <Route path="/forgot-password">
-                <ForgotPassword/>
-            </Route>
-            <Route path='/reset-password/:resetId'>
-                <ResetPassword/>
-            </Route>
-            <Route path='/validateprofile/:validationId'>
-                   <ValidateProfile/>
-            </Route>
-            <Route path="/profilecreation">
-                <CreateProfileForm/>
-            </Route>
-            <Route path="/gallery">
-                <Gallery/>
-            </Route>
+            <NavRoute exactly component={MainPage} path="/mainpage" />
+            <NavRoute exactly component={Notification} path="/notification" />
+            <NavRoute exactly component={() => <Messenger socket={socket} /> }  path="/messenger" />
+            <NavRoute exactly component={Profile} path="/profile" />
+            <NavRoute exactly component={UserProfile} path="/user-profile" />
+            <NavRoute exactly component={MyAccount} path="/my-account" />
+            <Route exactly component={ForgotPassword} path="/forgot-password" />
+            <Route exactly path='/profilecreation' component={CreateProfileForm} />
+            <Route exactly path='/validateprofile/:validationId' component={ValidateProfile} />
             <Route path="/">
-                {isLoggedIn
-                    ? user.status === 2
-                        ?  <Redirect to="/" /> : <Redirect to="/profilecreation"/>
-                    : <LandingPage />}
+                {user.status === 2 ? <Redirect to="/mainpage" /> : <Redirect to="/profilecreation"/> }
             </Route>
         </Switch>
         </>
