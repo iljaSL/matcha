@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
+import { useDispatch } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -7,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Form from "react-validation/build/form";
+import updateUserAction from '../../../actions/updateUserAction';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -33,8 +35,40 @@ const useStyles = makeStyles((theme) => ({
 },
 }));
 
-export default function Password() {
+const Password = () => {
   const classes = useStyles();
+
+  const form = useRef();
+
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [successful, setSuccessful] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const onChangeOldPassword = (e) => {
+    const oldPassword = e.target.value;
+    setOldPassword(oldPassword);
+  }
+
+  const onChangeNewPassword = (e) => {
+    const newPassword = e.target.value;
+    setNewPassword(newPassword);
+  }
+
+  const handlePasswordChange = (e) => {
+    e.preventDefault();
+
+    setSuccessful(false);
+
+    form.current.validateAll();
+
+    dispatch(updateUserAction.updatePassword(oldPassword, newPassword)).then(() => {
+      setSuccessful(true);
+    }).catch(() => {
+      setSuccessful(false);
+    })
+  }
 
   return (
     <Container component="main" maxWidth="xs" className={classes.outlined}>
@@ -43,31 +77,37 @@ export default function Password() {
         <Typography component="h1" variant="h6">
         Update your password
         </Typography>
-        <Form className={classes.form} noValidate>
-        <Grid item xs={12}>
+        <Form onSubmit={handlePasswordChange} ref={form} className={classes.form} noValidate>
+        {!successful && (
+          <div>
               <TextField
                 variant="outlined"
+                color="secondary"
                 required
                 fullWidth
-                name="password"
+                name="oldPassword"
+                label="Old Password"
+                type="password"
+                id="oldPassword"
+                autoComplete="current-password"
+                value={oldPassword}
+                onChange={onChangeOldPassword}
+              />
+              <TextField
+                variant="outlined"
+                color="secondary"
+                required
+                fullWidth
+                name="newPassword"
                 label="New Password"
                 type="password"
-                id="password"
+                id="newPassword"
                 autoComplete="current-password"
+                value={newPassword}
+                onChange={onChangeNewPassword}
               />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="confirm-password"
-                label="Confirm Password"
-                type="password"
-                id="confirm-password"
-                autoComplete="current-password"
-              />
-            </Grid>
+          </div> 
+          )}
           <Button
             type="submit"
             fullWidth
@@ -82,3 +122,5 @@ export default function Password() {
     </Container>
   );
 }
+
+export default Password;
