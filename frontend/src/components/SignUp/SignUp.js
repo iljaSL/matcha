@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+import { Redirect } from 'react-router-dom';
 import Form from "react-validation/build/form";
 import authService from '../../actions/auth';
 import {
@@ -101,6 +102,10 @@ const SignUpForm = () => {
                 setSuccessful(false);
             });
     };
+
+    if (successful) {
+        return <Redirect to="/login" />;
+    }
 
     return (
       <>

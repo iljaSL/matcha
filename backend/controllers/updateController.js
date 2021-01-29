@@ -88,6 +88,36 @@ const updateUser = async (request, response, next) => {
   return response.json({ message: 'Profile updated!' });
 };
 
+const updateTag = async (request, response, next) => {
+  try {
+    const { tag } = request.body;
+    console.log('TAG', tag);
+    const { authorization } = request.headers;
+    console.log('AUTH', authorization);
+    const userId = jsonWebTokenUtils.getUserId(authorization);
+
+    if (!userId) { throw wrongAuthError; }
+
+    const tagError = UserUtil.validateTag(tag);
+    if (tagError.error) return response.status(400).json({ message: 'Invalid tags!' });
+
+    const validateTagsInDb = await userModel.validateTagsInDb(tag);
+    if (!validateTagsInDb) {
+      return response.status(400).json({ message: 'Invalid tag!' });
+    }
+
+    const userTags = await userModel.userHasTags(userId);
+    if (userTags) {
+      await userModel.deleteRow('usertags', 'uid', userId);
+    }
+
+    const query = UserUtil.buildQueryForSavingTags(tag, userId);
+    await userModel.saveTags(query);
+  } catch (err) { next(err); }
+  return response.status(200).json({ message: 'Tags were successfully updated' });
+};
+
 export default {
   updateUser,
+  updateTag,
 };

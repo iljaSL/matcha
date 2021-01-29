@@ -138,6 +138,41 @@ const getOrientation = (gender, preferences) => {
   return 'gynesexual';
 };
 
+const validateTag = async (tags) => {
+  let errors = {};
+  if (!tags) {
+    errors.tagError = 'please pick a tag';
+  } else if (tags.length > 7) {
+    errors.tagError = '7 tags is the limit!';
+  } else if (!(await userModel.validateTagsInDb(tags))) {
+    errors.tagError = 'invalid tags';
+  }
+  return errors;
+};
+
+const buildQueryForSavingTags = (tags, id) => {
+  let query = {
+    values: [],
+    placeholder: '',
+  };
+  // eslint-disable-next-line no-restricted-syntax
+  for (const element of tags) {
+    query.values.push(id);
+    query.values.push(element);
+  }
+  query.placeholder = '';
+  let i = 1;
+  let { length } = tags;
+  while (length > 0) {
+    let j = i + 1;
+    query.placeholder += `($${i},(SELECT id FROM tags WHERE tag = $${j}))`;
+    if (length !== 1) query.placeholder += ',';
+    i += 2;
+    length -= 1;
+  }
+  return query;
+};
+
 export default {
   checkUserValidity,
   checkIfUsernameExist,
@@ -151,4 +186,6 @@ export default {
   validateMail,
   checkPassword,
   validatePassword,
+  validateTag,
+  buildQueryForSavingTags,
 };
