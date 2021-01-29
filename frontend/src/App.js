@@ -29,6 +29,7 @@ import authActions from './actions/auth'
 
 import socketIOClient from 'socket.io-client'
 import LandingPage from "./components/LandingPage/LandingPage";
+import axios from 'axios';
 
 const ENDPOINT = 'http://localhost:3001' // TODO: is this the right way to do it?
 const socket = socketIOClient(ENDPOINT)
@@ -52,6 +53,7 @@ const App = () => {
             })
             dispatch(authActions.getPosition())
             socket.emit("setUserData", user);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${ user.token }`;
         }
     }, [dispatch])
 
