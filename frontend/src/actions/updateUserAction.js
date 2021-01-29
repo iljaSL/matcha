@@ -12,6 +12,8 @@ import {
     UPDATE_PASSWORD_SUCCESS,
     UPDATE_PASSWORD_FAIL,
     UPDATE_DELETE_SUCCESS,
+    UPDATE_TAGS_SUCCESS,
+    UPDATE_TAGS_FAIL,
     SET_MESSAGE,
 } from './types';
 
@@ -76,7 +78,6 @@ const updateGender = (gender) => (dispatch) => UpdateService.updateGender(gender
         return Promise.resolve();
     },
     (error) => {
-        console.log('err', error.message);
         const message = (error.response
             && error.response.data
             && error.response.data.message)
@@ -102,7 +103,6 @@ const updatePreference = (preference) => (dispatch) => UpdateService.updatePrefe
         return Promise.resolve();
     },
     (error) => {
-        console.log('err', error.message);
         const message = (error.response
             && error.response.data
             && error.response.data.message)
@@ -128,7 +128,6 @@ const updateMail = (mail) => (dispatch) => UpdateService.updateMail(mail).then(
         return Promise.resolve();
     },
     (error) => {
-        console.log('err', error.message);
         const message = (error.response
             && error.response.data
             && error.response.data.message)
@@ -154,7 +153,6 @@ const updatePassword = (oldPassword, newPassword) => (dispatch) => UpdateService
         return Promise.resolve();
     },
     (error) => {
-        console.log('err', error.message);
         const message = (error.response
             && error.response.data
             && error.response.data.message)
@@ -162,6 +160,31 @@ const updatePassword = (oldPassword, newPassword) => (dispatch) => UpdateService
         
         dispatch({
             type: UPDATE_PASSWORD_FAIL,
+        });
+        dispatch({
+            type: SET_MESSAGE,
+            payload: message,
+        });
+        return Promise.reject();
+    },
+);
+
+const updateTags = (tags) => (dispatch) => UpdateService.updateTags(tags).then(
+    (response) => {
+        dispatch({
+            type: UPDATE_TAGS_SUCCESS,
+            payload: response.message,
+        });
+        return Promise.resolve();
+    },
+    (error) => {
+        const message = (error.response
+            && error.response.data
+            && error.response.data.message)
+            || error.message || error.toString();
+        
+        dispatch({
+            type: UPDATE_TAGS_FAIL,
         });
         dispatch({
             type: SET_MESSAGE,
@@ -181,6 +204,7 @@ const deleteUser = () => (dispatch) => {
 
 
 export default {
+    updateTags,
     updateFirstLastName,
     updateBio,
     updateGender,

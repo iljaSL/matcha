@@ -20,6 +20,7 @@ const updateUser = async (request, response, next) => {
       oldPassword,
     } = request.body;
     console.log('REQUEST', request.body);
+    console.log('AUTHTTTTT', request.headers);
     const { authorization } = request.headers;
     console.log('AUTH', authorization);
     const userId = jsonWebTokenUtils.getUserId(authorization);
