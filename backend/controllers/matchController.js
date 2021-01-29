@@ -5,7 +5,7 @@ import userModel from '../models/userModel.js';
 const getProfiles = async (request, response, next) => {
   try {
     const tokenUserId = jsonWebTokenUtils.getUserId(request.token);
-    const distance = request.body.distance ? request.body.distance : 200;
+    const distance = request.params.distance ? request.params.distance : 200;
     const userData = await userModel.findUserById(tokenUserId);
     const orientation = userData.sexual_orientation;
     // eslint-disable-next-line no-nested-ternary
@@ -17,6 +17,8 @@ const getProfiles = async (request, response, next) => {
     return response.status(200).json(await matchModel.getProfilesByDistance(tokenUserId, distance, genderPreference));
   } catch (err) { next(err); }
 };
+
+
 
 export default {
   getProfiles,

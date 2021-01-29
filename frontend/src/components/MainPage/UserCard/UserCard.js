@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -9,6 +9,8 @@ import IconButton from '@material-ui/core/IconButton';
 import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
+import axios from "axios";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,22 +42,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserCard = () => {
+const UserCard = ({user}) => {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+  const [profilePic, setProfilepic] = useState('')
+  useEffect(() => {
+    const getPic = async () => {
+      setProfilepic((await axios.get(`http://localhost:3001/api/images/${user.profile_picture_id}`)).data.imageBlob)
+    }
+    getPic();
+  }, [])
 
   return (
     <Card className={classes.root}>
+      <Link to={`/user-profile/${user.uid}`}>
       <CardHeader
         className={classes.iconcolor}
-        title="Jeff Cox"
-        subheader="HotOmeter: 101%"
+        title={`${user.firstname} ${user.lastname}`}
+        subheader={`Popularity score: ${user.popularity_score}`}
       />
       <CardMedia
         className={classes.media}
-        image="https://avatars1.githubusercontent.com/u/52207442?s=460&u=cf5611342017c2f1c66577a286f69aee74e29768&v=4"
+        image={`data:image/png;base64, ${profilePic}`}
         title="profile picture"
       />
+      </Link>
       <CardActions disableSpacing>
         <IconButton aria-label="match">
           <FavoriteIcon />

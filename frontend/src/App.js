@@ -29,6 +29,7 @@ import authActions from './actions/auth'
 
 import socketIOClient from 'socket.io-client'
 import LandingPage from "./components/LandingPage/LandingPage";
+import axios from 'axios';
 
 const ENDPOINT = 'http://localhost:3001' // TODO: is this the right way to do it?
 const socket = socketIOClient(ENDPOINT)
@@ -52,6 +53,7 @@ const App = () => {
             })
             dispatch(authActions.getPosition())
             socket.emit("setUserData", user);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${ user.token }`;
         }
     }, [dispatch])
 
@@ -81,6 +83,7 @@ const App = () => {
               <Route exactly component={LoginForm} path="/login" />
               <Route exactly path='/reset-password/:resetId' component={ResetPassword} />
               <Route exactly path='/validateprofile/:validationId' component={ValidateProfile} />
+              <Route exactly component={ForgotPassword} path="/forgot-password" />
               <Route path="/" component={LandingPage} />
             </Switch>
     return (
@@ -92,7 +95,6 @@ const App = () => {
             <NavRoute exactly component={Profile} path="/profile" />
             <NavRoute exactly component={UserProfile} path="/user-profile" />
             <NavRoute exactly component={MyAccount} path="/my-account" />
-            <Route exactly component={ForgotPassword} path="/forgot-password" />
             <Route exactly path='/profilecreation' component={CreateProfileForm} />
             <Route exactly path='/validateprofile/:validationId' component={ValidateProfile} />
             <Route path="/">

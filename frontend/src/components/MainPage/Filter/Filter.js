@@ -6,6 +6,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Chip from '@material-ui/core/Chip';
 import Input from '@material-ui/core/Input';
+import {Slider} from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -56,16 +58,12 @@ const tags = [
     'Cooking',
   ];
 
-export default function SimpleSelect() {
+export default function SimpleSelect({distance, handleDistance}) {
     const theme = useTheme();
   const classes = useStyles();
-  const [distance, setDistance] = React.useState('');
   const [fame, setFame] = React.useState('');
   const [tagName, setTagName] = React.useState([]);
 
-  const handleChangeOnDistance = (event) => {
-      setDistance(event.target.value);
-  }
 
   const handleChangeOnFame = (event) => {
     setFame(event.target.value);
@@ -77,23 +75,7 @@ export default function SimpleSelect() {
 
   return (
     <div>
-      <FormControl color='secondary' variant="outlined" className={classes.formControl}>
-        <InputLabel id="demo-simple-select-outlined-label">Distance</InputLabel>
-        <Select
-          labelId="demo-simple-select-outlined-label"
-          id="demo-simple-select-outlined"
-          value={distance}
-          onChange={handleChangeOnDistance}
-          label="distance"
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>0-50km</MenuItem>
-          <MenuItem value={20}>50-200km</MenuItem>
-          <MenuItem value={30}>more than 200km</MenuItem>
-        </Select>
-      </FormControl>
+
       <FormControl color='secondary' variant="outlined" className={classes.formControl}>
         <InputLabel id="demo-simple-select-outlined-label">Fame</InputLabel>
         <Select
@@ -128,6 +110,7 @@ export default function SimpleSelect() {
               ))}
             </div>
           )}
+
           MenuProps={MenuProps}
         >
           {tags.map((tag) => (
@@ -137,6 +120,15 @@ export default function SimpleSelect() {
           ))}
         </Select>
       </FormControl>
+      <Slider
+          value={distance}
+          onChange={handleDistance}
+          step={20}
+          marks={true}
+          min={0}
+          max={12742}
+          valueLabelDisplay="on"
+      />
     </div>
   );
 }

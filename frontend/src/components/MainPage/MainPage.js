@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Switch,
   Route,
@@ -7,9 +7,9 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import UserCard from './UserCard/UserCard';
-import Navbar from './Navbar/Navbar';
 import Filter from './Filter/Filter';
 import Footer from './Footer/Footer';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,22 +21,38 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MainPage = () => {
-  const [spacing, setSpacing] = React.useState(8);
+  const [spacing, setSpacing] = useState(8);
+  const [distance, setDistance] = useState(500);
+  const [users, setUsers] = useState([]);
+
   const classes = useStyles();
 
   const handleChange = (event) => {
     setSpacing(Number(event.target.value));
   };
 
+  const handleDistance = (event, value) => {
+    console.log(value)
+    setDistance(value)
+  }
+
+  useEffect(() => {
+    const getUsers = async () => {
+      const response = await axios.get(`http://localhost:3001/api/matches/${distance}`)
+      setUsers(response.data)
+    }
+    getUsers();
+  }, [distance])
+
   return (
     <>
-    <Filter />
+    <Filter distance={distance} handleDistance={handleDistance} />
       <Grid container className={classes.root} spacing={2}>
       <Grid item xs>
         <Grid container justify="center" spacing={spacing}>
-          {[0, 1, 2, 3, 4, 5, 6 ,7 ,8 ,9, 10, 11, 12].map((value) => (
-            <Grid key={value} item>
-              <UserCard className={classes.paper} />
+          {users.map(user => (
+            <Grid key={user.uid} item>
+              <UserCard className={classes.paper} user={user}/>
             </Grid>
           ))}
         </Grid>

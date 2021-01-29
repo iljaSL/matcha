@@ -5,7 +5,7 @@ import axios from 'axios';
 import imageModel from "../models/imageModel.js";
 import dotenv from 'dotenv'
 
-dotenv.config()
+dotenv.config({path: '../'})
 
 
 const initFakeUsers = async () => {

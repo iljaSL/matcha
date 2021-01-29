@@ -3,7 +3,7 @@ import matchController from '../controllers/matchController.js';
 
 const modelRouter = express.Router();
 
-modelRouter.get('/', async (request, response, next) => {
+modelRouter.get('/:distance', async (request, response, next) => {
   await matchController.getProfiles(request, response, next);
 });
 
