@@ -41,7 +41,12 @@ const updatePosition = async (coords) => {
 }
 
 const getPositionByIp = async () => {
-  const ip = (await axios.get('https://api.ipify.org/')).data;
+  const config = {
+    headers: {
+      "X-Requested-With": "matcha"
+    }
+  }
+  const ip = (await axios.get('https://cors-anywhere.herokuapp.com/http://api.ipify.org/', config)).data;
   const data = (await axios.get(`http://extreme-ip-lookup.com/json/${ip}`)).data
   if (!data) throw new Error('Could not get location!')
   return {long: data.lon, lat: data.lat}
