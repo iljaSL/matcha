@@ -5,6 +5,13 @@ import {
     UPDATE_BIO_FAIL,
     UPDATE_GENDER_SUCCESS,
     UPDATE_GENDER_FAIL,
+    UPDATE_PREFERENCE_SUCCESS,
+    UPDATE_PREFERENCE_FAIL,
+    UPDATE_MAIL_SUCCESS,
+    UPDATE_MAIL_FAIL,
+    UPDATE_PASSWORD_SUCCESS,
+    UPDATE_PASSWORD_FAIL,
+    UPDATE_DELETE_SUCCESS,
     SET_MESSAGE,
 } from './types';
 
@@ -86,8 +93,99 @@ const updateGender = (gender) => (dispatch) => UpdateService.updateGender(gender
     },
 );
 
+const updatePreference = (preference) => (dispatch) => UpdateService.updatePreference(preference).then(
+    (response) => {
+        dispatch({
+            type: UPDATE_PREFERENCE_SUCCESS,
+            payload: response.message,
+        });
+        return Promise.resolve();
+    },
+    (error) => {
+        console.log('err', error.message);
+        const message = (error.response
+            && error.response.data
+            && error.response.data.message)
+            || error.message || error.toString();
+        
+        dispatch({
+            type: UPDATE_PREFERENCE_FAIL,
+        });
+        dispatch({
+            type: SET_MESSAGE,
+            payload: message,
+        });
+        return Promise.reject();
+    },
+);
+
+const updateMail = (mail) => (dispatch) => UpdateService.updateMail(mail).then(
+    (response) => {
+        dispatch({
+            type: UPDATE_MAIL_SUCCESS,
+            payload: response.message,
+        });
+        return Promise.resolve();
+    },
+    (error) => {
+        console.log('err', error.message);
+        const message = (error.response
+            && error.response.data
+            && error.response.data.message)
+            || error.message || error.toString();
+        
+        dispatch({
+            type: UPDATE_MAIL_FAIL,
+        });
+        dispatch({
+            type: SET_MESSAGE,
+            payload: message,
+        });
+        return Promise.reject();
+    },
+);
+
+const updatePassword = (oldPassword, newPassword) => (dispatch) => UpdateService.updatePassword(oldPassword, newPassword).then(
+    (response) => {
+        dispatch({
+            type: UPDATE_PASSWORD_SUCCESS,
+            payload: response.message,
+        });
+        return Promise.resolve();
+    },
+    (error) => {
+        console.log('err', error.message);
+        const message = (error.response
+            && error.response.data
+            && error.response.data.message)
+            || error.message || error.toString();
+        
+        dispatch({
+            type: UPDATE_PASSWORD_FAIL,
+        });
+        dispatch({
+            type: SET_MESSAGE,
+            payload: message,
+        });
+        return Promise.reject();
+    },
+);
+
+const deleteUser = () => (dispatch) => {
+    UpdateService.deleteUser();
+  
+    dispatch({
+      type: UPDATE_DELETE_SUCCESS,
+    });
+  };
+
+
 export default {
     updateFirstLastName,
     updateBio,
     updateGender,
+    updatePreference,
+    updateMail,
+    updatePassword,
+    deleteUser,
 }

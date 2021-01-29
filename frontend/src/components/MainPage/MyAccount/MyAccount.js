@@ -8,7 +8,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 import Bio from './Bio';
-import Navbar from '../Navbar/Navbar';
 import Footer from '../Footer/Footer';
 import FirstLastName from './FirstLastName';
 import Email from './Email';
@@ -46,7 +45,6 @@ export default function MyAccount() {
 
   return (
     <>
-    <Navbar />
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>

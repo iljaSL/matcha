@@ -16,7 +16,6 @@ import Container from '@material-ui/core/Container';
 
 import History from './History/History';
 import Pictures from './Pictures/Pictures';
-import Navbar from '../Navbar/Navbar';
 import Footer from '../Footer/Footer';
 import Blocked from './Blocked/Blocked'
 import Matches from './Matches/Matches';
@@ -63,7 +62,6 @@ export default function SignInSide() {
 
   return (
     <>
-    <Navbar />
     <Typography className={classes.divider} color="secondary" variant="h3">
            Your Profile
     </Typography>

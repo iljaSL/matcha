@@ -3,19 +3,21 @@ import { useDispatch } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, withStyles  } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Form from "react-validation/build/form";
-import FormGroup from '@material-ui/core/FormGroup';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Favorite from '@material-ui/icons/Favorite';
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
+import FormControl from '@material-ui/core/FormControl';
+import clsx from 'clsx';
 import updateUserAction from '../../../actions/updateUserAction';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        alignContent: 'center'
+        '&:hover': {
+            backgroundColor: 'transparent',
+        },
     },
     paper: {
         marginTop: theme.spacing(1),
@@ -31,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(3),
     },
-    submit: {
+        submit: {
         margin: theme.spacing(3, 0, 2),
     },
     outlined: {
@@ -39,7 +41,55 @@ const useStyles = makeStyles((theme) => ({
         outlineWidth: "1px",
         color: "#f50057",
     },
+    icon: {
+        borderRadius: '50%',
+        width: 16,
+        height: 16,
+        boxShadow: 'inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)',
+        backgroundColor: '#f5f8fa',
+        backgroundImage: 'linear-gradient(180deg,hsla(0,0%,100%,.8),hsla(0,0%,100%,0))',
+        '$root.Mui-focusVisible &': {
+            outline: '2px auto rgba(19,124,189,.6)',
+            outlineOffset: 2,
+        },
+        'input:hover ~ &': {
+            backgroundColor: '#ebf1f5',
+        },
+        'input:disabled ~ &': {
+            boxShadow: 'none',
+            background: '#f50057',
+        },
+    },
+    checkedIcon: {
+        backgroundColor: '#f50057',
+        backgroundImage: 'linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))',
+        '&:before': {
+            display: 'block',
+            width: 16,
+            height: 16,
+            backgroundImage: 'radial-gradient(#fff,#fff 28%,transparent 32%)',
+            content: '""',
+        },
+        'input:hover ~ &': {
+            backgroundColor: '#f50057',
+        },
+    },
 }));
+
+function StyledRadio(props) {
+    const classes = useStyles();
+  
+    return (
+      <Radio
+        className={classes.root}
+        disableRipple
+        color="default"
+        checkedIcon={<span className={clsx(classes.icon, classes.checkedIcon)} />}
+        icon={<span className={classes.icon} />}
+        {...props}
+      />
+    );
+  }
 
 const Preference = () => {
   const classes = useStyles();
@@ -52,7 +102,7 @@ const Preference = () => {
 
   const onChangePreference = (e) => {
     const preference = e.target.value;
-    setGender(preference);
+    setPreference(preference);
   }
 
   const handlePreferenceChange = (e) => {
@@ -74,23 +124,22 @@ const Preference = () => {
       <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h6">
-        Change Sexual Preference
+        Choose Sexual Preference
         </Typography>
-        <Form className={classes.form}>
-            <FormGroup className={classes.root}>
-                <FormControlLabel
-                    control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="checkedA" />}
-                    label="Female"
-                />
-                <FormControlLabel
-                    control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="checkedB" />}
-                    label="Male"
-                />
-                <FormControlLabel
-                    control={<Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} name="checkedF" />}
-                    label="Other"
-                />
-            </FormGroup>
+        <Form onSubmit={handlePreferenceChange} ref={form} className={classes.form} noValidate>
+        {!successful && (
+            <FormControl component="fieldset">
+                <RadioGroup 
+                aria-label="preference" 
+                value={preference}
+                onChange={onChangePreference}
+                >
+                    <FormControlLabel value="pansexual" control={<StyledRadio />} label="Pansexual" />
+                    <FormControlLabel value="gynesexual" control={<StyledRadio />} label="Gynesexual" />
+                    <FormControlLabel value="androsexual" control={<StyledRadio />} label="Androsexual" />
+                </RadioGroup>
+            </FormControl>
+          )}
           <Button
             type="submit"
             fullWidth

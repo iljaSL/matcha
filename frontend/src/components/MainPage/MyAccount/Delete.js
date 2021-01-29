@@ -1,4 +1,6 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -6,7 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Form from "react-validation/build/form";
 import DeleteIcon from '@material-ui/icons/Delete';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import updateUserAction from '../../../actions/updateUserAction';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -36,6 +38,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Delete() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const handleDelete = () => {
+    dispatch(updateUserAction.deleteUser());
+  }
 
   return (
     <Container component="main" maxWidth="xs" className={classes.outlined}>
@@ -44,15 +51,18 @@ export default function Delete() {
         <Typography component="h1" variant="h6">
         ⚠️ Delete your User Account ⚠️
         </Typography>
-        <Form className={classes.form} noValidate>
+        <Form onSubmit={handleDelete} className={classes.form} noValidate>
         <Button
+        type="submit"
         variant="contained"
         color="secondary"
         className={classes.submit}
         startIcon={<DeleteIcon />}
         >
-        Delete
-      </Button>
+        <Link  href="/" color="inherit">
+         Delete
+        </Link>
+        </Button>
         </Form>
       </div>
     </Container>
