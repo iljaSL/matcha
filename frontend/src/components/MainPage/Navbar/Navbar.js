@@ -192,7 +192,9 @@ export default function Navbar({newNotifications, newMessages}) {
       <AppBar position="static" className={classes.pageColor}>
         <Toolbar>
           <Typography className={classes.title} variant="h6" noWrap>
-           Matcha
+           <Link  href="/mainpage" color="inherit">
+            Matcha
+           </Link>
           </Typography>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
