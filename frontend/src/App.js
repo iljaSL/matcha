@@ -81,6 +81,7 @@ const App = () => {
               <Route exactly component={LoginForm} path="/login" />
               <Route exactly path='/reset-password/:resetId' component={ResetPassword} />
               <Route exactly path='/validateprofile/:validationId' component={ValidateProfile} />
+              <Route exactly component={ForgotPassword} path="/forgot-password" />
               <Route path="/" component={LandingPage} />
             </Switch>
     return (
@@ -92,7 +93,6 @@ const App = () => {
             <NavRoute exactly component={Profile} path="/profile" />
             <NavRoute exactly component={UserProfile} path="/user-profile" />
             <NavRoute exactly component={MyAccount} path="/my-account" />
-            <Route exactly component={ForgotPassword} path="/forgot-password" />
             <Route exactly path='/profilecreation' component={CreateProfileForm} />
             <Route exactly path='/validateprofile/:validationId' component={ValidateProfile} />
             <Route path="/">
