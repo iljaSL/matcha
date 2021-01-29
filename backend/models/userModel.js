@@ -162,7 +162,44 @@ ORDER BY time_added DESC
 LIMIT 25;
 `, [uid]));
 
+const placeholderValues = (array) => {
+  let placeholder = '';
+  for (let i = 1; i < array.length + 1; i++) {
+    placeholder += `$${i}`;
+    if (i !== array.length) placeholder += ',';
+  }
+  return placeholder;
+};
+
+const validateTagsInDb = async (tags) => {
+  const tmp = placeholderValues(tags);
+  const result = await pool.query(`SELECT count(id) FROM tags WHERE tag IN (${tmp})`, [
+    ...tags,
+  ]);
+  return tags.length == result.rows[0].count ? true : false;
+};
+
+const userHasTags = async (id) => {
+  const result = await pool.query('SELECT count(id) FROM usertags WHERE uid=$1', [id]);
+  return result.rows[0].count !== 0;
+};
+
+const deleteRow = async (table, column, value) => {
+  await pool.query(`DELETE FROM ${table} WHERE ${column} = $1`, [value]);
+};
+
+const saveTags = async (query) => {
+  const { values, placeholder } = query;
+  await pool.query(`INSERT INTO public.usertags(uid, tagid) VALUES ${placeholder}`, [
+    ...values,
+  ]);
+};
+
 export default {
+  saveTags,
+  deleteRow,
+  userHasTags,
+  validateTagsInDb,
   isDuplicateUser,
   registerUser,
   findUser,

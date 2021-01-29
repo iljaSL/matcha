@@ -1,0 +1,7 @@
+POST http://localhost:3001/api/tags/updateTag/8 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjgiLCJ1c2VybmFtZSI6InBsdXN0aWciLCJpYXQiOjE2MTE5NDcyNTEsImV4cCI6MTYxMjAzMzY1MX0.0OL0HA9WXiAqsdBuFp9BeMhdUsHWv7npmsU-AwgLcTY
+
+{
+  "tag": ["vegan", "yoga", "cybersecurity"]
+}
