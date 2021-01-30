@@ -53,7 +53,7 @@ const getProfilesByDistance = async (uid, distance, specifiedGender = null) => {
                   FROM usertags
                   LEFT JOIN users ON users.id = usertags.uid
                   WHERE (point((SELECT geo_long FROM master_user), (SELECT geo_lat FROM master_user))
-                <@> point(geo_long, geo_lat)) < $2 * 1.609344
+                <@> point(geo_long, geo_lat)) <= $2 * 1.609344
                   AND tagid IN (SELECT tagid FROM master_user_tags)
                   AND users.id NOT IN ( SELECT id FROM master_user)
                   AND users.id NOT IN (
