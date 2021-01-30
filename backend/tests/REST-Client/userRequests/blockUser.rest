@@ -1,2 +1,2 @@
-POST http://localhost:3001/api/users/block/1/2 HTTP/1.1
+POST http://localhost:3001/api/users/block/501/499 HTTP/1.1
 content-Type: application/json
