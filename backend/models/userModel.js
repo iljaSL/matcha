@@ -199,9 +199,17 @@ const saveTags = async (query) => {
   ]);
 };
 
-const addVisit = async (visitor, visited) => await pool.query(`
-    INSERT INTO notifications (uid, event, added_by) 
-    VALUES ($1, 'visit', $2)`, [visited, visitor]);
+const addVisit = async (visitor, visited) => {
+  await pool.query(`
+    UPDATE notifications 
+        SET time_added = NOW() 
+        WHERE uid = $1 AND event = 'visit' AND added_by = $2`, [visited, visitor]);
+
+  await pool.query(`
+    INSERT INTO notifications (uid, event, added_by)
+    SELECT $1, 'visit', $2
+    WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE uid = $1 AND event = 'visit' AND added_by = $2);`, [visited, visitor]);
+};
 
 export default {
   saveTags,
