@@ -199,7 +199,7 @@ const saveTags = async (query) => {
   ]);
 };
 
-const addVisit = async (visitor, visited) => {
+const addVisit = async (visitor, visited) => { // if exists, updates timestamp
   await pool.query(`
     UPDATE notifications 
         SET time_added = NOW() 

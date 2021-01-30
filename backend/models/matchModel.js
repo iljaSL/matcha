@@ -49,12 +49,11 @@ const getProfilesByDistance = async (uid, distance, specifiedGender = null) => {
                   WHERE id = $1
                 )
                 
-                  SELECT  uid, COUNT(uid) AS tags_in_common, users.lastname, users.firstname, users.username, users.gender, users.sexual_orientation, users.bio, users.popularity_score, users.geo_lat, users.geo_long, users.profile_picture_id
+                  SELECT  uid, COUNT(uid) - 1 AS tags_in_common, users.lastname, users.firstname, users.username, users.gender, users.sexual_orientation, users.bio, users.popularity_score, users.geo_lat, users.geo_long, users.profile_picture_id
                   FROM usertags
                   LEFT JOIN users ON users.id = usertags.uid
                   WHERE (point((SELECT geo_long FROM master_user), (SELECT geo_lat FROM master_user))
                 <@> point(geo_long, geo_lat)) < $2 * 1.609344
-                  AND tagid IN (SELECT tagid FROM master_user_tags)
                   AND users.id NOT IN ( SELECT id FROM master_user)
                   AND users.id NOT IN (
                       SELECT blocked_user_id
@@ -68,8 +67,21 @@ const getProfilesByDistance = async (uid, distance, specifiedGender = null) => {
   return res.rows;
 };
 
+const getLikedStatus = async (user1, user2) => { // user1 = 'liker' user2 = 'liked'
+  const liked = await pool.query(`
+        SELECT 1 as liked
+        FROM likes
+        WHERE (user1 = $1 AND user2 = $2) `, [user1, user2]);
+  const matched = await pool.query(`
+      SELECT 1 as matched
+      FROM notifications
+      WHERE (event = 'match') AND (uid = $1 AND added_by = $2)`, [user1, user2]);
+  return { liked: liked.rowCount === 1, matched: matched.rowCount === 1 }
+};
+
 export default {
   getProfiles,
   getProfilesByDistance,
   getCommonTagCountByUid,
+  getLikedStatus,
 };

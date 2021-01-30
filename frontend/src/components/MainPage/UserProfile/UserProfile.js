@@ -82,6 +82,16 @@ export default function SignInSide() {
 
    if (!profile)
     return null;
+
+   const handleLike = async () => {
+     await axios.post(`http://localhost:3001/api/matches/like/${id}`)
+     const profileData = (await axios.get(`http://localhost:3001/api/users/${id}`)).data
+     setProfile(profileData)
+   }
+   const handleUnlike = async () => {
+     await axios.delete(`http://localhost:3001/api/matches/like/${id}`)
+     setProfile({...profile, matched: false, liked: false})
+   }
   return (
     <>
     <Typography className={classes.divider} color="secondary" variant="h3">
@@ -116,7 +126,8 @@ export default function SignInSide() {
     </Typography>
     </Container>
     <Container component="main" maxWidth="xs">
-    <MatchButton />
+      {!profile.liked && <MatchButton matchButton handleClick={handleLike} id={profile.uid} />}
+      {profile.liked && <MatchButton handleClick={handleUnlike} id={profile.uid} />}
     </Container>
     {/* <Container component="main" maxWidth="xs">
     <Blocked />

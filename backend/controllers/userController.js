@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import userModel from '../models/userModel.js';
 import imageModel from '../models/imageModel.js';
+import matchModel from '../models/matchModel.js';
 import UserUtil from '../utils/userUtil.js';
 import input from '../utils/inputUtil.js';
 import jsonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
@@ -280,7 +281,7 @@ const getUserNotifications = async (request, response, next) => {
   } catch (err) { next(err); }
 };
 
-const getUserProfile = async (request, response, next) => {
+const getUserProfile = async (request, response, next) => { // TODO: get MATCH, LIKE status!
   try {
     const { authorization } = request.headers;
     const profileId = request.params.id;
@@ -293,7 +294,14 @@ const getUserProfile = async (request, response, next) => {
     const userData = await userModel.getUserProfile(profileId);
     const tags = (await userModel.getTagsByUid(profileId)).rows;
     const images = await imageModel.getUserImages(profileId);
-    return response.status(200).json({ ...userData, tags, images });
+    const matchStatus = await matchModel.getLikedStatus(tokenUserId, profileId);
+    return response.status(200).json({
+      id: profileId,
+      ...userData,
+      tags,
+      images,
+      ...matchStatus,
+    }).end();
   } catch (err) { next(err); }
 };
 
