@@ -19,8 +19,9 @@ import MatchButton from './MatchButton/MatchButton';
 import Pictures from './Pictures/Pictures';
 import Footer from '../Footer/Footer';
 import axios from "axios";
-import {useParams} from "react-router-dom";
+import {Redirect, useParams} from "react-router-dom";
 import {login} from "../../../reducers/userReducer";
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,8 +69,9 @@ const useStyles = makeStyles((theme) => ({
 export default function SignInSide() {
   const classes = useStyles();
   const [profile, setProfile] = useState()
-  const [imageList, setImageList] = useState([])
-  const { id } = useParams();
+  const [blocked, setBlocked] = useState(false)
+  const { id } = useParams(); //confusing, this id is the id of the profile shown, while user.id is logged-in user
+  const {user} = useSelector(state => state.auth);
 
   useEffect(() => {
     const getProfile = async () => {
@@ -92,11 +94,24 @@ export default function SignInSide() {
      await axios.delete(`http://localhost:3001/api/matches/like/${id}`)
      setProfile({...profile, matched: false, liked: false})
    }
+
+   const handleBlock = async () => {
+     await axios.post(`http://localhost:3001/api/users/block/${user.id}/${id}`)
+     setBlocked(true);
+   }
+
+   const handleReport = async () => {
+     await axios.post(`http://localhost:3001/api/users/report/${user.id}/${id}`)
+     // message: user reported
+   }
+
+   if (blocked) return <Redirect to="/mainpage" />
+
   return (
     <>
     <Typography className={classes.divider} color="secondary" variant="h3">
       {profile.firstname} "{profile.username}" {profile.lastname}
-           <MenuButton />
+           <MenuButton handleBlock={handleBlock} handleReport={handleReport} />
     </Typography>
     <Typography className={classes.divider} color="secondary" variant="h4">
           Popularity: {profile.popularity_score} {profile.popularity_score > 20 && '🔥'}
