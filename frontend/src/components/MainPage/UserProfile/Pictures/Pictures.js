@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import IconButton from '@material-ui/core/IconButton';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -63,25 +64,39 @@ const tileData = [
     },
 ];
 
-export default function Pictures({images}) {
+
+const Picture = ({pictureId}) => {
     const classes = useStyles();
-    if (!images || images.length === 0)
-        return null
-    else
-        return (
-            <div className={classes.root}>
-                <GridList cellHeight={200} spacing={1} className={classes.gridList}>
-                    {images.map((image, index) => (
-                        <GridListTile key={index} cols={2} rows={2}>
-                            <img src={`data:image/png;base64, ${image}`}/>
-                            <GridListTileBar
-                                titlePosition="top"
-                                actionPosition="left"
-                                className={classes.titleBar}
-                            />
-                        </GridListTile>
-                    ))}
-                </GridList>
-            </div>
-        );
+    const [image, setImage] = useState([]);
+    useEffect(() => {
+        const getImage = async (id) => {
+            const res = await axios.get(`http://localhost:3001/api/images/${id}`)
+            setImage(res.data.imageBlob)
+            return res
+        }
+        getImage(pictureId)
+    })
+
+    return <GridListTile cols={2} rows={2}>
+        <img src={`data:image/png;base64, ${image}`}/>
+        <GridListTileBar
+            titlePosition="top"
+            actionPosition="left"
+            className={classes.titleBar}
+        />
+    </GridListTile>
+}
+
+export default function Pictures({imageList}) {
+
+    if (!imageList)
+        return null;
+    const classes = useStyles();
+    return (
+        <div className={classes.root}>
+            <GridList cellHeight={200} spacing={1} className={classes.gridList}>
+                {imageList.map((image, index) => <Picture key={index} pictureId={image.id} />)}
+            </GridList>
+        </div>
+    );
 }

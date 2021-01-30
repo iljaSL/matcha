@@ -69,36 +69,21 @@ export default function SignInSide() {
   const classes = useStyles();
   const [profile, setProfile] = useState()
   const [imageList, setImageList] = useState([])
-  const [imageBlobs, setImageBlobs] = useState([])
   const { id } = useParams();
 
   useEffect(() => {
     const getProfile = async () => {
       const profileData = (await axios.get(`http://localhost:3001/api/users/${id}`)).data
       setProfile(profileData)
-      setImageList(profileData.images)
     }
     getProfile();
-  }, [profile])
+  }, [])
 
-  useEffect(() => {
-    const getImage = async (id) => {
-      const res = (await axios.get(`http://localhost:3001/api/images/${id}`))
-      setImageBlobs([...imageBlobs, res.data.imageBlob])
-      return res
-    }
-    imageList.map(image => {
-      const blob = getImage(image.id);
-    })
-  }, [imageList.length])
 
-  console.log(imageBlobs)
-   if (!profile || !imageBlobs)
+   if (!profile)
     return null;
-  else
   return (
     <>
-
     <Typography className={classes.divider} color="secondary" variant="h3">
       {profile.firstname} "{profile.username}" {profile.lastname}
            <MenuButton />
@@ -112,7 +97,7 @@ export default function SignInSide() {
     <Grid container component="main" className={classes.root} className={classes.divider}>
       <CssBaseline />
       <Grid item xs={false} sm={6} md={6}>
-        <Pictures images={imageBlobs} /> </Grid>
+        <Pictures imageList={profile.images} /> </Grid>
       <Grid item xs={12} sm={6} md={5} elevation={6}>
         <div >
           <Typography component="h1" variant="h5">
