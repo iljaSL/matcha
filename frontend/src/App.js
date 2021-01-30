@@ -93,7 +93,7 @@ const App = () => {
             <NavRoute exactly component={Notification} path="/notification" />
             <NavRoute exactly component={() => <Messenger socket={socket} /> }  path="/messenger" />
             <NavRoute exactly component={Profile} path="/profile" />
-            <NavRoute exactly component={UserProfile} path="/user-profile" />
+            <NavRoute exactly component={UserProfile} path="/user-profile/:id" />
             <NavRoute exactly component={MyAccount} path="/my-account" />
             <Route exactly path='/profilecreation' component={CreateProfileForm} />
             <Route exactly path='/validateprofile/:validationId' component={ValidateProfile} />

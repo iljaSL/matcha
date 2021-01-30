@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -18,6 +18,9 @@ import MenuButton from './MenuButton/MenuButton';
 import MatchButton from './MatchButton/MatchButton';
 import Pictures from './Pictures/Pictures';
 import Footer from '../Footer/Footer';
+import axios from "axios";
+import {useParams} from "react-router-dom";
+import {login} from "../../../reducers/userReducer";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,6 +33,12 @@ const useStyles = makeStyles((theme) => ({
       theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     backgroundSize: 'cover',
     backgroundPosition: 'center',
+  },
+  gridList: {
+    width: 500,
+    height: 450,
+    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+    transform: 'translateZ(0)',
   },
   paper: {
     margin: theme.spacing(8, 4),
@@ -58,41 +67,52 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignInSide() {
   const classes = useStyles();
+  const [profile, setProfile] = useState()
+  const [imageList, setImageList] = useState([])
+  const { id } = useParams();
 
+  useEffect(() => {
+    const getProfile = async () => {
+      const profileData = (await axios.get(`http://localhost:3001/api/users/${id}`)).data
+      setProfile(profileData)
+    }
+    getProfile();
+  }, [])
+
+
+   if (!profile)
+    return null;
   return (
     <>
     <Typography className={classes.divider} color="secondary" variant="h3">
-           Lena Wolfgang Strauss (F)
+      {profile.firstname} "{profile.username}" {profile.lastname}
            <MenuButton />
     </Typography>
     <Typography className={classes.divider} color="secondary" variant="h4">
-          HotOmeter: 95 🔥
+          Popularity: {profile.popularity_score} {profile.popularity_score > 20 && '🔥'}
     </Typography>
     <Typography className={classes.divider} color="secondary" variant="h5">
-        Preferred gender: Male
+        Orientation: {profile.sexual_orientation}
     </Typography>
     <Grid container component="main" className={classes.root} className={classes.divider}>
       <CssBaseline />
-      <Grid item xs={false} sm={6} md={6}><Pictures /></Grid>
+      <Grid item xs={false} sm={6} md={6}>
+        <Pictures imageList={profile.images} /> </Grid>
       <Grid item xs={12} sm={6} md={5} elevation={6}>
         <div >
           <Typography component="h1" variant="h5">
             BIO
           </Typography>
           <Typography component="h2" variant="h6">
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et 
-          dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet 
-          clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, 
-          consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, 
-          sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea 
-          takimata sanctus est Lorem ipsum dolor sit amet.
+            {profile.bio}
+
           </Typography>
         </div>
       </Grid>
     </Grid>
     <Container component="main" maxWidth="xs">
     <Typography className={classes.divider} color="secondary" variant="h6">
-           (Username) is interested in: Vegan, Horses, Tags...
+      {profile.username}'s interests: {profile.tags.map(tag => <Button key={tag.id}>{tag.tag}</Button>)}
     </Typography>
     </Container>
     <Container component="main" maxWidth="xs">
@@ -102,7 +122,7 @@ export default function SignInSide() {
     <Blocked />
     </Container> */}
 
-    {/* 
+    {/*
     
     TODO: REPORT, BLOCK, SEE IF USER IS ONLINE IF NOT THE LAST TIME
 

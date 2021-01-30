@@ -90,4 +90,8 @@ userRouter.put('/:id/images', async (request, response, next) => {
   await userController.updateProfilePictures(request, response, next);
 });
 
+userRouter.get('/:id', async (request, response, next) => {
+  await userController.getUserProfile(request, response, next);
+});
+
 export default userRouter;
