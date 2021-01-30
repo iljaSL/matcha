@@ -280,6 +280,22 @@ const getUserNotifications = async (request, response, next) => {
   } catch (err) { next(err); }
 };
 
+const getUserProfile = async (request, response, next) => {
+  try {
+    const { authorization } = request.headers;
+    const profileId = request.params.id;
+    const tokenUserId = jsonWebTokenUtils.getUserId(authorization);
+    if (await userModel.checkIfUserIsBlocked(profileId, tokenUserId)
+        || await userModel.checkIfUserIsBlocked(tokenUserId, profileId)) {
+      return response.status(403).end();
+    }
+    const userData = await userModel.getUserProfile(profileId);
+    const tags = (await userModel.getTagsByUid(profileId)).rows;
+    const images = await imageModel.getUserImages(profileId);
+    return response.status(200).json({ ...userData, tags, images });
+  } catch (err) { next(err); }
+};
+
 export default {
   createUser,
   initProfile,
@@ -303,4 +319,5 @@ export default {
   changeUserLocation,
   getUserNotifications,
   updateProfilePictures,
+  getUserProfile,
 };
