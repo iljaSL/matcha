@@ -19,6 +19,9 @@ import MatchButton from './MatchButton/MatchButton';
 import Pictures from './Pictures/Pictures';
 import Footer from '../Footer/Footer';
 import axios from "axios";
+import {Redirect, useParams} from "react-router-dom";
+import {login} from "../../../reducers/userReducer";
+import {useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
 import {login} from "../../../reducers/userReducer";
 
@@ -68,6 +71,9 @@ const useStyles = makeStyles((theme) => ({
 export default function SignInSide() {
   const classes = useStyles();
   const [profile, setProfile] = useState()
+  const [blocked, setBlocked] = useState(false)
+  const { id } = useParams(); //confusing, this id is the id of the profile shown, while user.id is logged-in user
+  const {user} = useSelector(state => state.auth);
   const [imageList, setImageList] = useState([])
   const { id } = useParams();
 
@@ -80,13 +86,38 @@ export default function SignInSide() {
   }, [])
 
 
+
    if (!profile)
     return null;
+
+   const handleLike = async () => {
+     await axios.post(`http://localhost:3001/api/matches/like/${id}`)
+     const profileData = (await axios.get(`http://localhost:3001/api/users/${id}`)).data
+     setProfile(profileData)
+   }
+   const handleUnlike = async () => {
+     await axios.delete(`http://localhost:3001/api/matches/like/${id}`)
+     setProfile({...profile, matched: false, liked: false})
+   }
+
+   const handleBlock = async () => {
+     await axios.post(`http://localhost:3001/api/users/block/${user.id}/${id}`)
+     setBlocked(true);
+   }
+
+   const handleReport = async () => {
+     await axios.post(`http://localhost:3001/api/users/report/${user.id}/${id}`)
+     // message: user reported
+   }
+
+   if (blocked) return <Redirect to="/mainpage" />
+
+
   return (
     <>
     <Typography className={classes.divider} color="secondary" variant="h3">
       {profile.firstname} "{profile.username}" {profile.lastname}
-           <MenuButton />
+           <MenuButton handleBlock={handleBlock} handleReport={handleReport} />
     </Typography>
     <Typography className={classes.divider} color="secondary" variant="h4">
           Popularity: {profile.popularity_score} {profile.popularity_score > 20 && '🔥'}
@@ -116,7 +147,8 @@ export default function SignInSide() {
     </Typography>
     </Container>
     <Container component="main" maxWidth="xs">
-    <MatchButton />
+      {!profile.liked && <MatchButton matchButton handleClick={handleLike} id={profile.uid} />}
+      {profile.liked && <MatchButton handleClick={handleUnlike} id={profile.uid} />}
     </Container>
     {/* <Container component="main" maxWidth="xs">
     <Blocked />

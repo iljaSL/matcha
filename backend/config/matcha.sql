@@ -152,7 +152,8 @@ CREATE OR REPLACE FUNCTION public.notify_unlike()
     LANGUAGE plpgsql
 AS $function$
 BEGIN
-    INSERT INTO notifications (uid, event, added_by) VALUES (NEW.user1, 'unlike', NEW.user2);
+    DELETE FROM notifications WHERE (event = 'match' AND (uid = OLD.user1 AND added_by = OLD.user2) OR (uid = OLD.user2 AND added_by = OLD.user1));
+    INSERT INTO notifications (uid, event, added_by) VALUES (OLD.user2, 'unlike', OLD.user1);
     RETURN NULL;
 END;
 $function$;

@@ -11,6 +11,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import axios from "axios";
 import {Link} from "react-router-dom";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,6 +47,7 @@ const UserCard = ({user}) => {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const [profilePic, setProfilepic] = useState('')
+  const [matchStatus, setMatchStatus] = useState({liked: false, matched: false})
   useEffect(() => {
     const getPic = async () => {
       setProfilepic((await axios.get(`http://localhost:3001/api/images/${user.profile_picture_id}`)).data.imageBlob)
@@ -53,13 +55,30 @@ const UserCard = ({user}) => {
     getPic();
   }, [])
 
+  useEffect(() => {
+    const getMatchStatus = async () => {
+      setMatchStatus((await axios.get(`http://localhost:3001/api/matches/like/${user.uid}`)).data)
+    }
+    getMatchStatus();
+  }, [])
+
+  const handleLike = async () => {
+    await axios.post(`http://localhost:3001/api/matches/like/${user.uid}`)
+    setMatchStatus((await axios.get(`http://localhost:3001/api/matches/like/${user.uid}`)).data)
+  }
+  const handleUnlike = async () => {
+    await axios.delete(`http://localhost:3001/api/matches/like/${user.uid}`)
+    setMatchStatus((await axios.get(`http://localhost:3001/api/matches/like/${user.uid}`)).data)
+  }
+
+
   return (
     <Card className={classes.root}>
       <Link to={`/user-profile/${user.uid}`}>
       <CardHeader
         className={classes.iconcolor}
         title={`${user.firstname} ${user.lastname}`}
-        subheader={`Popularity score: ${user.popularity_score}`}
+        subheader={`Popularity score: ${user.popularity_score} `}
       />
       <CardMedia
         className={classes.media}
@@ -68,11 +87,10 @@ const UserCard = ({user}) => {
       />
       </Link>
       <CardActions disableSpacing>
-        <IconButton aria-label="match">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="thumb-down">
-          <ThumbDownIcon />
+        <IconButton aria-label="match" onClick={matchStatus.liked ? handleUnlike : handleLike}>
+          <Tooltip title={matchStatus.liked ? "unlike" : "like"} aria-label="add">
+            <FavoriteIcon color={matchStatus.liked ? "secondary" : "primary"}/>
+          </Tooltip>
         </IconButton>
       </CardActions>
     </Card>

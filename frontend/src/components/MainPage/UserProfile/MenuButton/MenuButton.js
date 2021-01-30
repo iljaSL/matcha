@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function MenuButton() {
+export default function MenuButton({handleBlock, handleReport}) {
     const classes = useStyles();
 
     return (
@@ -22,8 +22,8 @@ export default function MenuButton() {
                 ...
             </Button>
             <Menu {...bindMenu(popupState)}>
-                <MenuItem onClick={popupState.close}>Block User</MenuItem>
-                <MenuItem onClick={popupState.close}>Report User</MenuItem>
+                <MenuItem onClick={handleBlock}>Block User</MenuItem>
+                <MenuItem onClick={handleReport}>Report User</MenuItem>
             </Menu>
             </React.Fragment>
         )}
