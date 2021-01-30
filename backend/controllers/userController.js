@@ -303,10 +303,6 @@ const getUserProfile = async (request, response, next) => {
       images,
       ...matchStatus,
     }).end();
-    const userData = await userModel.getUserProfile(profileId);
-    const tags = (await userModel.getTagsByUid(profileId)).rows;
-    const images = await imageModel.getUserImages(profileId);
-    return response.status(200).json({ ...userData, tags, images });
   } catch (err) { next(err); }
 };
 

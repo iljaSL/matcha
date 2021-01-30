@@ -20,10 +20,7 @@ import Pictures from './Pictures/Pictures';
 import Footer from '../Footer/Footer';
 import axios from "axios";
 import {Redirect, useParams} from "react-router-dom";
-import {login} from "../../../reducers/userReducer";
 import {useSelector} from "react-redux";
-import {useParams} from "react-router-dom";
-import {login} from "../../../reducers/userReducer";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -75,7 +72,6 @@ export default function SignInSide() {
   const { id } = useParams(); //confusing, this id is the id of the profile shown, while user.id is logged-in user
   const {user} = useSelector(state => state.auth);
   const [imageList, setImageList] = useState([])
-  const { id } = useParams();
 
   useEffect(() => {
     const getProfile = async () => {
