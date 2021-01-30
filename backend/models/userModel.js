@@ -162,6 +162,7 @@ ORDER BY time_added DESC
 LIMIT 25;
 `, [uid]));
 
+
 const getUserProfile = async (uid) => (await pool.query(`SELECT users.lastname, users.firstname, users.username, users.gender, users.sexual_orientation, users.mail, users.bio, users.popularity_score, users.geo_lat, users.geo_long, users.profile_picture_id
                                                          FROM users
                                                          WHERE id = $1`, [uid])).rows[0];

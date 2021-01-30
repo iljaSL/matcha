@@ -22,6 +22,8 @@ import axios from "axios";
 import {Redirect, useParams} from "react-router-dom";
 import {login} from "../../../reducers/userReducer";
 import {useSelector} from "react-redux";
+import {useParams} from "react-router-dom";
+import {login} from "../../../reducers/userReducer";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,6 +74,8 @@ export default function SignInSide() {
   const [blocked, setBlocked] = useState(false)
   const { id } = useParams(); //confusing, this id is the id of the profile shown, while user.id is logged-in user
   const {user} = useSelector(state => state.auth);
+  const [imageList, setImageList] = useState([])
+  const { id } = useParams();
 
   useEffect(() => {
     const getProfile = async () => {
@@ -80,6 +84,7 @@ export default function SignInSide() {
     }
     getProfile();
   }, [])
+
 
 
    if (!profile)
@@ -106,6 +111,7 @@ export default function SignInSide() {
    }
 
    if (blocked) return <Redirect to="/mainpage" />
+
 
   return (
     <>

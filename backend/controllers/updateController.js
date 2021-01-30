@@ -62,7 +62,6 @@ const updateUser = async (request, response, next) => {
     }
 
     if (Object.keys(error).length !== 0) {
-      console.log('Err', error);
       return response.status(400).json({ message: 'Invalid Input!' });
     }
 
@@ -92,9 +91,7 @@ const updateUser = async (request, response, next) => {
 const updateTag = async (request, response, next) => {
   try {
     const { tag } = request.body;
-    console.log('TAG', tag);
     const { authorization } = request.headers;
-    console.log('AUTH', authorization);
     const userId = jsonWebTokenUtils.getUserId(authorization);
 
     if (!userId) { throw wrongAuthError; }

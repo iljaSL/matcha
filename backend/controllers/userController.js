@@ -281,7 +281,8 @@ const getUserNotifications = async (request, response, next) => {
   } catch (err) { next(err); }
 };
 
-const getUserProfile = async (request, response, next) => { // TODO: get MATCH, LIKE status!
+
+const getUserProfile = async (request, response, next) => {
   try {
     const { authorization } = request.headers;
     const profileId = request.params.id;
@@ -302,6 +303,10 @@ const getUserProfile = async (request, response, next) => { // TODO: get MATCH, 
       images,
       ...matchStatus,
     }).end();
+    const userData = await userModel.getUserProfile(profileId);
+    const tags = (await userModel.getTagsByUid(profileId)).rows;
+    const images = await imageModel.getUserImages(profileId);
+    return response.status(200).json({ ...userData, tags, images });
   } catch (err) { next(err); }
 };
 

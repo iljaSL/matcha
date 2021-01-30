@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import { useSelector } from "react-redux";
+import axios from "axios";
 import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
@@ -63,15 +65,29 @@ const useStyles = makeStyles((theme) => ({
       },
   ];
 
-export default function Pictures() {
+const Pictures = () => {
   const classes = useStyles();
+  const { user: currentUser } = useSelector((state) => state.auth);
+  const [profile, setProfile] = useState()
+  const id = currentUser.id;
+
+  useEffect(() => {
+    const getProfile = async () => {
+      const profileData = (await axios.get(`http://localhost:3001/api/users/${id}`)).data
+      setProfile(profileData)
+    }
+    getProfile();
+  }, [])
+
+  if (!profile)
+    return null;
 
   return (
     <div className={classes.root}>
       <GridList cellHeight={200} spacing={1} className={classes.gridList}>
-        {tileData.map((tile) => (
-          <GridListTile key={tile.img} cols={tile.featured ? 2 : 1} rows={tile.featured ? 2 : 1}>
-            <img src={tile.img} />
+        {profile.images.map((img) => (
+          <GridListTile key={img.uid} cols={2} rows={2}>
+            <img src={`data:image/png;base64, ${img.link}`} />
             <GridListTileBar
               titlePosition="top"
               actionPosition="left"
@@ -83,3 +99,5 @@ export default function Pictures() {
     </div>
   );
 }
+
+export default Pictures;

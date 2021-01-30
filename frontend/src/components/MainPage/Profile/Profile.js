@@ -1,18 +1,11 @@
-import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
+import React, {useEffect, useState} from 'react';
+import { useSelector } from "react-redux";
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import axios from "axios";
 
 import History from './History/History';
 import Pictures from './Pictures/Pictures';
@@ -57,16 +50,30 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function SignInSide() {
+const Profile = () => {
   const classes = useStyles();
+  const { user: currentUser } = useSelector((state) => state.auth);
+  const [profile, setProfile] = useState()
+  const id = currentUser.id;
+
+  useEffect(() => {
+    const getProfile = async () => {
+      const profileData = (await axios.get(`http://localhost:3001/api/users/${id}`)).data
+      setProfile(profileData)
+    }
+    getProfile();
+  }, [])
+
+  if (!profile)
+    return null;
 
   return (
     <>
     <Typography className={classes.divider} color="secondary" variant="h3">
-           Your Profile
+    {console.log('ID', profile)}{profile.firstname} {profile.lastname}
     </Typography>
     <Typography className={classes.divider} color="secondary" variant="h4">
-          HotOmeter: 99 🔥
+      Popularity: {profile.popularity_score} {profile.popularity_score < 20 && '❄️'} {profile.popularity_score > 20 && '🔥'}
     </Typography>
     <Grid container component="main" className={classes.root} className={classes.divider}>
       <CssBaseline />
@@ -77,12 +84,7 @@ export default function SignInSide() {
             BIO
           </Typography>
           <Typography component="h2" variant="h6">
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et 
-          dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet 
-          clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, 
-          consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, 
-          sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea 
-          takimata sanctus est Lorem ipsum dolor sit amet.
+          {profile.bio}
           </Typography>
         </div>
       </Grid>
@@ -101,3 +103,5 @@ export default function SignInSide() {
     </>
   );
 }
+
+export default Profile;
