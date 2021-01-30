@@ -1,4 +1,4 @@
-GET http://localhost:3001/api/users/tags/1
+GET http://localhost:3001/api/users/tags/8
 Content-Type: application/json
 
 ###

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
+import { useDispatch } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -11,6 +12,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Chip from '@material-ui/core/Chip';
+import updateUserAction from '../../../actions/updateUserAction';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -64,35 +66,52 @@ const MenuProps = {
 };
 
 const names = [
-    'Oliver Hansen',
-    'Van Henry',
-    'April Tucker',
-    'Ralph Hubbard',
-    'Omar Alexander',
-    'Carlos Abbott',
-    'Miriam Wagner',
-    'Bradley Wilkerson',
-    'Virginia Andrews',
-    'Kelly Snyder',
+    'vegan',
+    'bodybuilding',
+    'yoga',
+    'design',
+    'coffee',
+    'programming',
+    'cybersecurity',
   ];
 
-function getStyles(name, personName, theme) {
+function getStyles(name, tags, theme) {
     return {
       fontWeight:
-        personName.indexOf(name) === -1
+        tags.indexOf(name) === -1
           ? theme.typography.fontWeightRegular
           : theme.typography.fontWeightMedium,
     };
   }
 
-export default function Tags() {
+const Tags = () => {
   const classes = useStyles();
   const theme = useTheme();
-  const [personName, setPersonName] = React.useState([]);
+  const form = useRef();
 
-  const handleTag = (event) => {
-    setPersonName(event.target.value);
-  };
+  const [tags, setTags] = React.useState([]);
+  const [successful, setSuccessful] = useState(false);
+  
+  const dispatch = useDispatch();
+
+  const onChangeTags = (e) => {
+    const tags = e.target.value;
+    setTags(tags);
+  }
+
+  const handleTagsChange = (e) => {
+    e.preventDefault();
+
+    setSuccessful(false);
+
+    form.current.validateAll();
+
+    dispatch(updateUserAction.updateTags(tags)).then(() => {
+      setSuccessful(true);
+    }).catch(() => {
+      setSuccessful(false);
+    })
+  }
 
   return (
     <Container component="main" maxWidth="xs" className={classes.outlined}>
@@ -101,14 +120,15 @@ export default function Tags() {
         <Typography component="h1" variant="h6">
         Update your Tags
         </Typography>
-        <Form className={classes.form} noValidate>
+        <Form onSubmit={handleTagsChange} ref={form} className={classes.form} noValidate>
+        {!successful && (
             <FormControl color="secondary" className={classes.formControl}>
                 <Select
                 labelId="demo-mutiple-chip-label"
                 id="demo-mutiple-chip"
                 multiple
-                value={personName}
-                onChange={handleTag}
+                value={tags}
+                onChange={onChangeTags}
                 input={<Input id="select-multiple-chip" />}
                 renderValue={(selected) => (
                     <div className={classes.chips}>
@@ -120,12 +140,13 @@ export default function Tags() {
                 MenuProps={MenuProps}
                 >
                 {names.map((name) => (
-                    <MenuItem key={name} value={name} style={getStyles(name, personName, theme)}>
+                    <MenuItem key={name} value={name} style={getStyles(name, tags, theme)}>
                     {name}
                     </MenuItem>
                 ))}
                 </Select>
             </FormControl>
+          )}
           <Button
             type="submit"
             fullWidth
@@ -140,3 +161,5 @@ export default function Tags() {
     </Container>
   );
 }
+
+export default Tags;

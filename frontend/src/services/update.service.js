@@ -52,6 +52,14 @@ const updatePassword = async (oldPassword, newPassword) => {
     return result.data;
 }
 
+const updateTags = async (tags) => {
+    let id = window.localStorage.getItem('user');
+    const result = await axios.post(`${baseUrl}/tags/updateTag/${id.id}`, {
+        tag: tags
+    })
+    return result.data;
+}
+
 const deleteUser = async () => {
     let id = window.localStorage.getItem('user');
     localStorage.removeItem('user');
@@ -59,6 +67,7 @@ const deleteUser = async () => {
 }
 
 export default {
+    updateTags,
     updateFirstLastName,
     updateBio,
     updateGender,
