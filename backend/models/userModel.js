@@ -162,11 +162,9 @@ ORDER BY time_added DESC
 LIMIT 25;
 `, [uid]));
 
-
 const getUserProfile = async (uid) => (await pool.query(`SELECT users.lastname, users.firstname, users.username, users.gender, users.sexual_orientation, users.mail, users.bio, users.popularity_score, users.geo_lat, users.geo_long, users.profile_picture_id
                                                          FROM users
                                                          WHERE id = $1`, [uid])).rows[0];
-
 
 const placeholderValues = (array) => {
   let placeholder = '';
@@ -182,7 +180,7 @@ const validateTagsInDb = async (tags) => {
   const result = await pool.query(`SELECT count(id) FROM tags WHERE tag IN (${tmp})`, [
     ...tags,
   ]);
-  return tags.length == result.rows[0].count ? true : false;
+  return tags.length == result.rows[0].count;
 };
 
 const userHasTags = async (id) => {
@@ -200,6 +198,10 @@ const saveTags = async (query) => {
     ...values,
   ]);
 };
+
+const addVisit = async (visitor, visited) => await pool.query(`
+    INSERT INTO notifications (uid, event, added_by) 
+    VALUES ($1, 'visit', $2)`, [visited, visitor]);
 
 export default {
   saveTags,
@@ -230,4 +232,5 @@ export default {
   findUserInfo,
   findUserById,
   getUserProfile,
+  addVisit,
 };

@@ -289,6 +289,7 @@ const getUserProfile = async (request, response, next) => {
         || await userModel.checkIfUserIsBlocked(tokenUserId, profileId)) {
       return response.status(403).end();
     }
+    await userModel.addVisit(tokenUserId, profileId);
     const userData = await userModel.getUserProfile(profileId);
     const tags = (await userModel.getTagsByUid(profileId)).rows;
     const images = await imageModel.getUserImages(profileId);
