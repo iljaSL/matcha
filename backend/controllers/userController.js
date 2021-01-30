@@ -1,11 +1,11 @@
 import bcrypt from 'bcrypt';
 import userModel from '../models/userModel.js';
 import imageModel from '../models/imageModel.js';
+import matchModel from '../models/matchModel.js';
 import UserUtil from '../utils/userUtil.js';
 import input from '../utils/inputUtil.js';
 import jsonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
 import sendmail from '../utils/emailUtil.js';
-import { response } from 'express';
 
 const selfBlockError = new Error('You can not block/unblock yourself!');
 selfBlockError.code = '666';
@@ -281,6 +281,7 @@ const getUserNotifications = async (request, response, next) => {
   } catch (err) { next(err); }
 };
 
+
 const getUserProfile = async (request, response, next) => {
   try {
     const { authorization } = request.headers;
@@ -290,10 +291,18 @@ const getUserProfile = async (request, response, next) => {
         || await userModel.checkIfUserIsBlocked(tokenUserId, profileId)) {
       return response.status(403).end();
     }
+    await userModel.addVisit(tokenUserId, profileId);
     const userData = await userModel.getUserProfile(profileId);
     const tags = (await userModel.getTagsByUid(profileId)).rows;
     const images = await imageModel.getUserImages(profileId);
-    return response.status(200).json({ ...userData, tags, images });
+    const matchStatus = await matchModel.getLikedStatus(tokenUserId, profileId);
+    return response.status(200).json({
+      id: profileId,
+      ...userData,
+      tags,
+      images,
+      ...matchStatus,
+    }).end();
   } catch (err) { next(err); }
 };
 

@@ -87,11 +87,12 @@ const addLike = async (likerId, likedId) => {
   return result.rows[0];
 };
 
-const removeLike = async (likeId) => {
-  const result = await pool.query(`
-    DELETE FROM likes
-        WHERE id = $1;`, [likeId]);
-  return result.rows[0];
+const removeLike = async (likerId, likedId) => {
+  const result = await pool.query(
+    ` DELETE FROM likes
+        WHERE user1 = $1 AND user2 = $2;`, [likerId, likedId],
+  );
+  return result;
 };
 
 export default {
@@ -100,4 +101,5 @@ export default {
   getMessages,
   addMessage,
   addLike,
+  removeLike,
 };

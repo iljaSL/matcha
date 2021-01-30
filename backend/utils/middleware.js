@@ -1,7 +1,7 @@
 // eslint-disable-next-line consistent-return
 // TODO: add custom error class to make this prettier..
 const errorHandler = (error, request, response, next) => {
-   //console.log('Errorhandler:', error.name);
+   //console.log('Errorhandler:', error.name, error.message);
   if (error.code === '666') return response.status(400).end();
   if (error.code === '665') return response.status(401).end();
   if (error.code === '22P02') return response.status(500).end();

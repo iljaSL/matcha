@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
 
@@ -19,14 +20,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SimpleTooltips() {
+export default function SimpleTooltips({handleClick, matchButton}) {
   const classes = useStyles();
 
   return (
     <div>
-      <Tooltip title="Match" aria-label="add">
-        <Fab color="secondary" className={classes.fab}>
-          <FavoriteIcon className={classes.icon}  />
+      <Tooltip title={matchButton ? "Like" : "Unlike"} aria-label="add">
+        <Fab onClick={handleClick} color="secondary" className={classes.fab}>
+          {matchButton && <FavoriteIcon className={classes.icon}  />}
+          {!matchButton && <NotInterestedIcon className={classes.icon} />}
         </Fab>
       </Tooltip>
     </div>

@@ -167,7 +167,6 @@ const getUserProfile = async (uid) => (await pool.query(`SELECT users.lastname, 
                                                          FROM users
                                                          WHERE id = $1`, [uid])).rows[0];
 
-
 const placeholderValues = (array) => {
   let placeholder = '';
   for (let i = 1; i < array.length + 1; i++) {
@@ -182,7 +181,7 @@ const validateTagsInDb = async (tags) => {
   const result = await pool.query(`SELECT count(id) FROM tags WHERE tag IN (${tmp})`, [
     ...tags,
   ]);
-  return tags.length == result.rows[0].count ? true : false;
+  return tags.length == result.rows[0].count;
 };
 
 const userHasTags = async (id) => {
@@ -201,6 +200,7 @@ const saveTags = async (query) => {
   ]);
 };
 
+<<<<<<< HEAD
 const getBlockedUsers = async (id) => {
   const res = await pool.query(
     `SELECT block.user_id as id FROM block
@@ -208,6 +208,18 @@ const getBlockedUsers = async (id) => {
     [id],
   );
   return res.rows;
+=======
+const addVisit = async (visitor, visited) => { // if exists, updates timestamp
+  await pool.query(`
+    UPDATE notifications 
+        SET time_added = NOW() 
+        WHERE uid = $1 AND event = 'visit' AND added_by = $2`, [visited, visitor]);
+
+  await pool.query(`
+    INSERT INTO notifications (uid, event, added_by)
+    SELECT $1, 'visit', $2
+    WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE uid = $1 AND event = 'visit' AND added_by = $2);`, [visited, visitor]);
+>>>>>>> origin
 };
 
 export default {
@@ -240,4 +252,5 @@ export default {
   findUserInfo,
   findUserById,
   getUserProfile,
+  addVisit,
 };
