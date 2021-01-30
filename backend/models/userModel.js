@@ -201,7 +201,17 @@ const saveTags = async (query) => {
   ]);
 };
 
+const getBlockedUsers = async (id) => {
+  const res = await pool.query(
+    `SELECT block.user_id as id FROM block
+    WHERE block.user_id = $1`,
+    [id],
+  );
+  return res.rows;
+};
+
 export default {
+  getBlockedUsers,
   saveTags,
   deleteRow,
   userHasTags,

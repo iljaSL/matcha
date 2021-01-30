@@ -94,4 +94,9 @@ userRouter.get('/:id', async (request, response, next) => {
   await userController.getUserProfile(request, response, next);
 });
 
+userRouter.get('/blockedUsers/:id', async (request, response, next) => {
+  await userController.getBlockedUsers(request, response, next);
+});
+
+
 export default userRouter;

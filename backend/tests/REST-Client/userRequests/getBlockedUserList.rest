@@ -1,0 +1,3 @@
+GET http://localhost:3001/api/users/blockedUsers/501 HTTP/1.1
+content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUwMSIsInVzZXJuYW1lIjoicGx1c3RpZyIsImlhdCI6MTYxMjA0MzY0NSwiZXhwIjoxNjEyMTMwMDQ1fQ.0zIlF2JcG5ibGeurj454XCxyhy8HUBQMtR6Fl5a25To

@@ -5,6 +5,7 @@ import UserUtil from '../utils/userUtil.js';
 import input from '../utils/inputUtil.js';
 import jsonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
 import sendmail from '../utils/emailUtil.js';
+import { response } from 'express';
 
 const selfBlockError = new Error('You can not block/unblock yourself!');
 selfBlockError.code = '666';
@@ -296,7 +297,22 @@ const getUserProfile = async (request, response, next) => {
   } catch (err) { next(err); }
 };
 
+const getBlockedUsers = async (request, response, next) => {
+  try {
+    const { authorization } = request.headers;
+    const userId = jsonWebTokenUtils.getUserId(authorization);
+
+    if (!userId) { throw wrongAuthError; }
+
+    const blockedUsers = await userModel.getBlockedUsers(userId);
+    blockedUsers.map((item) => (item.blocked = true));
+
+    return response.json(blockedUsers);
+  } catch (err) { next(err); }
+};
+
 export default {
+  getBlockedUsers,
   createUser,
   initProfile,
   getUserImages,
