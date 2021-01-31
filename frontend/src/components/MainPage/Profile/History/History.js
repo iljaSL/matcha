@@ -1,12 +1,15 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
+import PersonIcon from '@material-ui/icons/Person';
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,60 +20,61 @@ const useStyles = makeStyles((theme) => ({
   inline: {
     display: 'inline',
   },
+  color: {
+    color:  '#f50057',
+    textDecoration: 'none',
+  },
+  fontColor: {
+    color: 'black'
+  }
 }));
 
 export default function History() {
   const classes = useStyles();
+  const { user: currentUser } = useSelector((state) => state.auth);
+  const [profile, setProfile] = useState()
+  const id = currentUser.id;
+
+  useEffect(() => {
+    let mounted = true
+    if(mounted){
+      const getProfile = async () => {
+        const profileData = (await axios.get(`http://localhost:3001/api/users/userVisit/${id}`)).data
+        setProfile(profileData)
+      }
+      getProfile();
+    }
+    return () => {
+      mounted = false 
+     }
+  }, [])
+
+  if (!profile)
+    return null;
 
   return (
+    <>
     <List className={classes.root}>
     <Typography color="secondary" variant="h6" className={classes.title}>
            Your Visitor History
     </Typography>
-      <ListItem alignItems="flex-start">
+    {profile.map((user) => (
+      <div key={user.id}>
+      <Link to={`/user-profile/${user.id}`} className={classes.color} >
+      <ListItem  alignItems="flex-start" >
         <ListItemAvatar>
-          <Avatar alt="Remy Sharp" src="https://images.unsplash.com/photo-1610859875107-b8a6d589c029?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw1N3x8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" />
+          <PersonIcon />
         </ListItemAvatar>
-        <ListItemText
-          primary="John Good"
+        <ListItemText 
+        className={classes.fontColor}
+          primary={user.username}
         />
       </ListItem>
+      </Link>
       <Divider variant="inset" component="li" />
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="Travis Howard" src="https://images.unsplash.com/photo-1611055114622-4ae289ce3c15?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzM3x8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Johnny Clark"
-        />
-      </ListItem>
-      <Divider variant="inset" component="li" />
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="Travis Howard" src="https://images.unsplash.com/photo-1611055114622-4ae289ce3c15?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzM3x8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Micheal Love"
-        />
-      </ListItem>
-      <Divider variant="inset" component="li" />
-      <ListItem alignItems="flex-start">
-        <ListItemAvatar>
-          <Avatar alt="Travis Howard" src="https://images.unsplash.com/photo-1611055114622-4ae289ce3c15?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzM3x8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Travis Howard"
-        />
-      </ListItem>
-      <Divider variant="inset" component="li" />
-      <ListItem alignItems="center">
-        <ListItemAvatar>
-          <Avatar alt="Cindy Baker" src="https://images.unsplash.com/photo-1610997486601-a6228bdf8ef5?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0OXx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" />
-        </ListItemAvatar>
-        <ListItemText
-          primary="Love Crime"
-        />
-      </ListItem>
+      </div>
+      ))}
     </List>
+    </>
   );
 }
