@@ -74,6 +74,8 @@ export const webSocketServer = (server) => {
         interval = setInterval(async () => {
           const conversation = await chatModel.getMessages(userId, conversationId);
           socket.emit('conversation', { conversationId, conversation });
+          const unreadMessages = await chatModel.getUnreadMessages(userId);
+          socket.emit('unreadMessages', unreadMessages.count);
         }, 1000);
       } catch (err) { socket.emit('my error', 'could not get conversation'); clearInterval(interval); }
     });

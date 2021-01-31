@@ -85,11 +85,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Navbar({newNotifications, newMessages}) {
+export default function Navbar({socket}) {
+  const [newNotifications, setNewNotifications] = useState([]);
+  const [newMessages, setNewMessages] = useState(0);
   const classes = useStyles();
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+
+  socket.once('notification', notification => {
+    if (!newNotifications.includes(notification) && notification.event !== 'message')
+      setNewNotifications([...newNotifications, notification])
+  })
+
+  socket.on('unreadMessages', messageCount => setNewMessages(messageCount)
+  )
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
