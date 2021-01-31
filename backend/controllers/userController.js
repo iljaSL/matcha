@@ -160,6 +160,8 @@ const login = async (request, response, next) => {
     id: user.id,
     status: user.status,
     message: 'Login successful!',
+    orientation: user.sexual_orientation,
+    gender: user.gender,
     username,
     token: tokenObject.token,
     tokenExpiration: tokenObject.expiration,

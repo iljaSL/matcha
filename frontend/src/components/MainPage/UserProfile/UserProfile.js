@@ -121,7 +121,7 @@ export default function SignInSide() {
       Distance: {Math.round(profile.distance_in_miles * 0.621371)} km away
     </Typography>
     <Typography className={classes.divider} color="secondary" variant="h5">
-        Orientation: {profile.sexual_orientation}
+        Orientation: {profile.sexual_orientation} Gender: {profile.gender}
     </Typography>
     <Grid container component="main" className={classes.root} className={classes.divider}>
       <CssBaseline />
