@@ -108,8 +108,6 @@ export default function SignInSide() {
 
    if (blocked) return <Redirect to="/mainpage" />
 
-  console.log(profile)
-
   return (
     <>
     <Typography className={classes.divider} color="secondary" variant="h3">

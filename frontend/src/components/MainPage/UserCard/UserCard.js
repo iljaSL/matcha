@@ -78,7 +78,7 @@ const UserCard = ({user}) => {
       <CardHeader
         className={classes.iconcolor}
         title={`${user.firstname} ${user.lastname}`}
-        subheader={`Popularity score: ${user.popularity_score} `}
+        subheader={`Popularity: ${user.popularity_score} Distance: ${Math.round(user.distance_in_miles * 0.621371)} km`}
       />
       <CardMedia
         className={classes.media}

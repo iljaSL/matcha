@@ -10,6 +10,7 @@ import UserCard from './UserCard/UserCard';
 import Filter from './Filter/Filter';
 import Footer from './Footer/Footer';
 import axios from 'axios';
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme) => ({
   root: {

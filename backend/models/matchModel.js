@@ -49,7 +49,17 @@ const getProfilesByDistance = async (uid, distance, specifiedGender = null) => {
                   WHERE id = $1
                 )
                 
-                  SELECT  uid, COUNT(uid) - 1 AS tags_in_common, users.lastname, users.firstname, users.username, users.gender, users.sexual_orientation, users.bio, users.popularity_score, users.geo_lat, users.geo_long, users.profile_picture_id
+                  SELECT  uid,
+                   COUNT(uid) - 1 AS tags_in_common,
+                    users.lastname, users.firstname,
+                     users.username, users.gender, users.sexual_orientation,
+                      users.bio,
+                       users.popularity_score,
+                        users.geo_lat,
+                         users.geo_long,
+                          users.profile_picture_id,
+                          point((SELECT geo_long FROM master_user), (SELECT geo_lat FROM master_user))
+                           <@> point(users.geo_long, users.geo_lat) as distance_in_miles
                   FROM usertags
                   LEFT JOIN users ON users.id = usertags.uid
                   WHERE (point((SELECT geo_long FROM master_user), (SELECT geo_lat FROM master_user))
