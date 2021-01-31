@@ -52,6 +52,7 @@ const MainPage = () => {
 
   const handleDistance = (event, value) => {
     setDistance(value)
+    setGenderFilter(initialGenders)
   }
 
   const handleSort = (event, sort = null) => {
