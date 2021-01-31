@@ -57,11 +57,26 @@ const Profile = () => {
   const id = currentUser.id;
 
   useEffect(() => {
+    const source = axios.CancelToken.source()
+
     const getProfile = async () => {
-      const profileData = (await axios.get(`http://localhost:3001/api/users/${id}`)).data
-      setProfile(profileData)
-    }
+      try {
+        
+          const profileData = (await axios.get(`http://localhost:3001/api/users/${id}`, {
+            cancelToken: source.token,
+          })).data
+          setProfile(profileData)
+      } catch (error) {
+        if (axios.isCancel(error)) {
+        } else {
+            throw error
+        }
+      }
+   }
     getProfile();
+    return () => {
+      source.cancel()
+  }
   }, [])
 
   if (!profile)
@@ -77,7 +92,9 @@ const Profile = () => {
     </Typography>
     <Grid container component="main" className={classes.root} className={classes.divider}>
       <CssBaseline />
-      <Grid item xs={false} sm={6} md={6}><Pictures /></Grid>
+      <Grid item xs={false} sm={6} md={6}>
+        <Pictures profile={profile}/>
+      </Grid>
       <Grid item xs={12} sm={6} md={5} elevation={6}>
         <div >
           <Typography component="h1" variant="h5">

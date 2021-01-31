@@ -13,7 +13,6 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import BlockIcon from '@material-ui/icons/Block';
 import DeleteIcon from '@material-ui/icons/Delete';
-import updateUserAction from '../../../../actions/updateUserAction';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,11 +37,17 @@ const Blocked = () => {
   }
 
   useEffect(() => {
-    const getProfile = async () => {
-      const profileData = (await axios.get(`http://localhost:3001/api/users/blockedUsers/${id}`)).data
-      setProfile(profileData)
+    let mounted = true
+    if(mounted){
+      const getProfile = async () => {
+        const profileData = (await axios.get(`http://localhost:3001/api/users/blockedUsers/${id}`)).data
+        setProfile(profileData)
+      }
+      getProfile();
     }
-    getProfile();
+    return () => {
+      mounted = false 
+     }
   }, [])
 
   if (!profile)
@@ -58,7 +63,7 @@ const Blocked = () => {
           <div className={classes.demo}>
             <List>
               {profile.map((user) => (
-                <ListItem>
+                <ListItem  key={user.id}>
                   <ListItemAvatar>
                     <Avatar>
                       <BlockIcon />
