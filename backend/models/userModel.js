@@ -248,7 +248,18 @@ const addVisit = async (visitor, visited) => { // if exists, updates timestamp
         AND added_by = $2);`, [visited, visitor]);
 };
 
+const getVisit = async(id) => {
+  const res = await pool.query(
+    `SELECT notifications.added_by as id, users.username FROM notifications
+    LEFT JOIN users ON users.id = added_by
+    WHERE uid=$1 AND "event" = 'visit'`,
+    [id],
+  );
+  return res.rows;
+};
+
 export default {
+  getVisit,
   getBlockedUsers,
   saveTags,
   deleteRow,

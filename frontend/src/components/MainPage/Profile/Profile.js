@@ -107,9 +107,6 @@ const Profile = () => {
       </Grid>
     </Grid>
     <Container component="main" maxWidth="xs">
-    <Matches />
-    </Container>
-    <Container component="main" maxWidth="xs">
     <History />
     </Container>
     <Container component="main" maxWidth="xs">
