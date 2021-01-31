@@ -84,7 +84,8 @@ conversation_id bigserial NOT NULL references conversations (id) ON DELETE CASCA
 time_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 sender bigint NOT NULL REFERENCES users (id) ON DELETE CASCADE,
 receiver bigint NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-message text NOT NULL
+message text NOT NULL,
+message_read boolean NOT NULL DEFAULT false
 );
 
 CREATE TABLE IF NOT EXISTS likes (

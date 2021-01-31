@@ -157,7 +157,7 @@ export default function Navbar({newNotifications, newMessages}) {
     >
       <MenuItem>
         <IconButton aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={newMessages && newMessages.length} color="secondary">
+          <Badge badgeContent={newMessages > 0 ? newMessages : null} color="secondary">
             <Link  href="/messenger" color="inherit">
               <MailIcon />
             </Link>
@@ -168,7 +168,9 @@ export default function Navbar({newNotifications, newMessages}) {
       <MenuItem>
         <IconButton aria-label="show 11 new notifications" color="inherit">
           <Badge badgeContent={newNotifications && newNotifications.length} color="secondary">
+            <Link href="/notification" color="inherit">
             <NotificationsIcon />
+            </Link>
           </Badge>
         </IconButton>
         <p>Notifications</p>
@@ -199,15 +201,17 @@ export default function Navbar({newNotifications, newMessages}) {
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={newMessages && newMessages.length} color="secondary">
-                <Link  href="/messenger" color="inherit">
+              <Badge badgeContent={newMessages > 0 ? newMessages : null} color="secondary">
+                <Link href="/messenger" color="inherit">
                   <MailIcon />
                 </Link>
               </Badge>
             </IconButton>
             <IconButton aria-label="show 17 new notifications" color="inherit">
               <Badge badgeContent={newNotifications && newNotifications.length} color="secondary">
+                <Link href="/notification" color="inherit">
                 <NotificationsIcon />
+                </Link>
               </Badge>
             </IconButton>
             <IconButton

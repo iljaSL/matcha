@@ -170,7 +170,7 @@ const Messenger = ({socket}) => {
             }
         )
         if (currentConversationId)
-            socket.emit('getConversation', currentConversationId)
+            socket.emit('getConversation', {userId: user.id, conversationId: currentConversationId})
 
         socket.on('my error', (error) => console.log(error));
     })

@@ -37,8 +37,8 @@ const socket = socketIOClient(ENDPOINT)
 
 const App = () => {
     const dispatch = useDispatch();
-    const [newNotifications, setNewNotifications] = useState({});
-    const [newMessages, setNewMessages] = useState({});
+    const [newNotifications, setNewNotifications] = useState([]);
+    const [newMessages, setNewMessages] = useState(0);
 
     useEffect(() => {
         let user = JSON.parse(localStorage.getItem("user")) || null;
@@ -61,9 +61,10 @@ const App = () => {
     socket.once('notification', notification => {
         if (!newNotifications.includes(notification) && notification.event !== 'message')
             setNewNotifications([...newNotifications, notification])
-        else if (notification.event === 'message' && !newMessages.includes(notification))
-            setNewMessages([...newMessages, notification])
     })
+
+    socket.on('unreadMessages', messageCount => setNewMessages(messageCount)
+    )
 
     const NavRoute = ({exact, path, component: Component}) => (
         <Route exact={exact} path={path} render={(props) => (

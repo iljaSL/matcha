@@ -15,6 +15,7 @@ import Footer from '../Footer/Footer';
 import axios from 'axios';
 import {useSelector} from "react-redux";
 import { Link } from "react-router-dom";
+import {Visibility} from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 const NotificationEntry = ({notification}) => {
     const string = `You have a new ${notification.event} from ${notification.username}!`
+    console.log('notification', notification)
     switch (notification.event) {
         case 'message':
             return  <ListItem button component={Link} to="/messenger" >
@@ -39,22 +41,29 @@ const NotificationEntry = ({notification}) => {
                 <ListItemText primary={string} />
             </ListItem>
 
-        case 'like': // TODO: link to user profile
-            return  <ListItem button component={Link} to="/" >
+        case 'like':
+            return  <ListItem button component={Link} to={`/user-profile/${notification.added_by}`} >
                 <ListItemIcon>
                     <ThumbUpIcon color='secondary' />
                 </ListItemIcon>
                 <ListItemText primary={string} />
             </ListItem>
-
-        case 'match': // TODO: link to user profile
-            return  <ListItem button component={Link} to="/" >
+        case 'match':
+            return  <ListItem button component={Link} to={`/user-profile/${notification.added_by}`} >
                 <ListItemIcon>
                     <FavoriteIcon color='secondary' />
                 </ListItemIcon>
                 <ListItemText primary={string} />
             </ListItem>
-
+        case 'visit':
+            return  <ListItem button component={Link} to={`/user-profile/${notification.added_by}`} >
+                <ListItemIcon>
+                    <Visibility color='secondary' />
+                </ListItemIcon>
+                <ListItemText primary={string} />
+            </ListItem>
+        default:
+            return null;
     }
 }
 
@@ -72,12 +81,11 @@ export default function Notification() {
         }
         if (user.id) {
             getNotifications()
-            return;
         }
     }, [user])
+    if (!user) return null;
   return (
     <>
-    <Navbar/>
     <Container component="main" maxWidth="xs" className={classes.divider}>
     <div className={classes.root}>
     <Typography component="h1" variant="h5">

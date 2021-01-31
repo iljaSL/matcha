@@ -156,7 +156,7 @@ const getUserNotifications = async (uid) => (pool.query(`
     WITH updated as (UPDATE notifications
         SET notification_read = true
         FROM users
-        WHERE uid = $1 AND notifications.added_by = users.id
+        WHERE uid = $1 AND notifications.added_by = users.id AND notifications.event NOT IN ('message')
         RETURNING notifications.id, notifications.uid, notifications.time_added, event, added_by, username, gender, sexuaL_orientation, profile_picture_id
     )
     SELECT *
