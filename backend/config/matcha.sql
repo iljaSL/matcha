@@ -180,6 +180,7 @@ AS $function$
 BEGIN
     DELETE FROM notifications WHERE (event = 'match' AND (uid = NEW.user_id AND added_by = NEW.blocked_user_id) OR (uid = NEW.blocked_user_id AND added_by = NEW.user_id));
     DELETE FROM conversations WHERE (user1 = NEW.user_id AND user2 = NEW.blocked_user_id) OR (user1 = NEW.blocked_user_id AND user2 = NEW.user_id);
+    RETURN NULL;
 END;
 $function$;
 
