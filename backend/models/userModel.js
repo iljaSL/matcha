@@ -200,15 +200,16 @@ const saveTags = async (query) => {
   ]);
 };
 
-<<<<<<< HEAD
 const getBlockedUsers = async (id) => {
   const res = await pool.query(
-    `SELECT block.user_id as id FROM block
+    `SELECT block.user_id as id, users.username, users.id FROM block
+    LEFT JOIN users ON users.id = blocked_user_id
     WHERE block.user_id = $1`,
     [id],
   );
   return res.rows;
-=======
+};
+
 const addVisit = async (visitor, visited) => { // if exists, updates timestamp
   await pool.query(`
     UPDATE notifications 
@@ -219,7 +220,6 @@ const addVisit = async (visitor, visited) => { // if exists, updates timestamp
     INSERT INTO notifications (uid, event, added_by)
     SELECT $1, 'visit', $2
     WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE uid = $1 AND event = 'visit' AND added_by = $2);`, [visited, visitor]);
->>>>>>> origin
 };
 
 export default {

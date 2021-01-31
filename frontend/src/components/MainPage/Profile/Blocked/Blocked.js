@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -11,6 +13,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import BlockIcon from '@material-ui/icons/Block';
 import DeleteIcon from '@material-ui/icons/Delete';
+import updateUserAction from '../../../../actions/updateUserAction';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,28 +25,39 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function generate(element) {
-  return [0, 1, 2].map((value) =>
-    React.cloneElement(element, {
-      key: value,
-    }),
-  );
-}
-
-export default function InteractiveList() {
+const Blocked = () => {
   const classes = useStyles();
-  const [dense, setDense] = React.useState(false);
-  const [secondary, setSecondary] = React.useState(false);
+  const { user: currentUser } = useSelector((state) => state.auth);
+  const [profile, setProfile] = useState()
+  const id = currentUser.id;
+
+  const handleUnblock = async (blockedUserId) => {
+    await axios.post(`http://localhost:3001/api/users/unblock/${id}/${blockedUserId}`)
+    const profileData = (await axios.get(`http://localhost:3001/api/users/blockedUsers/${id}`)).data
+    setProfile(profileData)
+  }
+
+  useEffect(() => {
+    const getProfile = async () => {
+      const profileData = (await axios.get(`http://localhost:3001/api/users/blockedUsers/${id}`)).data
+      setProfile(profileData)
+    }
+    getProfile();
+  }, [])
+
+  if (!profile)
+    return null;
 
   return (
     <div className={classes.root}>
+    {console.log(profile)}
         <Grid item xs={12} md={12}>
           <Typography color="secondary" variant="h6" className={classes.title}>
            Blocked Users
           </Typography>
           <div className={classes.demo}>
-            <List dense={dense}>
-              {generate(
+            <List>
+              {profile.map((user) => (
                 <ListItem>
                   <ListItemAvatar>
                     <Avatar>
@@ -51,19 +65,25 @@ export default function InteractiveList() {
                     </Avatar>
                   </ListItemAvatar>
                   <ListItemText
-                    primary="Name Here"
-                    secondary={secondary ? 'Secondary text' : null}
+                    primary={user.username}
                   />
-                  <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="unblock">
-                      <DeleteIcon />
+                  <ListItemSecondaryAction>      
+                    <IconButton 
+                    edge="end" 
+                    aria-label="unblock"
+                    onClick={() => handleUnblock(user.id)}
+                    >
+                      <DeleteIcon      
+                      color='secondary' />
                     </IconButton>
                   </ListItemSecondaryAction>
-                </ListItem>,
-              )}
+                </ListItem>
+              ))}
             </List>
           </div>
         </Grid>
     </div>
   );
 }
+
+export default Blocked;
