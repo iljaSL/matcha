@@ -71,12 +71,12 @@ const updatePasswordWithResetKey = async (newPassword, key) => {
 };
 
 const addUserProfile = async (uid, formData) => pool.query(`UPDATE users
-                           SET gender             = $1,
-                               sexual_orientation = $2,
-                               bio                = $3,
-                               profile_picture_id = $4,
-                               status = $5
-                           WHERE id = $6`,
+                                                            SET gender             = $1,
+                                                                sexual_orientation = $2,
+                                                                bio                = $3,
+                                                                profile_picture_id = $4,
+                                                                status             = $5
+                                                            WHERE id = $6`,
 [formData.gender, formData.sexualOrientation, formData.bio,
   formData.profilePicID, 2, uid]);
 
@@ -132,10 +132,10 @@ const registerUser = async (user, next) => {
 };
 
 const getTagsByUid = async (uid) => pool.query(`
-    SELECT  usertags.uid, tags.id, tags.tag  
-    FROM usertags 
-        INNER JOIN tags
-        ON usertags.tagid = tags.id 
+    SELECT usertags.uid, tags.id, tags.tag
+    FROM usertags
+             INNER JOIN tags
+                        ON usertags.tagid = tags.id
     WHERE uid = $1`, [uid]);
 
 const addUserTag = async (uid, tagId) => pool.query('INSERT INTO usertags (uid, tagId) VALUES ($1, $2)', [uid, tagId]);
@@ -145,27 +145,48 @@ const removeUserTag = async (userTagId) => pool.query('DELETE FROM usertags WHER
 const changeUserLocation = async (uid, long, lat) => {
   if (!(long <= 180 && long >= -180 && lat >= -90 && lat <= 90)) throw (new Error('False coordinates'));
   return pool.query(
-    `UPDATE users 
-          SET geo_long = $1, geo_lat = $2 
-          WHERE id = $3`, [long, lat, uid],
+    `UPDATE users
+         SET geo_long = $1,
+             geo_lat  = $2
+         WHERE id = $3`, [long, lat, uid],
   );
 };
 
 const getUserNotifications = async (uid) => (pool.query(`
-  WITH updated as (UPDATE notifications
-  SET notification_read = true
-  FROM users
-  WHERE uid = $1 AND notifications.added_by = users.id
-  RETURNING notifications.id, notifications.uid, notifications.time_added, event, added_by, username, gender, sexuaL_orientation, profile_picture_id
-) SELECT * FROM updated
-ORDER BY time_added DESC
-LIMIT 25;
+    WITH updated as (UPDATE notifications
+        SET notification_read = true
+        FROM users
+        WHERE uid = $1 AND notifications.added_by = users.id
+        RETURNING notifications.id, notifications.uid, notifications.time_added, event, added_by, username, gender, sexuaL_orientation, profile_picture_id
+    )
+    SELECT *
+    FROM updated
+    ORDER BY time_added DESC
+    LIMIT 25;
 `, [uid]));
 
+const getUserProfile = async (user1, user2) => (await pool.query(`
 
-const getUserProfile = async (uid) => (await pool.query(`SELECT users.lastname, users.firstname, users.username, users.gender, users.sexual_orientation, users.mail, users.bio, users.popularity_score, users.geo_lat, users.geo_long, users.profile_picture_id
-                                                         FROM users
-                                                         WHERE id = $1`, [uid])).rows[0];
+    WITH master_user AS (
+        SELECT *
+        FROM users
+        WHERE id = $1
+    )
+    SELECT users.lastname,
+           users.firstname,
+           users.username,
+           users.gender,
+           users.sexual_orientation,
+           users.mail,
+           users.bio,
+           users.popularity_score,
+           users.geo_lat,
+           users.geo_long,
+           users.profile_picture_id,
+           point((SELECT geo_long FROM master_user), (SELECT geo_lat FROM master_user))
+               <@> point(users.geo_long, users.geo_lat) as distance_in_miles
+    FROM users
+    WHERE id = $2`, [user1, user2])).rows[0];
 
 const placeholderValues = (array) => {
   let placeholder = '';
@@ -202,14 +223,20 @@ const saveTags = async (query) => {
 
 const addVisit = async (visitor, visited) => { // if exists, updates timestamp
   await pool.query(`
-    UPDATE notifications 
-        SET time_added = NOW() 
-        WHERE uid = $1 AND event = 'visit' AND added_by = $2`, [visited, visitor]);
+        UPDATE notifications
+        SET time_added = NOW()
+        WHERE uid = $1
+          AND event = 'visit'
+          AND added_by = $2`, [visited, visitor]);
 
   await pool.query(`
-    INSERT INTO notifications (uid, event, added_by)
-    SELECT $1, 'visit', $2
-    WHERE NOT EXISTS (SELECT 1 FROM notifications WHERE uid = $1 AND event = 'visit' AND added_by = $2);`, [visited, visitor]);
+        INSERT INTO notifications (uid, event, added_by)
+        SELECT $1, 'visit', $2
+        WHERE NOT EXISTS(SELECT 1
+                         FROM notifications
+                         WHERE uid = $1
+                           AND event = 'visit'
+                           AND added_by = $2);`, [visited, visitor]);
 };
 
 export default {
