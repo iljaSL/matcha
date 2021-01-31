@@ -126,13 +126,17 @@ BEGIN
         SELECT NEW.user2, 'match', NEW.user1
             WHERE EXISTS (
                 SELECT 1 FROM likes WHERE user2 = NEW.user1 AND user1 = NEW.user2
-                       );
-
+                    );
     INSERT INTO notifications (uid, event, added_by)
         SELECT NEW.user1, 'match', NEW.user2
         WHERE EXISTS (
                       SELECT 1 FROM likes WHERE user2 = NEW.user1 AND user1 = NEW.user2
-                  );
+                    );
+    INSERT INTO conversations (user1, user2)
+        SELECT NEW.user1, NEW.user2
+        WHERE EXISTS (
+                      SELECT 1 FROM likes WHERE user2 = NEW.user1 AND user1 = NEW.user2
+                    );
     RETURN NULL;
 END;
 $function$;
@@ -168,6 +172,17 @@ BEGIN
 END;
 $function$;
 
+CREATE OR REPLACE FUNCTION public.block()
+    RETURNS trigger
+    LANGUAGE plpgsql
+AS $function$
+BEGIN
+    DELETE FROM notifications WHERE (event = 'match' AND (uid = NEW.user_id AND added_by = NEW.blocked_user_id) OR (uid = NEW.blocked_user_id AND added_by = NEW.user_id));
+    DELETE FROM conversations WHERE (user1 = NEW.user_id AND user2 = NEW.blocked_user_id) OR (user1 = NEW.blocked_user_id AND user2 = NEW.user_id);
+END;
+$function$;
+
+
 
 CREATE TRIGGER new_like_trigger AFTER INSERT ON likes -- TRIGGERS AFTER EACH LIKE
     FOR EACH ROW EXECUTE PROCEDURE notify_like();
@@ -180,3 +195,6 @@ CREATE TRIGGER deleted_like_trigger AFTER DELETE ON likes
 
 CREATE TRIGGER new_notification_trigger AFTER INSERT ON notifications
     FOR EACH ROW EXECUTE PROCEDURE notify_notification(); -- such a good name...
+
+CREATE TRIGGER new_block_trigger AFTER INSERT ON block
+    FOR EACH ROW EXECUTE PROCEDURE block();
