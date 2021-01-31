@@ -56,7 +56,11 @@ export const webSocketServer = (server) => {
         const receiverOnline = connections.find((connection) => connection.userId === parseInt(receiverId, 10));
         interval = setInterval(async () => {
           socket.emit('conversation', { conversationId, conversation });
-          if (receiverOnline) io.to(receiverOnline.socketId).emit('conversation', { conversationId, conversation });
+          if (receiverOnline) {
+            io.to(receiverOnline.socketId).emit('conversation', { conversationId, conversation });
+            const unreadMessages = await chatModel.getUnreadMessages(receiverId);
+            io.to(receiverOnline.socketId).emit('unreadMessages', unreadMessages.count);
+          }
         }, 1000);
       } catch (err) { socket.emit('my error', 'could not add message'); clearInterval(interval); }
     });
