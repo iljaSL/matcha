@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "2.5rem",
     margin: theme.spacing(1),
     minWidth: 120,
+    listStyle: 'none',
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
   noLabel: {
     marginTop: theme.spacing(3),
   },
+
 }));
 
 const ITEM_HEIGHT = 48;
@@ -51,75 +53,44 @@ function getStyles(tag, tagName, theme) {
   }
   
 
-const tags = [
-    'Vegan',
-    'Jocke',
-    'Coder',
-    'Cooking',
-  ];
 
-export default function SimpleSelect({distance, handleDistance}) {
-    const theme = useTheme();
+export default function SimpleSelect({distance, handleDistance, handleSort, sort, genderList, handleFilter, selectedGenders}) {
+  const theme = useTheme();
   const classes = useStyles();
-  const [fame, setFame] = React.useState('');
-  const [tagName, setTagName] = React.useState([]);
 
-
-  const handleChangeOnFame = (event) => {
-    setFame(event.target.value);
-    }
-
-    const handleTag = (event) => {
-        setTagName(event.target.value);
-    };
 
   return (
     <div>
-
       <FormControl color='secondary' variant="outlined" className={classes.formControl}>
-        <InputLabel id="demo-simple-select-outlined-label">Fame</InputLabel>
+        <InputLabel id="demo-simple-select-outlined-label">Sort by</InputLabel>
         <Select
           labelId="demo-simple-select-outlined-label"
           id="demo-simple-select-outlined"
-          value={fame}
-          onChange={handleChangeOnFame}
-          label="fame"
+          onChange={handleSort}
+          label="Sort by"
+          value={sort}
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>0-50❤️</MenuItem>
-          <MenuItem value={20}>50-100❤️</MenuItem>
-          <MenuItem value={30}>100❤️</MenuItem>
-          <MenuItem value={40}>Jocke❤️❤️❤️</MenuItem>
+          <MenuItem value={'default'}>Default</MenuItem>
+          <MenuItem value={'score'}>Popularity️</MenuItem>
+          <MenuItem value={'tags'}>Tags in common️</MenuItem>
+          <MenuItem value={'distance'}>Distance️</MenuItem>
         </Select>
       </FormControl>
-      <FormControl color='secondary' className={classes.formControl}>
-        <InputLabel id="demo-mutiple-chip-label">Tags</InputLabel>
-        <Select
-          labelId="demo-mutiple-chip-label"
-          id="demo-mutiple-chip"
-          multiple
-          value={tagName}
-          onChange={handleTag}
-          input={<Input id="select-multiple-chip" />}
-          renderValue={(selected) => (
-            <div className={classes.chips}>
-              {selected.map((value) => (
-                <Chip key={value} label={value} className={classes.chip} />
-              ))}
-            </div>
-          )}
 
-          MenuProps={MenuProps}
-        >
-          {tags.map((tag) => (
-            <MenuItem key={tag} value={tag} style={getStyles(tag, tagName, theme)}>
-              {tag}
-            </MenuItem>
-          ))}
-        </Select>
+
+      <FormControl color='secondary' variant="outlined" className={classes.formControl}>
+      {genderList.map((gender, index) => <li key={index}>
+        <Chip clickable
+              value={gender}
+              label={gender}
+              color={selectedGenders.includes(gender) ? "primary" : "secondary" }
+              onClick={() => handleFilter(gender)}
+        />
+      </li>
+      )}
       </FormControl>
+
+
       <Slider
           value={distance}
           onChange={handleDistance}
