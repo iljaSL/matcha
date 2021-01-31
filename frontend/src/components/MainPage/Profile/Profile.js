@@ -70,7 +70,7 @@ const Profile = () => {
   return (
     <>
     <Typography className={classes.divider} color="secondary" variant="h3">
-    {console.log('ID', profile)}{profile.firstname} {profile.lastname}
+    {profile.firstname} {profile.lastname}
     </Typography>
     <Typography className={classes.divider} color="secondary" variant="h4">
       Popularity: {profile.popularity_score} {profile.popularity_score < 20 && '❄️'} {profile.popularity_score > 20 && '🔥'}
