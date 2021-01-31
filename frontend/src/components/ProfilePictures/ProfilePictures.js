@@ -23,14 +23,28 @@ const ProfilePictures = () => {
     const {user} = useSelector(state => state.auth)
     const history = useHistory();
     useEffect(() => {
+        const source = axios.CancelToken.source()
+
         const fetchImageData = async () => {
-            setProfilePictures((await axios.get(`http://localhost:3001/api/users/${user.id}/images`)).data)
+            try {
+                setProfilePictures((await axios.get(`http://localhost:3001/api/users/${user.id}/images`, {
+                    cancelToken: source.token,
+                })).data)
+            } catch (error) {
+                if (axios.isCancel(error)) {
+                } else {
+                    throw error
+                }
+            }
         }
         if (user.id) {
             fetchImageData();
         }
         if (profilePictures.length > 0)
            readImages(profilePictures)
+        return () => {
+            source.cancel()
+        }
     }, [user, profilePictures.length])
 
 
@@ -74,7 +88,7 @@ const ProfilePictures = () => {
         handleUpload={handleDropZone}
         initialFiles={pictureBlobs}
         handleDelete={handleDelete}/>
-    <Button variant="contained" color="secondary" onClick={() => reset()}>Reset</Button><Button onClick={() => handleUpload()} variant="contained" color="primary">Apply</Button>
+    <Button variant="contained" color="secondary" onClick={() => reset()}>Reset</Button><Button onClick={() => handleUpload()} variant="contained" color="secondary">Apply</Button>
     </>
     else return <p>loading...</p>
 }

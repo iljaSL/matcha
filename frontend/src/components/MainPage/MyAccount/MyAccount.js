@@ -17,6 +17,7 @@ import Preference from './Preference';
 import Tags from './Tags';
 import Delete from './Delete';
 import Alert from "@material-ui/lab/Alert";
+import Pictures from '../../ProfilePictures/ProfilePictures';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -59,6 +60,9 @@ export default function MyAccount() {
             {message}
             </Alert>
           )}
+        <div className={classes.divider}>
+        <Pictures />
+        </div>
         <div className={classes.divider}>
         <FirstLastName />
         </div>
