@@ -108,7 +108,6 @@ export default function SignInSide() {
 
    if (blocked) return <Redirect to="/mainpage" />
 
-
   return (
     <>
     <Typography className={classes.divider} color="secondary" variant="h3">
@@ -118,8 +117,11 @@ export default function SignInSide() {
     <Typography className={classes.divider} color="secondary" variant="h4">
           Popularity: {profile.popularity_score} {profile.popularity_score > 20 && '🔥'}
     </Typography>
+    <Typography className={classes.divider} color="secondary" variant="h4">
+      Distance: {Math.round(profile.distance_in_miles * 0.621371)} km away
+    </Typography>
     <Typography className={classes.divider} color="secondary" variant="h5">
-        Orientation: {profile.sexual_orientation}
+        Orientation: {profile.sexual_orientation} Gender: {profile.gender}
     </Typography>
     <Grid container component="main" className={classes.root} className={classes.divider}>
       <CssBaseline />

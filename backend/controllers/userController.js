@@ -160,6 +160,8 @@ const login = async (request, response, next) => {
     id: user.id,
     status: user.status,
     message: 'Login successful!',
+    orientation: user.sexual_orientation,
+    gender: user.gender,
     username,
     token: tokenObject.token,
     tokenExpiration: tokenObject.expiration,
@@ -292,7 +294,7 @@ const getUserProfile = async (request, response, next) => {
       return response.status(403).end();
     }
     await userModel.addVisit(tokenUserId, profileId);
-    const userData = await userModel.getUserProfile(profileId);
+    const userData = await userModel.getUserProfile(tokenUserId, profileId);
     const tags = (await userModel.getTagsByUid(profileId)).rows;
     const images = await imageModel.getUserImages(profileId);
     const matchStatus = await matchModel.getLikedStatus(tokenUserId, profileId);

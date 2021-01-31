@@ -49,7 +49,21 @@ const getProfilesByDistance = async (uid, distance, specifiedGender = null) => {
                   WHERE id = $1
                 )
                 
-                  SELECT  uid, COUNT(uid) - 1 AS tags_in_common, users.lastname, users.firstname, users.username, users.gender, users.sexual_orientation, users.bio, users.popularity_score, users.geo_lat, users.geo_long, users.profile_picture_id
+                  SELECT  uid,
+                   COUNT(uid) - 1 AS tags_in_common,
+                    users.lastname, users.firstname,
+                     users.username, users.gender, users.sexual_orientation,
+                      users.bio,
+                       users.popularity_score,
+                        users.geo_lat,
+                         users.geo_long,
+                          users.profile_picture_id,
+                          point((SELECT geo_long FROM master_user), (SELECT geo_lat FROM master_user))
+                           <@> point(users.geo_long, users.geo_lat) as distance_in_miles,
+                           ( select json_agg(row_to_json(usertags)) 
+                           from usertags 
+                           left join tags ON tags.id = usertags.tagid 
+                           where usertags.uid=users.id) as tags
                   FROM usertags
                   LEFT JOIN users ON users.id = usertags.uid
                   WHERE (point((SELECT geo_long FROM master_user), (SELECT geo_lat FROM master_user))
@@ -61,7 +75,8 @@ const getProfilesByDistance = async (uid, distance, specifiedGender = null) => {
                   WHERE user_id = (SELECT id FROM master_user)
                 )
                   ${genderString}
-                  GROUP BY uid, users.lastname, users.firstname, users.username, users.gender, users.sexual_orientation, users.bio, users.popularity_score, users.geo_lat, users.geo_long, users.profile_picture_id
+                  GROUP BY uid, users.lastname, users.firstname, users.username, users.gender, users.sexual_orientation, users.bio, users.popularity_score, users.geo_lat, users.geo_long, users.profile_picture_id,
+                  users.id
                   ORDER BY tags_in_common DESC, users.popularity_score DESC`;
   const res = await pool.query(queryString, [uid, distance]);
   return res.rows;
