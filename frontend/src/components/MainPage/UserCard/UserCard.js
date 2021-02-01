@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -8,7 +7,6 @@ import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import axios from "axios";
 import {Link} from "react-router-dom";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -41,25 +39,59 @@ const useStyles = makeStyles((theme) => ({
   iconcolor: {
     color: "#f50057",
   },
+  link: {
+    textDecoration: 'none',
+  },
+  heartPosition: {
+    marginLeft: '160px',
+  },
 }));
 
 const UserCard = ({user}) => {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
   const [profilePic, setProfilepic] = useState('')
   const [matchStatus, setMatchStatus] = useState({liked: false, matched: false})
+
   useEffect(() => {
+    const source = axios.CancelToken.source()
+    
     const getPic = async () => {
-      setProfilepic((await axios.get(`http://localhost:3001/api/images/${user.profile_picture_id}`)).data.imageBlob)
+      try {
+        setProfilepic((await axios.get(`http://localhost:3001/api/images/${user.profile_picture_id}`, {
+          cancelToken: source.token,
+        })).data.imageBlob)
+      } catch (error) {
+        if (axios.isCancel(error)) {
+        } else {
+            throw error
+        }
+      }
     }
     getPic();
+    return () => {
+      source.cancel()
+    }
   }, [])
 
   useEffect(() => {
+    const source = axios.CancelToken.source()
+
     const getMatchStatus = async () => {
-      setMatchStatus((await axios.get(`http://localhost:3001/api/matches/like/${user.uid}`)).data)
+      try {
+         setMatchStatus((await axios.get(`http://localhost:3001/api/matches/like/${user.uid}`, {
+          cancelToken: source.token,
+         })).data)
+      } catch (error) {
+        if (axios.isCancel(error)) {
+        } else {
+            throw error
+        }
+      }
     }
     getMatchStatus();
+    return () => {
+      source.cancel()
+    }
   }, [])
 
   const handleLike = async () => {
@@ -74,7 +106,7 @@ const UserCard = ({user}) => {
 
   return (
     <Card className={classes.root}>
-      <Link to={`/user-profile/${user.uid}`}>
+      <Link to={`/user-profile/${user.uid}`} className={classes.link}>
       <CardHeader
         className={classes.iconcolor}
         title={`${user.firstname} ${user.lastname}`}
@@ -87,9 +119,9 @@ const UserCard = ({user}) => {
       />
       </Link>
       <CardActions disableSpacing>
-        <IconButton aria-label="match" onClick={matchStatus.liked ? handleUnlike : handleLike}>
+        <IconButton className={classes.heartPosition} aria-label="match" onClick={matchStatus.liked ? handleUnlike : handleLike}>
           <Tooltip title={matchStatus.liked ? "unlike" : "like"} aria-label="add">
-            <FavoriteIcon color={matchStatus.liked ? "secondary" : "primary"}/>
+            <FavoriteIcon color={matchStatus.liked ? "secondary" : "inherit"}/>
           </Tooltip>
         </IconButton>
       </CardActions>

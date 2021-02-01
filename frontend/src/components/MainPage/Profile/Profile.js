@@ -61,7 +61,6 @@ const Profile = () => {
 
     const getProfile = async () => {
       try {
-        
           const profileData = (await axios.get(`http://localhost:3001/api/users/${id}`, {
             cancelToken: source.token,
           })).data
@@ -76,7 +75,7 @@ const Profile = () => {
     getProfile();
     return () => {
       source.cancel()
-  }
+    }
   }, [])
 
   if (!profile)

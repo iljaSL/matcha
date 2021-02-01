@@ -15,7 +15,7 @@ import {useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    paddingTop: '200px',
+    paddingTop: '50px',
   },
   control: {
     padding: theme.spacing(5),
@@ -99,11 +99,25 @@ const MainPage = () => {
     }
 
   useEffect(() => {
+    const source = axios.CancelToken.source()
+
     const getUsers = async () => {
-      const response = await axios.get(`http://localhost:3001/api/matches/${distance}`)
-      setUsers(response.data)
+      try {
+        const response = await axios.get(`http://localhost:3001/api/matches/${distance}`, {
+          cancelToken: source.token,
+        })
+        setUsers(response.data)
+      } catch (error) {
+        if (axios.isCancel(error)) {
+        } else {
+          throw error;
+        }
+      }
     }
     getUsers();
+    return () => {
+      source.cancel();
+    }
   }, [distance, displayedUsers[0]])
 
   useEffect(() => {

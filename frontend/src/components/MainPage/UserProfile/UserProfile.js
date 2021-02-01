@@ -74,11 +74,25 @@ export default function SignInSide() {
   const [imageList, setImageList] = useState([])
 
   useEffect(() => {
+    const source = axios.CancelToken.source()
+
     const getProfile = async () => {
-      const profileData = (await axios.get(`http://localhost:3001/api/users/${id}`)).data
-      setProfile(profileData)
+      try {
+        const profileData = (await axios.get(`http://localhost:3001/api/users/${id}`, {
+          cancelToken: source.token,
+        })).data
+        setProfile(profileData)
+      } catch (error) {
+        if (axios.isCancel(error)) {
+        } else {
+          throw error
+        }
+      } 
     }
     getProfile();
+    return () => {
+      source.cancel()
+    }
   }, [])
 
 
