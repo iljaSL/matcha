@@ -1,12 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import { useSelector } from "react-redux";
 import axios from "axios";
 import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
-import IconButton from '@material-ui/core/IconButton';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,70 +28,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
- const tileData = [
-    {
-      img: 'https://images.unsplash.com/photo-1610976792422-36d647abf7ac?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-      title: 'Image1',
-      author: 'author1',
-      featured: true,
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1610948409536-4aa96bc76988?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw2Mnx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-        title: 'Image2',
-        author: 'author2',
-        featured: true,
-      },
-      {
-        img: 'https://images.unsplash.com/photo-1610984404810-f917a18c9d36?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw2M3x8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-        title: 'Image3',
-        author: 'author3',
-        featured: true,
-      },
-      {
-        img: 'https://images.unsplash.com/photo-1611020915878-7ffbba3a5f62?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw3NHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-        title: 'Image4',
-        author: 'author4',
-        featured: true,
-      },
-      {
-        img: 'https://images.unsplash.com/photo-1610983881213-db786dba17c5?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxMDN8fHxlbnwwfHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-        title: 'Image5',
-        author: 'author5',
-        featured: true,
-      },
-  ];
-
-const Pictures = () => {
+const Pictures = ({profile}) => {
   const classes = useStyles();
-  const { user: currentUser } = useSelector((state) => state.auth);
-  const [profile, setProfile] = useState()
-  const id = currentUser.id;
+  const [profilePic, setProfilepic] = useState('')
 
   useEffect(() => {
-    const getProfile = async () => {
-      const profileData = (await axios.get(`http://localhost:3001/api/users/${id}`)).data
-      setProfile(profileData)
+    const getPic = async () => {
+      setProfilepic((await axios.get(`http://localhost:3001/api/images/${profile.profile_picture_id}`)).data.imageBlob)
     }
-    getProfile();
+    getPic();
   }, [])
 
   if (!profile)
-    return null;
+  return null;
 
   return (
     <div className={classes.root}>
       <GridList cellHeight={200} spacing={1} className={classes.gridList}>
-        {profile.images.map((img) => (
-          <GridListTile key={img.uid} cols={2} rows={2}>
-            <img src={`data:image/png;base64, ${img.link}`} />
+          <GridListTile cols={2} rows={2}>
+            <img src={`data:image/png;base64, ${profilePic}`} />
             <GridListTileBar
               titlePosition="top"
               actionPosition="left"
               className={classes.titleBar}
             />
           </GridListTile>
-        ))}
       </GridList>
     </div>
   );

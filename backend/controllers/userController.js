@@ -322,7 +322,22 @@ const getBlockedUsers = async (request, response, next) => {
   } catch (err) { next(err); }
 };
 
+const getVisit = async (request, response, next) => {
+  try {
+    const { authorization } = request.headers;
+    const userId = jsonWebTokenUtils.getUserId(authorization);
+
+    if (!userId) { throw wrongAuthError; }
+
+    const visitList = await userModel.getVisit(userId);
+    visitList.map((item) => (item.visited = true));
+
+    return response.json(visitList);
+  } catch (err) { next(err); }
+};
+
 export default {
+  getVisit,
   getBlockedUsers,
   createUser,
   initProfile,
