@@ -1,6 +1,7 @@
 import { Server } from 'socket.io';
 import chatModel from './models/chatModel.js';
 import { initDbListener } from './utils/dbListener.js';
+import userModel from './models/userModel.js';
 
 export const webSocketServer = (server) => {
   const dbListener = initDbListener();
@@ -19,15 +20,16 @@ export const webSocketServer = (server) => {
       clearInterval(interval);
     }
 
-    dbListener.on('notification', (msg) => {
+    dbListener.on('notification', async (msg) => {
       const payload = JSON.parse(msg.payload);
       const currentConnection = connections.find((connection) => connection.userId === payload.uid);
       if (currentConnection) {
-        io.to(currentConnection.socketId).emit('notification', payload);
+        const notificationCount = await userModel.getUserNotificationCount(payload.uid);
+        io.to(currentConnection.socketId).emit('notification', { ...payload, ...notificationCount });
       }
     });
 
-    socket.on('setUserData', (userData) => {
+    socket.on('setUserData', async (userData) => {
       if (interval) {
         clearInterval(interval);
       }
@@ -37,9 +39,11 @@ export const webSocketServer = (server) => {
         interval = setInterval(async () => {
           const conversationList = await chatModel.getConversations(id);
           socket.emit('conversationList', conversationList);
-          const unreadMessages = await chatModel.getUnreadMessages(id);
-          socket.emit('unreadMessages', unreadMessages.count);
         }, 1000);
+        const notificationCount = await userModel.getUserNotificationCount(id);
+        const unreadMessages = await chatModel.getUnreadMessages(id);
+        socket.emit('unreadMessages', unreadMessages.count);
+        socket.emit('unreadNotifications', notificationCount);
       } catch (err) { socket.emit('my error', 'could not get conversations'); clearInterval(interval); }
     });
 

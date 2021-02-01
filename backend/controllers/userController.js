@@ -283,7 +283,6 @@ const getUserNotifications = async (request, response, next) => {
   } catch (err) { next(err); }
 };
 
-
 const getUserProfile = async (request, response, next) => {
   try {
     const { authorization } = request.headers;

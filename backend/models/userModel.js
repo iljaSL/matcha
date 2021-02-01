@@ -165,6 +165,16 @@ const getUserNotifications = async (uid) => (pool.query(`
     LIMIT 25;
 `, [uid]));
 
+const getUserNotificationCount = async (uid) => {
+  const result = await pool.query(`
+        SELECT COUNT(*) as unread_notifications
+        FROM notifications
+        WHERE uid = $1
+          AND notification_read = FALSE
+          AND notifications.event NOT IN ('message')`, [uid]);
+  return result.rows[0];
+};
+
 const getUserProfile = async (user1, user2) => (await pool.query(`
 
     WITH master_user AS (
@@ -248,7 +258,7 @@ const addVisit = async (visitor, visited) => { // if exists, updates timestamp
         AND added_by = $2);`, [visited, visitor]);
 };
 
-const getVisit = async(id) => {
+const getVisit = async (id) => {
   const res = await pool.query(
     `SELECT notifications.added_by as id, users.username FROM notifications
     LEFT JOIN users ON users.id = added_by
@@ -290,4 +300,5 @@ export default {
   findUserById,
   getUserProfile,
   addVisit,
+  getUserNotificationCount,
 };

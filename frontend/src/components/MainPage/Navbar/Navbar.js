@@ -86,19 +86,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Navbar({socket}) {
-  const [newNotifications, setNewNotifications] = useState([]);
+  const [newNotifications, setNewNotifications] = useState(0);
   const [newMessages, setNewMessages] = useState(0);
   const classes = useStyles();
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
-  socket.once('notification', notification => {
-    if (!newNotifications.includes(notification) && notification.event !== 'message')
-      setNewNotifications([...newNotifications, notification])
+  socket.on('notification', notification => {
+    setNewNotifications(notification.unread_notifications)
   })
 
-  socket.on('unreadMessages', messageCount => setNewMessages(messageCount)
+  socket.on('unreadMessages', messageCount => setNewMessages(messageCount))
+
+  socket.on('unreadNotifications', notificationCount => setNewNotifications(notificationCount.unread_notifications)
   )
 
   const isMenuOpen = Boolean(anchorEl);
@@ -177,7 +178,7 @@ export default function Navbar({socket}) {
       </MenuItem>
       <MenuItem>
         <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={newNotifications && newNotifications.length} color="secondary">
+          <Badge badgeContent={newNotifications > 0 ? newNotifications : null} color="secondary">
             <Link href="/notification" color="inherit">
             <NotificationsIcon />
             </Link>
@@ -218,7 +219,7 @@ export default function Navbar({socket}) {
               </Badge>
             </IconButton>
             <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={newNotifications && newNotifications.length} color="secondary">
+              <Badge badgeContent={newNotifications > 0 ? newNotifications : null} color="secondary">
                 <Link href="/notification" color="inherit">
                 <NotificationsIcon />
                 </Link>
