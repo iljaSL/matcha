@@ -118,13 +118,10 @@ const getPosition = () => (dispatch) => {
           dispatch({type: 'TOKEN_ERROR'})
         }
       }, async (err) => {
-        try {
-          const position = await AuthService.getPositionByIp();
-          await AuthService.updatePosition(position);
-        } catch (err) {
-          dispatch({type: 'GPS_ERROR'})
-        }
-
+          if (err) {
+            const position = await AuthService.getPositionByIp();
+            await AuthService.updatePosition(position);
+          }
       }
       );
 }
