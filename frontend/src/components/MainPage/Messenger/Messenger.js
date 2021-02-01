@@ -157,23 +157,28 @@ const Messenger = ({socket}) => {
     const [currentConversationId, setCurrentConversationId] = useState('')
     const [receiver, setReceiver] = useState('')
     useEffect(() => {
-        socket.on('conversationList',
-            (conversations) => {
-                setConversations(conversations)
-            }
-        )
-        socket.on('conversation', conversation => {
-                if (conversation.id = currentConversationId) {
-                    setMessages(conversation.conversation)
-                } else
-                    ; // TODO: notify user about new message in another chat
-            }
-        )
+                socket.on('conversationList',
+                    (conversations) => {
+                        setConversations(conversations)
+                    }
+                )
+                socket.on('conversation', conversation => {
+                        if (conversation.id = currentConversationId)
+                            setMessages(conversation.conversation)
+                    }
+                )
+                socket.on('my error', (error) => console.log(error));
+
+                return () => {
+                    socket.off('conversationList')
+                    socket.off('conversation')
+                }
+    })
+
+    useEffect(() => {
         if (currentConversationId)
             socket.emit('getConversation', {userId: user.id, conversationId: currentConversationId})
-
-        socket.on('my error', (error) => console.log(error));
-    })
+}, [currentConversationId])
 
     const handleConversation = (conversationUser) => {
             setCurrentConversationId(conversationUser.conversationId)

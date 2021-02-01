@@ -68,7 +68,7 @@ const getMessages = async (userId, conversationId) => {
       WHERE receiver = $1
       RETURNING messages.id, messages.conversation_id, messages.time_added, messages.sender, messages.receiver, messages.message, messages.message_read
     `, [userId]);
-  const result = await pool.query('SELECT * FROM messages WHERE conversation_id = $1', [conversationId]);
+  const result = await pool.query('SELECT * FROM messages WHERE conversation_id = $1 ORDER BY messages.time_added ASC', [conversationId]);
   return result.rows;
 };
 

@@ -48,9 +48,6 @@ export const webSocketServer = (server) => {
     });
 
     socket.on('newMessage', async (messageData) => { // TODO: rethink intervals on each listener...
-      if (interval) {
-        clearInterval(interval);
-      }
       const {
         conversationId, senderId, receiverId, message,
       } = messageData;
@@ -58,34 +55,26 @@ export const webSocketServer = (server) => {
         await chatModel.addMessage(conversationId, senderId, receiverId, message);
         const conversation = await chatModel.getMessages(senderId, conversationId);
         const receiverOnline = connections.find((connection) => connection.userId === parseInt(receiverId, 10));
-        interval = setInterval(async () => {
-          socket.emit('conversation', { conversationId, conversation });
-          if (receiverOnline) {
-            io.to(receiverOnline.socketId).emit('conversation', { conversationId, conversation });
-            const unreadMessages = await chatModel.getUnreadMessages(receiverId);
-            io.to(receiverOnline.socketId).emit('unreadMessages', unreadMessages.count);
-          }
-        }, 1000);
+        socket.emit('conversation', { conversationId, conversation });
+        if (receiverOnline) {
+          io.to(receiverOnline.socketId).emit('conversation', { conversationId, conversation });
+          const unreadMessages = await chatModel.getUnreadMessages(receiverId);
+          io.to(receiverOnline.socketId).emit('unreadMessages', unreadMessages.count);
+        }
       } catch (err) { socket.emit('my error', 'could not add message'); clearInterval(interval); }
     });
 
-    socket.on('getConversation', (conversationData) => {
+    socket.on('getConversation', async (conversationData) => {
       const { userId, conversationId } = conversationData;
-      if (interval) {
-        clearInterval(interval);
-      }
       try {
-        interval = setInterval(async () => {
-          const conversation = await chatModel.getMessages(userId, conversationId);
-          socket.emit('conversation', { conversationId, conversation });
-          const unreadMessages = await chatModel.getUnreadMessages(userId);
-          socket.emit('unreadMessages', unreadMessages.count);
-        }, 1000);
+        const conversation = await chatModel.getMessages(userId, conversationId);
+        socket.emit('conversation', { conversationId, conversation });
+        const unreadMessages = await chatModel.getUnreadMessages(userId);
+        socket.emit('unreadMessages', unreadMessages.count);
       } catch (err) { socket.emit('my error', 'could not get conversation'); clearInterval(interval); }
     });
 
     socket.on('disconnect', () => {
-      console.log('client disconnected');
       connections = connections.filter((connection) => connection.socketId !== socket.id);
       clearInterval(interval);
     });
