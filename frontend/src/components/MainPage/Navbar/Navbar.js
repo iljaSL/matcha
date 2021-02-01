@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useDispatch } from 'react-redux';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -93,14 +93,20 @@ export default function Navbar({socket}) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
-  socket.on('notification', notification => {
-    setNewNotifications(notification.unread_notifications)
+  useEffect(() => {
+    socket.on('notification', notification => {
+      setNewNotifications(notification.unread_notifications)
+    })
+    socket.on('unreadMessages', messageCount => setNewMessages(messageCount))
+
+    socket.on('unreadNotifications', notificationCount => setNewNotifications(notificationCount.unread_notifications))
+
+    return () => {
+      socket.off('notification')
+      socket.off('unreadMessages')
+      socket.off('unreadNotifications')
+    }
   })
-
-  socket.on('unreadMessages', messageCount => setNewMessages(messageCount))
-
-  socket.on('unreadNotifications', notificationCount => setNewNotifications(notificationCount.unread_notifications)
-  )
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
