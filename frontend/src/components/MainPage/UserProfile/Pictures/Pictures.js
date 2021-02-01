@@ -3,8 +3,6 @@ import {makeStyles} from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
-import IconButton from '@material-ui/core/IconButton';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
 import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
@@ -13,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
         flexWrap: 'wrap',
         justifyContent: 'space-around',
         overflow: 'hidden',
+        
     },
     gridList: {
         width: 500,
@@ -29,41 +28,6 @@ const useStyles = makeStyles((theme) => ({
         color: 'white',
     },
 }));
-
-
-const tileData = [
-    {
-        img: 'https://images.unsplash.com/photo-1610976792422-36d647abf7ac?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-        title: 'Image1',
-        author: 'author1',
-        featured: true,
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1610948409536-4aa96bc76988?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw2Mnx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-        title: 'Image2',
-        author: 'author2',
-        featured: true,
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1610984404810-f917a18c9d36?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw2M3x8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-        title: 'Image3',
-        author: 'author3',
-        featured: true,
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1611020915878-7ffbba3a5f62?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw3NHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-        title: 'Image4',
-        author: 'author4',
-        featured: true,
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1610983881213-db786dba17c5?ixid=MXwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxMDN8fHxlbnwwfHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-        title: 'Image5',
-        author: 'author5',
-        featured: true,
-    },
-];
-
 
 const Picture = ({pictureId}) => {
     const classes = useStyles();

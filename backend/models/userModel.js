@@ -262,7 +262,9 @@ const getVisit = async (id) => {
   const res = await pool.query(
     `SELECT notifications.added_by as id, users.username FROM notifications
     LEFT JOIN users ON users.id = added_by
-    WHERE uid=$1 AND "event" = 'visit'`,
+    WHERE uid=$1 AND "event" = 'visit'
+    AND uid != added_by
+    ORDER BY time_added DESC`,
     [id],
   );
   return res.rows;

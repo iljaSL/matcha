@@ -55,7 +55,6 @@ const Blocked = () => {
 
   return (
     <div className={classes.root}>
-    {console.log(profile)}
         <Grid item xs={12} md={12}>
           <Typography color="secondary" variant="h6" className={classes.title}>
            Blocked Users

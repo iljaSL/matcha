@@ -1,18 +1,15 @@
-import React, {useState} from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Chip from '@material-ui/core/Chip';
-import Input from '@material-ui/core/Input';
-import {Slider} from "@material-ui/core";
-import Typography from "@material-ui/core/Typography";
+import { Slider } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
     marginTop: "2.5rem",
-    margin: theme.spacing(1),
     minWidth: 120,
     listStyle: 'none',
   },
@@ -29,35 +26,16 @@ const useStyles = makeStyles((theme) => ({
   noLabel: {
     marginTop: theme.spacing(3),
   },
-
+  chipMargin: {
+    marginBottom: '5px'
+  },
+  slider: {
+    width: '30%',
+  }
 }));
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
-function getStyles(tag, tagName, theme) {
-    return {
-      fontWeight:
-        tagName.indexOf(tag) === -1
-          ? theme.typography.fontWeightRegular
-          : theme.typography.fontWeightMedium,
-    };
-  }
-  
-
-
 export default function SimpleSelect({distance, handleDistance, handleSort, sort, genderList, handleFilter, selectedGenders}) {
-  const theme = useTheme();
   const classes = useStyles();
-
 
   return (
     <div>
@@ -76,22 +54,26 @@ export default function SimpleSelect({distance, handleDistance, handleSort, sort
           <MenuItem value={'distance'}>Distance️</MenuItem>
         </Select>
       </FormControl>
+      <br />
 
 
       <FormControl color='secondary' variant="outlined" className={classes.formControl}>
       {genderList.map((gender, index) => <li key={index}>
         <Chip clickable
+              className={classes.chipMargin}
               value={gender}
               label={gender}
-              color={selectedGenders.includes(gender) ? "primary" : "secondary" }
+              color={selectedGenders.includes(gender) ? "default" : "secondary" }
               onClick={() => handleFilter(gender)}
         />
       </li>
       )}
       </FormControl>
-
+      <br />
 
       <Slider
+          className={classes.slider}
+          color='secondary'
           value={distance}
           onChange={handleDistance}
           step={20}
