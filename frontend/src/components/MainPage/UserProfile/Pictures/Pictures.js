@@ -14,15 +14,12 @@ const useStyles = makeStyles((theme) => ({
         
     },
     gridList: {
-        width: 500,
-        height: 450,
+        listStyleType: 'none',
+        marginBottom: '20px',
+        width: 300,
+        height: 300,
         // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
         transform: 'translateZ(0)',
-    },
-    titleBar: {
-        background:
-            'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
-            'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
     },
     icon: {
         color: 'white',
@@ -41,13 +38,8 @@ const Picture = ({pictureId}) => {
         getImage(pictureId)
     })
 
-    return <GridListTile cols={2} rows={2}>
+    return <GridListTile cols={2} rows={2} className={classes.gridList}>
         <img src={`data:image/png;base64, ${image}`}/>
-        <GridListTileBar
-            titlePosition="top"
-            actionPosition="left"
-            className={classes.titleBar}
-        />
     </GridListTile>
 }
 
@@ -58,9 +50,7 @@ export default function Pictures({imageList}) {
     const classes = useStyles();
     return (
         <div className={classes.root}>
-            <GridList cellHeight={200} spacing={1} className={classes.gridList}>
                 {imageList.map((image, index) => <Picture key={index} pictureId={image.id} />)}
-            </GridList>
         </div>
     );
 }
