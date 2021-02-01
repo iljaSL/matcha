@@ -64,7 +64,7 @@ export const ChooseTags = ({handleListItem, tagList, initialTags}) => {
         {initialTags.map((tag, index) =>
             <ListItem key={index} onClick={() => handleListItem(tag.id)}>
                 <Checkbox edge="start" checked={tagList.indexOf(tag.id) !== -1}/>
-                {tag.tag}
+                #{tag.tag}
             </ListItem>
         )}
     </List>
