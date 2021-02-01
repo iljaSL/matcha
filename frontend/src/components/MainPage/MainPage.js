@@ -71,7 +71,7 @@ const MainPage = () => {
         setSort('distance');
         sorted = users;
         sorted.sort((a, b) => {
-          return (a.distance < b.distance) ? 1 : -1
+          return (a.distance_in_miles > b.distance_in_miles) ? 1 : -1
         })
         setDisplayedUsers(sorted)
         break;
