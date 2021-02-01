@@ -61,12 +61,14 @@ const getConversations = async (uid) => {
   return result.rows;
 };
 
-const getMessages = async (id) => {
-  const result = await pool.query(`
-    SELECT *
-    FROM messages
-    WHERE conversation_id = $1
-    `, [id]);
+const getMessages = async (userId, conversationId) => {
+  await pool.query(`
+    UPDATE messages
+      SET message_read = true
+      WHERE receiver = $1
+      RETURNING messages.id, messages.conversation_id, messages.time_added, messages.sender, messages.receiver, messages.message, messages.message_read
+    `, [userId]);
+  const result = await pool.query('SELECT * FROM messages WHERE conversation_id = $1', [conversationId]);
   return result.rows;
 };
 
@@ -95,6 +97,8 @@ const removeLike = async (likerId, likedId) => {
   return result;
 };
 
+const getUnreadMessages = async (uid) => (await pool.query('SELECT COUNT(*) FROM messages WHERE receiver = $1 AND message_read = false', [uid])).rows[0];
+
 export default {
   getConversationID,
   getConversations,
@@ -102,4 +106,5 @@ export default {
   addMessage,
   addLike,
   removeLike,
+    getUnreadMessages,
 };

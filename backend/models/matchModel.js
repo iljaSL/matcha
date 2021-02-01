@@ -74,6 +74,11 @@ const getProfilesByDistance = async (uid, distance, specifiedGender = null) => {
                   FROM block
                   WHERE user_id = (SELECT id FROM master_user)
                 )
+                  AND users.id NOT IN (
+                        SELECT user_id 
+                  FROM block
+                  WHERE blocked_user_id = (SELECT id FROM master_user)
+                  )
                   ${genderString}
                   GROUP BY uid, users.lastname, users.firstname, users.username, users.gender, users.sexual_orientation, users.bio, users.popularity_score, users.geo_lat, users.geo_long, users.profile_picture_id,
                   users.id
