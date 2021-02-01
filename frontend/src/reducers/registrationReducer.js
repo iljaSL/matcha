@@ -55,7 +55,6 @@ const registrationReducer = (state = initialState, action) => {
         case 'CHANGE_PAGE':
             return {...state, currentStep: action.data}
         case 'ADD_IMAGE':
-            console.log(action.data)
             return {...state, profilePic:  action.data}
         case 'FORM_SUCCESS':
             return {...state, signupSuccess: action.data}
