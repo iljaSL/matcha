@@ -141,7 +141,7 @@ const Tags = () => {
                 >
                 {names.map((name) => (
                     <MenuItem key={name} value={name} style={getStyles(name, tags, theme)}>
-                    {name}
+                    #{name}
                     </MenuItem>
                 ))}
                 </Select>

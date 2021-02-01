@@ -141,7 +141,7 @@ export default function SignInSide() {
       <CssBaseline />
       <Grid item xs={false} sm={6} md={6}>
         <Pictures imageList={profile.images} /> </Grid>
-      <Grid item xs={12} sm={6} md={5} elevation={6}>
+      <Grid item xs={12} sm={6} md={6} elevation={6}>
         <div >
           <Typography component="h1" variant="h5">
             BIO
@@ -155,7 +155,7 @@ export default function SignInSide() {
     </Grid>
     <Container component="main" maxWidth="xs">
     <Typography className={classes.divider} color="secondary" variant="h6">
-      {profile.username}'s interests: {profile.tags.map(tag => <Button key={tag.id}>{tag.tag}</Button>)}
+      {profile.username}'s interests: {profile.tags.map(tag => <Button key={tag.id}>#{tag.tag}</Button>)}
     </Typography>
     </Container>
     <Container component="main" maxWidth="xs">
