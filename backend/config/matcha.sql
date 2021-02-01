@@ -159,6 +159,7 @@ AS $function$
 BEGIN
     DELETE FROM notifications WHERE (event = 'match' AND (uid = OLD.user1 AND added_by = OLD.user2) OR (uid = OLD.user2 AND added_by = OLD.user1));
     INSERT INTO notifications (uid, event, added_by) VALUES (OLD.user2, 'unlike', OLD.user1);
+    DELETE FROM conversations WHERE (user1 = OLD.user1 AND user2 = OLD.user2) OR (user1 = OLD.user2 AND user2 = OLD.user1);
     RETURN NULL;
 END;
 $function$;
