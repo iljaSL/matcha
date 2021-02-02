@@ -23,7 +23,8 @@ const login = async (username, password) => axios.post(`${baseUrl}/login`, {
   return response.data;
 });
 
-const logout = () => {
+const logout = async () => {
+  await axios.delete(`${baseUrl}/login`)
   localStorage.removeItem('user');
 };
 

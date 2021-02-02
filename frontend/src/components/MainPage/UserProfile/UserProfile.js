@@ -124,13 +124,15 @@ export default function SignInSide() {
    }
 
    if (blocked) return <Redirect to="/mainpage" />
-
   return (
     <>
     <Typography className={classes.divider} color="secondary" variant="h3">
       {profile.firstname} "{profile.username}" {profile.lastname}
            <MenuButton handleBlock={handleBlock} handleReport={handleReport} />
     </Typography>
+      <Typography className={classes.divider} color="secondary" variant="h6">
+        {profile.online ? `User is ONLINE!` : `User is offline, last seen: ${(new Date(profile.last_seen))}`}
+      </Typography>
     <Typography className={classes.divider} color="secondary" variant="h4">
           Popularity: {profile.popularity_score} {profile.popularity_score > 20 && '🔥'}
     </Typography>

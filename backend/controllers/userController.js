@@ -155,6 +155,7 @@ const login = async (request, response, next) => {
   const match = await bcrypt.compare(password, user.password);
   if (!match) return response.status(401).json({ message: 'invalid username/password' });
   const tokenObject = jsonWebTokenUtils.tokenGenerator([user.id, user.username]);
+  await userModel.login(user.id);
   return response.status(200).json({
     id: user.id,
     status: user.status,
@@ -165,6 +166,15 @@ const login = async (request, response, next) => {
     token: tokenObject.token,
     tokenExpiration: tokenObject.expiration,
   });
+};
+
+const logout = async (request, response, next) => {
+  try {
+    const { authorization } = request.headers;
+    const tokenUserId = jsonWebTokenUtils.getUserId(authorization);
+    await userModel.logout(tokenUserId);
+    return response.status(200).json({ message: 'Logged out!' });
+  } catch (err) { next(err); }
 };
 
 // REGISTER CONTROLLER
@@ -343,6 +353,7 @@ export default {
   getUserImages,
   auth,
   login,
+  logout,
   updatePasswordWithUserId,
   deleteUser,
   getTagsByUid,

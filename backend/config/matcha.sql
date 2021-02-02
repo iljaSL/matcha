@@ -34,9 +34,9 @@ CREATE TABLE IF NOT EXISTS users (
   -- `tags` tinyint(1) DEFAULT NULL,
   key varchar(255) DEFAULT 0,
   reset_password_key varchar(255) DEFAULT 0,
-  status smallint DEFAULT 0
-  -- `online` tinyint(1) NOT NULL DEFAULT '0',
-  -- `last_connection` datetime DEFAULT NULL
+  status smallint DEFAULT 0,
+  online smallint NOT NULL DEFAULT 0,
+  last_seen TIMESTAMP DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS report (

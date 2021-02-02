@@ -193,6 +193,9 @@ const getUserProfile = async (user1, user2) => (await pool.query(`
            users.geo_lat,
            users.geo_long,
            users.profile_picture_id,
+           users.online,
+           users.last_seen,
+           users.id,
            point((SELECT geo_long FROM master_user), (SELECT geo_lat FROM master_user))
                <@> point(users.geo_long, users.geo_lat) as distance_in_miles
     FROM users
@@ -270,6 +273,10 @@ const getVisit = async (id) => {
   return res.rows;
 };
 
+const login = async (id) => pool.query('UPDATE users SET online = 1 WHERE id = $1', [id]);
+
+const logout = async (id) => pool.query('UPDATE users SET online = 0, last_seen = NOW() WHERE id = $1', [id]);
+
 export default {
   getVisit,
   getBlockedUsers,
@@ -303,4 +310,6 @@ export default {
   getUserProfile,
   addVisit,
   getUserNotificationCount,
+  login,
+  logout,
 };
