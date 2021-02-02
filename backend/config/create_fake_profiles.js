@@ -10,7 +10,7 @@ dotenv.config({path: '../'})
 
 const initFakeUsers = async () => {
 
-    let statement = 'INSERT INTO users (lastname, firstname, username, gender, sexual_orientation, mail, bio, geo_lat, geo_long, status, password) VALUES';
+    let statement = 'INSERT INTO users (lastname, firstname, username, gender, sexual_orientation, mail, bio, geo_lat, geo_long, status, password, online, last_seen) VALUES';
     let ids = [];
     const gender = ['woman', 'man', 'other'];
     const sexualOrientation = ['androsexual', 'gynesexual', 'pansexual'];
@@ -28,7 +28,7 @@ const initFakeUsers = async () => {
             '${faker.lorem.sentence()}',
             '${faker.address.latitude()}',
             '${faker.address.longitude()}',
-             2, 'fake'
+             2, 'fake', ${Math.round(Math.random())}, (select NOW() - (random() * (interval '90 days')) + '30 days')
             )`
         if (i < 499) statement += ','
     }
