@@ -27,6 +27,14 @@
   }
 }
 
+.MuiStepIcon-root.MuiStepIcon-active {
+  color: #f50057 !important;
+}
+
+.MuiStepIcon-root.MuiStepIcon-completed {
+  color: #f50057 !important;
+}
+
 .slider {
   color:#f50057;
   text-transform: uppercase;
