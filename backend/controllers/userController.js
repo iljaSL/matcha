@@ -77,18 +77,17 @@ const validateUserAfterRegistration = async (request, response) => {
   } return response.status(400).json({ message: 'user could not be validated.' });
 };
 
-const updatePasswordWithResetKey = async (request, response) => {
+const updatePasswordWithResetKey = async (request, response, next) => {
   const newPassword = request.body.new_password;
   const repeatPassword = request.body.repeat_password;
   const { key } = request.params;
-
-  if (input.password(newPassword).error) return response.status(400).json({ message: 'new password does not work' });
-  if (input.password(repeatPassword).error) return response.status(400).json({ message: 'confirm password does not work' });
-  if (newPassword !== repeatPassword) return response.status(400).json({ message: 'password and confirm password does not match!' });
-
-  const result = await UserUtil.updatePasswordWithResetKey(newPassword, key);
-  if (result.status === 'success') return response.status(201).json({ status: 'password has been updated' });
-  return response.status(400).json({ message: 'something went wrong!' });
+  try {
+    if (!input.password(newPassword)) return response.status(400).json({ message: 'new password does not work' });
+    if (!input.password(repeatPassword)) return response.status(400).json({ message: 'confirm password does not work' });
+    if (newPassword !== repeatPassword) return response.status(400).json({ message: 'password and confirm password does not match!' });
+    await UserUtil.updatePasswordWithResetKey(newPassword, key);
+    return response.status(201).json({ status: 'password has been updated' });
+  } catch (err) { next(err); }
 };
 
 const checkPasswordResetKey = async (request, response, next) => {
