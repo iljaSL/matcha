@@ -46,11 +46,11 @@ const authReducer = (state = initialState, action) => {
                 user: null,
             };
         case PROFILE_CREATION_SUCCESS:
-            let { auth } = state
-            auth.user.status = 2;
+            let userData = state.user
+            userData.status = 2;
             return {
                 ...state,
-                auth
+                user: userData
             }
         case GPS_SUCCESS:
             let { user } = state;

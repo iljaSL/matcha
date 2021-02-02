@@ -1,6 +1,7 @@
 import {initialSteps} from "../components/ProfileCreation/ProfileFormUtils";
 import axios from 'axios';
 import React from "react";
+import authActions from '../actions/auth'
 
 const initialState = {
     currentStep: 0,
@@ -127,9 +128,11 @@ export const submitProfileForm = (formData, userData) => {
             console.log(error)
         }
         const user = JSON.parse(localStorage.getItem("user"));
-        if (success) user.status = 2;
-        localStorage.setItem("user", JSON.stringify(user))
-        dispatch({type: 'FORM_SUCCESS', data: success});
+        if (success) {
+            user.status = 2;
+            localStorage.setItem("user", JSON.stringify(user))
+            dispatch({type: 'FORM_SUCCESS', data: success});
+        }
     }
 }
 

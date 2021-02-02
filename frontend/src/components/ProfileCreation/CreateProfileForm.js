@@ -19,6 +19,7 @@ import {
 
 
 import {Bio, ChooseGender, ChoosePreferredGender, ChooseTags, FinalPage, PictureDropZone} from './CreateProfileFields'
+import authActions from "../../actions/auth";
 
 const CreateProfileForm = () => {
 
@@ -31,6 +32,8 @@ const CreateProfileForm = () => {
 
     useEffect(() => {
         dispatch(checkFormValidity(registrationData))
+        if (registrationData.signupSuccess)
+            dispatch(authActions.profileCreated())
     }, [dispatch, registrationData])
 
     useEffect(() => {
@@ -57,11 +60,10 @@ const CreateProfileForm = () => {
     }
 
     const handleUpload = fileArray => {
-        console.log('handling upload...')
-            dispatch(addProfilePicture(fileArray))
+        dispatch(addProfilePicture(fileArray))
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         dispatch(submitProfileForm(registrationData, userData))
     }
 
@@ -74,7 +76,7 @@ const CreateProfileForm = () => {
         const newList = preferences.indexOf(gender) === -1
             ? preferences.concat(gender)
             : preferences.filter(item => item !== gender)
-        dispatch(updateField(Object.keys({preferences})[0], newList)) // unnecessary workaround to get variable name as as string
+        dispatch(updateField(Object.keys({preferences})[0], newList))
     }
 
     const handleListItem = (item) => {
@@ -100,7 +102,8 @@ const CreateProfileForm = () => {
             case 2:
                 return <Bio bio={bio} handleChange={handleChange}/>
             case 3:
-                return <ChooseTags handleListItem={handleListItem} tagList={tagList} initialTags={registrationData.initialTags}/>
+                return <ChooseTags handleListItem={handleListItem} tagList={tagList}
+                                   initialTags={registrationData.initialTags}/>
             case 4:
                 return <PictureDropZone handleUpload={handleUpload} initialFiles={profilePic}
                                         handleDelete={handleDelete}/>
@@ -110,29 +113,28 @@ const CreateProfileForm = () => {
                 return <div></div>
         }
     }
-    if (userData.status === 2)
-        return <Redirect to="/gallery"/>
-    else
-        return (
-            <div>
-                <h3>Welcome to Matcha {userData.username}! Let's get started with your profile creation...</h3>
-                <Stepper
-                    activeStep={currentStep}>
-                    {steps.map((entry, index) => {
-                            return (
-                                <Step
-                                    key={entry.name}>
-                                    <StepLabel error={checkError(index)}
-                                               onClick={() => jump(index)}>{entry.name}</StepLabel>
-                                </Step>
-                            )
-                        }
-                    )}
-                </Stepper>
-                {getStepContent(currentStep)}
-                <StepNavigation/>
-            </div>
-        )
+    if (registrationData.signupSuccess)
+        return <Redirect to="/" />
+    return (
+        <div>
+            <h3>Welcome to Matcha {userData.username}! Let's get started with your profile creation...</h3>
+            <Stepper
+                activeStep={currentStep}>
+                {steps.map((entry, index) => {
+                        return (
+                            <Step
+                                key={entry.name}>
+                                <StepLabel error={checkError(index)}
+                                           onClick={() => jump(index)}>{entry.name}</StepLabel>
+                            </Step>
+                        )
+                    }
+                )}
+            </Stepper>
+            {getStepContent(currentStep)}
+            <StepNavigation/>
+        </div>
+    )
 }
 
 export default CreateProfileForm;
