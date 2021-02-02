@@ -76,7 +76,7 @@ const Bio = () => {
           required
           id="bio"
           name="bio"
-          autoComplete="lname"
+          autoComplete="bio"
           value={bio}
           onChange={onChangeBio}
         />

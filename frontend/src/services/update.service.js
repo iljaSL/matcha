@@ -66,6 +66,10 @@ const deleteUser = async () => {
     await axios.delete(`${baseUrl}/users/${id.id}`)
 }
 
+const updatePosition = async (position) => {
+    await axios.post(`${baseUrl}/users/location`, position)
+}
+
 export default {
     updateTags,
     updateFirstLastName,
@@ -75,4 +79,5 @@ export default {
     updateMail,
     updatePassword,
     deleteUser,
+    updatePosition,
 }

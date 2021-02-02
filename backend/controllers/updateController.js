@@ -18,13 +18,10 @@ const updateUser = async (request, response, next) => {
       mail,
       newPassword,
       oldPassword,
+      position,
     } = request.body;
-    console.log('REQUEST', request.body);
-    console.log('AUTHTTTTT', request.headers);
     const { authorization } = request.headers;
-    console.log('AUTH', authorization);
     const userId = jsonWebTokenUtils.getUserId(authorization);
-
     let password;
     let error = {};
 
@@ -56,6 +53,9 @@ const updateUser = async (request, response, next) => {
         } else {
           error = { oldPasswordError: 'wrong password' };
         }
+        break;
+      case 'position':
+        await userModel.changeUserLocation(userId, position.long, position.lat);
         break;
       default:
         return response.json({ message: 'Invalid input' });

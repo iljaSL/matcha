@@ -18,6 +18,7 @@ import Tags from './Tags';
 import Delete from './Delete';
 import Alert from "@material-ui/lab/Alert";
 import Pictures from '../../ProfilePictures/ProfilePictures';
+import Position from "./Position";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -83,6 +84,9 @@ export default function MyAccount() {
         </div>
         <div className={classes.divider}>
         <Password />
+        </div>
+        <div className={classes.divider}>
+         <Position />
         </div>
         <div className={classes.divider}>
         <Delete />

@@ -202,6 +202,28 @@ const deleteUser = () => (dispatch) => {
     });
   };
 
+const updatePosition = (position) => (dispatch) => UpdateService.updatePosition(position)
+    .then(
+        response => {
+            dispatch({type: 'UPDATE_POSITION_SUCCESS'})
+            return Promise.resolve();
+        },
+        (error) => {
+    const message = (error.response
+        && error.response.data
+        && error.response.data.message)
+        || error.message || error.toString();
+    dispatch({
+        type: SET_MESSAGE,
+        payload: message,
+    });
+    return Promise.reject();
+},
+);
+
+
+
+
 
 export default {
     updateTags,
@@ -212,4 +234,5 @@ export default {
     updateMail,
     updatePassword,
     deleteUser,
+    updatePosition,
 }

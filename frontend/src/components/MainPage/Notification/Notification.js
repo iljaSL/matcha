@@ -7,6 +7,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import Typography from '@material-ui/core/Typography';
 import MessageIcon from '@material-ui/icons/Message';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import ThumbDownIcon from '@material-ui/icons/ThumbDown'
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Navbar from '../Navbar/Navbar';
@@ -15,7 +16,7 @@ import Footer from '../Footer/Footer';
 import axios from 'axios';
 import {useSelector} from "react-redux";
 import {Link} from "react-router-dom";
-import {Visibility} from "@material-ui/icons";
+import {ThumbDown, Visibility} from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -58,6 +59,13 @@ const NotificationEntry = ({notification}) => {
             return <ListItem button component={Link} to={`/user-profile/${notification.added_by}`}>
                 <ListItemIcon>
                     <Visibility color='secondary'/>
+                </ListItemIcon>
+                <ListItemText primary={string}/>
+            </ListItem>
+        case 'unlike':
+            return <ListItem button component={Link} to={`/user-profile/${notification.added_by}`}>
+                <ListItemIcon>
+                    <ThumbDown color='secondary'/>
                 </ListItemIcon>
                 <ListItemText primary={string}/>
             </ListItem>
