@@ -1,9 +1,7 @@
 import React from 'react';
 import { useParams, Redirect } from 'react-router-dom';
 import { useDispatch } from 'react-redux'
-
 import authAction from '../../actions/resetPassword'
-
 
 const ValidateProfile = () => {
     const { validationId } = useParams();

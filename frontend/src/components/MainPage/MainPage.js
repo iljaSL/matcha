@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Switch,
-  Route,
-  Redirect,
-} from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import UserCard from './UserCard/UserCard';
 import Filter from './Filter/Filter';
 import Footer from './Footer/Footer';
 import axios from 'axios';
-import Typography from "@material-ui/core/Typography";
 import {useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
@@ -43,12 +37,7 @@ const MainPage = () => {
   const [displayedUsers, setDisplayedUsers] = useState([]);
   const [sort, setSort] = useState('default');
   const [filteredGenders, setGenderFilter] = useState(initialGenders);
-
   const classes = useStyles();
-
-  const handleChange = (event) => {
-    setSpacing(Number(event.target.value));
-  };
 
   const handleDistance = (event, value) => {
     setDistance(value)
@@ -129,7 +118,6 @@ const MainPage = () => {
     const sorted = displayedUsers.filter(user => filteredGenders.includes(user.gender))
     setDisplayedUsers(sorted);
   }, [filteredGenders.length])
-
 
   return (
     <>

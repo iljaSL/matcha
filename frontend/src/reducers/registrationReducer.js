@@ -1,7 +1,5 @@
 import {initialSteps} from "../components/ProfileCreation/ProfileFormUtils";
 import axios from 'axios';
-import React from "react";
-import authActions from '../actions/auth'
 
 const initialState = {
     currentStep: 0,

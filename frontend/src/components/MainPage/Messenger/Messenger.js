@@ -12,10 +12,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
-
-import Navbar from '../Navbar/Navbar';
 import Footer from '../Footer/Footer';
-
 import {useSelector} from 'react-redux'
 import axios from "axios";
 

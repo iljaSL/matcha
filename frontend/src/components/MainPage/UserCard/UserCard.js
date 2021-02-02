@@ -103,7 +103,6 @@ const UserCard = ({user}) => {
     setMatchStatus((await axios.get(`http://localhost:3001/api/matches/like/${user.uid}`)).data)
   }
 
-
   return (
     <Card className={classes.root}>
       <Link to={`/user-profile/${user.uid}`} className={classes.link}>

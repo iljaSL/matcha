@@ -11,7 +11,6 @@ import History from './History/History';
 import Pictures from './Pictures/Pictures';
 import Footer from '../Footer/Footer';
 import Blocked from './Blocked/Blocked'
-import Matches from './Matches/Matches';
 
 const useStyles = makeStyles((theme) => ({
   root: {

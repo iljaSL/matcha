@@ -1,4 +1,4 @@
-import express, { request, response } from 'express';
+import express from 'express';
 import tagController from '../controllers/tagController.js';
 import updateController from '../controllers/updateController.js';
 

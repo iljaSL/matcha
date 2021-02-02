@@ -106,5 +106,5 @@ export default {
   addMessage,
   addLike,
   removeLike,
-    getUnreadMessages,
+  getUnreadMessages,
 };
