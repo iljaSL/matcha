@@ -5,7 +5,7 @@ import authActions from '../actions/auth'
 
 const initialState = {
     currentStep: 0,
-    gender: 'female',
+    gender: 'woman',
     preferences: ['female', 'male', 'other'],
     bio: '',
     tagList: [],
