@@ -93,7 +93,6 @@ export const PictureDropZone = ({handleUpload, initialFiles, handleDelete}) => {
     )
 }
 
-
 export const FinalPage = ({formData}) => { // why don't we sketch a 'tinder card' here?
     const {profilePic, preferences, bio, tagList, gender} = formData
     return <Card style={{height: '80vh', width: 'auto'}}>

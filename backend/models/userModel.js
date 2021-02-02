@@ -98,7 +98,7 @@ const updatePasswordWithUserId = async (password, id) => {
   return result.affectedRows;
 };
 
-const findUser = async (data, next) => {
+const findUser = async (data) => {
   const result = await pool.query('SELECT * FROM users WHERE username = $1', [data]);
   if (result) return result.rows[0];
 };
@@ -109,7 +109,7 @@ const findUserById = async (id) => {
   return null;
 };
 
-const findUserKey = async (data, next) => {
+const findUserKey = async (data) => {
   const result = await pool.query('SELECT * FROM users WHERE reset_password_key = ($1)', [data]);
   if (result) return result.rows[0];
 };
@@ -119,7 +119,7 @@ const isDuplicateUser = async (username, next) => {
   return result !== undefined;
 };
 
-const registerUser = async (user, next) => {
+const registerUser = async (user) => {
   const {
     lastname, firstname, username, mail, password, uuid,
   } = user;

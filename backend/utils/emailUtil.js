@@ -1,5 +1,4 @@
 import nodemailer from 'nodemailer';
-import inputUtil from './inputUtil.js';
 
 const emailForForgotPassword = (mail, username, link) => {
   const message = `

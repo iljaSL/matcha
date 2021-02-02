@@ -1,5 +1,4 @@
 // import mysql from 'mysql';
-import util from 'util';
 import dotenv from 'dotenv';
 
 import pkg from 'pg';

@@ -28,7 +28,6 @@ const updateFirstLastName = (firstName, lastName) => (dispatch) => UpdateService
         return Promise.resolve();
     },
     (error) => {
-        console.log('err', error.message);
         const message = (error.response
             && error.response.data
             && error.response.data.message)

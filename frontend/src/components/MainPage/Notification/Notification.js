@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -9,7 +8,6 @@ import MessageIcon from '@material-ui/icons/Message';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Navbar from '../Navbar/Navbar';
 import Footer from '../Footer/Footer';
 
 import axios from 'axios';
@@ -27,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
         marginTop: '3rem',
     }
 }));
-
 
 const NotificationEntry = ({notification}) => {
     const string = `You have a new ${notification.event} from ${notification.username}!`
@@ -63,7 +60,6 @@ const NotificationEntry = ({notification}) => {
             </ListItem>
     }
 }
-
 
 export default function Notification() {
     const classes = useStyles();

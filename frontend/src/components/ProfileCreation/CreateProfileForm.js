@@ -5,7 +5,6 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import {Redirect} from 'react-router-dom'
 
-
 import {useSelector, useDispatch} from 'react-redux'
 
 import {
@@ -16,7 +15,6 @@ import {
     addProfilePicture,
     getInitialTags
 } from '../../reducers/registrationReducer'
-
 
 import {Bio, ChooseGender, ChoosePreferredGender, ChooseTags, FinalPage, PictureDropZone} from './CreateProfileFields'
 import authActions from "../../actions/auth";

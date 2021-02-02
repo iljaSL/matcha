@@ -5,7 +5,6 @@ import Button from '@material-ui/core/Button';
 import {Redirect, useHistory} from 'react-router-dom'
 import {useSelector} from "react-redux";
 
-
 const ProfilePictures = () => {
 
     const readImages = (profilePictures) => {
@@ -79,7 +78,6 @@ const ProfilePictures = () => {
         else reset();
 
     }
-
 
     const handleDelete = () => {}
 

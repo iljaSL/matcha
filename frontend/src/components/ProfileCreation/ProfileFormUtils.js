@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 export const initialSteps = [
     {
         name: 'Select your gender',
