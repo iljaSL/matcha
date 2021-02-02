@@ -292,6 +292,7 @@ const getUserProfile = async (request, response, next) => {
         || await userModel.checkIfUserIsBlocked(tokenUserId, profileId)) {
       return response.status(403).end();
     }
+    if (!await userModel.findUserById(profileId)) return response.status(404).end();
     await userModel.addVisit(tokenUserId, profileId);
     const userData = await userModel.getUserProfile(tokenUserId, profileId);
     const tags = (await userModel.getTagsByUid(profileId)).rows;

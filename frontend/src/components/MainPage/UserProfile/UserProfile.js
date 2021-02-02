@@ -85,17 +85,20 @@ export default function SignInSide() {
       } catch (error) {
         if (axios.isCancel(error)) {
         } else {
-          throw error
+          setProfile(null)
+          console.log(error)
         }
       } 
     }
-    getProfile();
+    if (user.id !== id)
+      getProfile();
     return () => {
       source.cancel()
     }
   }, [])
 
-
+  if (user.id === id)
+    return <Redirect to="/my-account" />
 
    if (!profile)
     return null;
