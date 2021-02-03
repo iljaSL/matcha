@@ -1,5 +1,6 @@
 import axios from 'axios';
 import imageModel from '../models/imageModel.js';
+import jsonWebTokenUtils from '../utils/jasonWebTokenUtils.js';
 
 const checkUrlValidity = async (url) => {
   try {
@@ -11,28 +12,24 @@ const checkUrlValidity = async (url) => {
 };
 
 const addImage = async (request, response, next) => { // TODO: refactor
+  try {
   const { image } = request.body;
   let { link } = request.body;
-  const { id } = request.params;
+  const id = jsonWebTokenUtils.getUserId(request.token);
   if (image) {
-    try {
       link = `${await imageModel.saveImageBlob(id, image)}`;
       await imageModel.addImageLink(id, link);
       return response.status(200).json(link);
-    } catch (err) {
-      next(err);
-    }
   } else if (link) {
-    try {
       if (!(await checkUrlValidity(link))) { next(new Error('link invalid')); }
       const imageId = await imageModel.addImageLink(id, link);
       return response.status(200).json(imageId);
-    } catch (err) {
+    }
+  } catch (err) {
       next(err);
     }
-  }
-  return response.status(500);
-};
+    return response.status(500);
+  };
 
 const getImageBlob = async (request, response, next) => {
   try {
