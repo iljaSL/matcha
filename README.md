@@ -6,14 +6,15 @@
 
 ### What is this project about?
 
-This is a team project, a part of the web branch at [Hive Helsinki](https://www.hive.fi/) coding school.
+This is a team project, a part of the web branch at [Hive Helsinki](https://github.com/iljaSL/what_is_hive_helsinki) coding school.
 
 - [Task](#task)
 - [Tech stack](#tech-stack)
 - [Functionality](#functionality)
 - [Planning](#planning)
-  - [Work breakdown](#work-breakdown)
 - [Run locally](#run-locally)
+- [Improvements](#improvements)
+- [Acknowledgements](#acknowledgements)
 
 ## Task
 
@@ -80,7 +81,38 @@ Frontend:
 - **Notifications features:**
   - Real-time push notifications when the user receives a like/unlike, message from another user or user's profile is checked.
 
-## Planning and Work breakdown
+## Planning
 
 We outined our work load inside Github Projects [Link](https://github.com/iljaSL/matcha/projects/1).
 
+## Run locally
+
+- **Git clone** repo
+- Install [PostgreSQL](https://www.postgresql.org/) and its [PostGIS](https://postgis.net/) extension
+  `brew install postgresql postgis` or `apt install postgresql postgis`
+- Make sure you can send email from terminal
+- Install nodejs and npm `brew install nodejs npm` or `apt install nodejs`
+- Create a file **.env** inside the `backend` folder and update with your credentials
+
+```
+PORT=3001
+DB_USER=<YOUR_DB_USERNAME>
+DB_PASSWORD=<YOUR_DB_PASSWORD>
+SECRET_KEY=<SECRET>
+IMAGE_PATH=./images
+```
+- Run command `npm run init` in the matcha root folder to install all dependencies in the backend and frontend.
+- Run command `npm run dev` to start a server and open `localhost:3001` in your preferred browser in dev mode.
+- Run command `npm run db` to setup the database.
+- Run command `npm run fake` to populate the database with fake users.
+- Open Application in your favorite browser `localhost:3000`
+
+## Improvements
+
+- Deploying the app to Heroku
+- Improving UI (the user profile and my account pages are not pretty at all, we needed to catch a deadline and rushed a bit through the UI dev process)
+- Fixing exisitng bugs
+
+## Acknowledgements
+
+A big shout out to [Tatiana](https://github.com/T7Q) and [Diana](https://github.com/DianaMukaliyeva) for letting us use their readme template!
