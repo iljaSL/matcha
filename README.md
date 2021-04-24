@@ -1,5 +1,9 @@
 # Matcha
 
+<p align="center">
+  <img src="https://github.com/iljaSL/matcha/blob/master/images/landingPage.gif">
+</p>
+
 ### What is this project about?
 
 This is a team project, a part of the web branch at [Hive Helsinki](https://www.hive.fi/) coding school.
