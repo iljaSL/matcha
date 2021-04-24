@@ -52,12 +52,31 @@ Frontend:
   - User data management, incl. edit profile data, change password and geolocation.
   - View own and other user profiles.
   - View profile visit history, list of connected and blocked profiles.
+
+<p align="center">
+  <img src="https://github.com/iljaSL/matcha/blob/master/images/matcha_signup.gif">
+</p>
+
 - **Matching features:**
   - Multiple infinite scroll galleries with a list of suggestions that match his/her profile (recommended, online, popular, nearby).
   - Matching Alogrimth using scoring weights based on Chinese and Western horoscope compatibility, common tags, fame rating, location, age and gender.
   - Advanced range sliders to sort and filter users by horoscope believe, common tags, location, fame rating and age.
+
+<p align="center">
+  <img src="https://github.com/iljaSL/matcha/blob/master/images/matcha_gallery.gif">
+</p>
+
+<p align="center">
+  <img src="https://github.com/iljaSL/matcha/blob/master/images/matcha_filter.gif">
+</p>
+
 - **Chat features:**
   - Real-time chat for matched users.
+
+<p align="center">
+  <img src="https://github.com/iljaSL/matcha/blob/master/images/matcha_messenger.gif">
+</p>
+
 - **Notifications features:**
   - Real-time push notifications when the user receives a like/unlike, message from another user or user's profile is checked.
 
